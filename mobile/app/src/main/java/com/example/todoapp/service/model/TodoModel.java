@@ -6,7 +6,7 @@ import io.realm.annotations.Required;
 
 public class TodoModel extends RealmObject {
     @PrimaryKey
-    private int id;
+    private String id;
 
     @Required
     private String description;
@@ -14,17 +14,17 @@ public class TodoModel extends RealmObject {
     @Required
     private boolean completed;
 
-    public TodoModel(final Integer id, final String description, final boolean completed ){
+    public TodoModel(final String id, final String description, final boolean completed ){
         this.setId(id);
         this.setDescription(description);
         this.setCompleted(completed);
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

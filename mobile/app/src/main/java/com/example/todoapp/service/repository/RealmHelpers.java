@@ -39,20 +39,9 @@ public class RealmHelpers {
             .migration(new Migration())
             .build();
 
-    private static Realm realm = null;
     private RealmHelpers(){  }
 
     public static Realm getRealm(){
-        if(realm == null){
-            realm = Realm.getInstance(config);
-        }
-        return realm;
-    }
-
-    public static void closeRealm(){
-        if(realm != null && !realm.isInTransaction()){
-            realm.close();
-            realm = null;
-        }
+        return Realm.getInstance(config);
     }
 }
