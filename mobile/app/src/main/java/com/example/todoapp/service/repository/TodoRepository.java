@@ -42,12 +42,12 @@ public class TodoRepository {
         return todo;
     }
 
-    public List<TodoModel> getAll() {
+    public List<TodoModel> getAllFiltered(boolean completed) {
         List<TodoModel> todo = null;
         Realm realm = null;
         try {
             realm = Realm.getDefaultInstance();
-            todo = realm.where(TodoModel.class).findAll();
+            todo = realm.where(TodoModel.class).equalTo(DatabaseConstants.TODO.COMPLETED, completed).findAll();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,5 +86,33 @@ public class TodoRepository {
                 realm.close();
             }
         }
+    }
+
+    public List<TodoModel> getTodo() {
+        return getAllFiltered(false);
+    }
+
+    public List<TodoModel> getCompleted() {
+        return getAllFiltered(true);
+    }
+
+    public boolean complete(TodoModel todo) {
+        boolean success = true;
+        Realm realm = null;
+        try {
+            realm = getRealm();
+            realm.executeTransaction(realm1 -> {
+                todo.setCompleted(true);
+                realm1.insertOrUpdate(todo);
+            });
+        } catch (Exception e) {
+            Log.d(TODO_TAG, "saveOrUpdate: " + e.getLocalizedMessage());
+            success = false;
+        }finally {
+            if (realm != null) {
+                realm.close();
+            }
+        }
+        return success;
     }
 }

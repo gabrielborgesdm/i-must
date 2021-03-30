@@ -27,7 +27,8 @@ import static com.example.todoapp.service.constants.TodoConstants.TODO_TAG;
 public class TodoListFragment extends Fragment {
 
     TodoListViewModel todoListViewModel;
-    TodoAdapter mAdapter = new TodoAdapter();
+    TodoAdapter mTodoAdapter = new TodoAdapter();
+    TodoAdapter mCompletedAdapter = new TodoAdapter();
     TodoListener mListener = new TodoListener() {
         @Override
         public void onEdit(TodoModel todo) {
@@ -36,12 +37,14 @@ public class TodoListFragment extends Fragment {
 
         @Override
         public void onDelete(TodoModel todo) {
-
+            todoListViewModel.delete(todo);
+            todoListViewModel.load();
         }
 
         @Override
         public void onComplete(TodoModel todo) {
-
+            todoListViewModel.complete(todo);
+            todoListViewModel.load();
         }
     };
 
@@ -51,10 +54,16 @@ public class TodoListFragment extends Fragment {
         Log.d(TODO_TAG, "onCreateView: teste");
         View root = inflater.inflate(R.layout.fragment_todo_list, container, false);
 
-        RecyclerView recyclerView = root.findViewById(R.id.todo_open_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.attachListener(mListener);
+        RecyclerView todoRecycler = root.findViewById(R.id.todo_open_view);
+        todoRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        todoRecycler.setAdapter(mTodoAdapter);
+        mTodoAdapter.attachListener(mListener);
+
+        RecyclerView completedRecycler = root.findViewById(R.id.todo_completed_view);
+        completedRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        completedRecycler.setAdapter(mCompletedAdapter);
+        mCompletedAdapter.attachListener(mListener);
+
         observer();
 
         return root;
@@ -73,7 +82,11 @@ public class TodoListFragment extends Fragment {
 
     private void observer() {
         todoListViewModel.todoList.observe(getViewLifecycleOwner(), list -> {
-            mAdapter.updateTodo(list);
+            mTodoAdapter.updateTodo(list);
+        });
+
+        todoListViewModel.completedList.observe(getViewLifecycleOwner(), list -> {
+            mCompletedAdapter.updateTodo(list);
         });
     }
 }

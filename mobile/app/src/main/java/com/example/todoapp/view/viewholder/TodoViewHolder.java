@@ -2,6 +2,8 @@ package com.example.todoapp.view.viewholder;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,14 +23,29 @@ public class TodoViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(TodoModel todo){
+        ImageView buttonEdit = itemView.findViewById(R.id.button_edit_guest);
+        ImageView buttonComplete = itemView.findViewById(R.id.button_complete_guest);
+        ImageView buttonRemove = itemView.findViewById(R.id.button_remove_guest);
         TextView textName = itemView.findViewById(R.id.text_description);
+
         textName.setText(todo.getDescription());
 
-        ImageView buttonEdit = itemView.findViewById(R.id.button_edit_guest);
-        buttonEdit.setOnClickListener(v -> {
-            mListener.onEdit(todo);
-        });
-        ImageView buttonRemove = itemView.findViewById(R.id.button_remove_guest);
+        if(!todo.getCompleted()){
+
+            buttonEdit.setOnClickListener(v -> {
+                mListener.onEdit(todo);
+            });
+
+
+            buttonComplete.setOnClickListener(v -> {
+                mListener.onComplete(todo);
+            });
+        } else {
+            buttonEdit.setVisibility(View.INVISIBLE);
+            buttonComplete.setVisibility(View.INVISIBLE);
+            textName.setPaintFlags(textName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+
         buttonRemove.setOnClickListener(v -> {
             new AlertDialog.Builder(itemView.getContext())
                     .setTitle(R.string.todo_removal)
@@ -40,9 +57,6 @@ public class TodoViewHolder extends RecyclerView.ViewHolder {
                     .show();
         });
 
-        ImageView buttonComplete = itemView.findViewById(R.id.button_complete_guest);
-        buttonComplete.setOnClickListener(v -> {
-            mListener.onComplete(todo);
-        });
+
     }
 }
