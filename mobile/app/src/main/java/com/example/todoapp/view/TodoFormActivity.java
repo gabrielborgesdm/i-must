@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.todoapp.R;
+import com.example.todoapp.service.constants.DatabaseConstants;
 import com.example.todoapp.service.model.TodoModel;
 import com.example.todoapp.viewmodel.TodoFormViewModel;
 
@@ -17,6 +19,7 @@ public class TodoFormActivity extends AppCompatActivity implements View.OnClickL
 
     private TodoFormViewModel mViewModel;
     private TodoModel mTodo = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,17 +28,7 @@ public class TodoFormActivity extends AppCompatActivity implements View.OnClickL
         mViewModel = new ViewModelProvider(this).get(TodoFormViewModel.class);
         setListeners();
         observe();
-    }
-
-    private void observe() {
-        mViewModel.saveTodo.observe(this, success -> {
-            if(success){
-                Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_LONG).show();
-            }
-            finish();
-        });
+        loadData();
     }
 
     @Override
@@ -49,6 +42,29 @@ public class TodoFormActivity extends AppCompatActivity implements View.OnClickL
             } else {
                 mViewModel.saveOrUpdate(mTodo.getId(), description, mTodo.getCompleted());
             }
+        }
+    }
+
+    private void observe() {
+        mViewModel.saveTodo.observe(this, success -> {
+            if(success){
+                Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_LONG).show();
+            }
+            finish();
+        });
+    }
+
+    private void loadData() {
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            mTodo = new TodoModel();
+            mTodo.setId(bundle.getString(DatabaseConstants.TODO.ID));
+            mTodo.setDescription(bundle.getString(DatabaseConstants.TODO.DESCRIPTION));
+            mTodo.setCompleted(bundle.getBoolean(DatabaseConstants.TODO.COMPLETED));
+            EditText editDescription = findViewById(R.id.edit_description);
+            editDescription.setText(mTodo.getDescription());
         }
     }
 

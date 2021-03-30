@@ -35,7 +35,7 @@ public class   TodoModel extends RealmObject {
         this.description = description;
     }
 
-    public Boolean getCompleted() {
+    public boolean getCompleted() {
         return completed;
     }
 

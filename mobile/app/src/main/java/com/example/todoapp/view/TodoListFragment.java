@@ -1,5 +1,6 @@
 package com.example.todoapp.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
+import com.example.todoapp.service.constants.DatabaseConstants;
 import com.example.todoapp.service.model.TodoModel;
 import com.example.todoapp.view.adapter.TodoAdapter;
 import com.example.todoapp.view.listener.TodoListener;
@@ -22,6 +24,7 @@ import com.example.todoapp.viewmodel.TodoListViewModel;
 
 import java.util.List;
 
+import static com.example.todoapp.service.constants.TodoConstants.TODO_OBJECT;
 import static com.example.todoapp.service.constants.TodoConstants.TODO_TAG;
 
 public class TodoListFragment extends Fragment {
@@ -32,7 +35,13 @@ public class TodoListFragment extends Fragment {
     TodoListener mListener = new TodoListener() {
         @Override
         public void onEdit(TodoModel todo) {
-
+            Intent intent = new Intent(getContext(), TodoFormActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(DatabaseConstants.TODO.ID, todo.getId());
+            bundle.putString(DatabaseConstants.TODO.DESCRIPTION, todo.getDescription());
+            bundle.putBoolean(DatabaseConstants.TODO.COMPLETED, todo.getCompleted());
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
 
         @Override
