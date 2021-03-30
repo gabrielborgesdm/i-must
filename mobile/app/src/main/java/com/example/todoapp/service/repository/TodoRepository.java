@@ -1,5 +1,7 @@
 package com.example.todoapp.service.repository;
 
+import android.util.Log;
+
 import com.example.todoapp.service.constants.DatabaseConstants;
 import com.example.todoapp.service.model.TodoModel;
 
@@ -7,6 +9,7 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static com.example.todoapp.service.constants.TodoConstants.TODO_TAG;
 import static com.example.todoapp.service.repository.RealmHelpers.getRealm;
 
 public class TodoRepository {
@@ -23,7 +26,7 @@ public class TodoRepository {
     }
 
     public TodoModel get(final String id) {
-        TodoModel todo = null;
+        TodoModel todo;
         Realm realm = null;
         try {
             realm = getRealm();
@@ -43,32 +46,30 @@ public class TodoRepository {
         List<TodoModel> todo = null;
         Realm realm = null;
         try {
-            realm = getRealm();
+            realm = Realm.getDefaultInstance();
             todo = realm.where(TodoModel.class).findAll();
-        } finally {
-            if (realm != null) {
-                realm.close();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        Log.d(TODO_TAG, "getAll: " + todo);
         return todo;
     }
 
-    public void saveOrUpdate(final TodoModel todo) {
-
+    public boolean saveOrUpdate(final TodoModel todo) {
+        boolean success = true;
         Realm realm = null;
         try {
             realm = getRealm();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.insertOrUpdate(todo);
-                }
-            });
-        } finally {
+            realm.executeTransaction(realm1 -> realm1.insertOrUpdate(todo));
+        } catch (Exception e) {
+            Log.d(TODO_TAG, "saveOrUpdate: " + e.getLocalizedMessage());
+            success = false;
+        }finally {
             if (realm != null) {
                 realm.close();
             }
         }
+        return success;
     }
 
     public void delete(final String id) {

@@ -1,5 +1,7 @@
 package com.example.todoapp.service.repository;
 
+import android.content.Context;
+
 import com.example.todoapp.service.constants.DatabaseConstants;
 import com.example.todoapp.service.model.TodoModel;
 
@@ -32,16 +34,27 @@ class Migration implements RealmMigration {
 class Module {}
 
 public class RealmHelpers {
-    private static final RealmConfiguration config = new RealmConfiguration.Builder()
-            .modules(new Module())
-            .schemaVersion(DatabaseConstants.DATABASE_VERSION)
-            .name(DatabaseConstants.DATABASE_NAME)
-            .migration(new Migration())
-            .build();
+    private static RealmConfiguration getRealmConfig(){
+         return new RealmConfiguration.Builder()
+                .modules(new Module())
+                 .allowQueriesOnUiThread(true)
+                 .allowWritesOnUiThread(true)
+                .schemaVersion(DatabaseConstants.DATABASE_VERSION)
+                .name(DatabaseConstants.DATABASE_NAME)
+                .migration(new Migration())
+                .build();
+    }
 
     private RealmHelpers(){  }
 
     public static Realm getRealm(){
-        return Realm.getInstance(config);
+        return Realm.getDefaultInstance();
+    }
+
+
+
+    public static void startRealmContext(Context context) {
+        Realm.init(context);
+        Realm.setDefaultConfiguration(getRealmConfig());
     }
 }
