@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/text_description"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+
+        android:text="@string/open_todo"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/button_remove_guest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="16dp"
+        android:contentDescription="@string/remove_button"
+        android:src="@drawable/ic_baseline_delete_24"
+        app:tint="@color/danger" />
+
+    <ImageView
+        android:id="@+id/button_edit_guest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:layout_toLeftOf="@+id/button_remove_guest"
+        android:contentDescription="@string/edit_button"
+        android:src="@drawable/ic_baseline_edit_24"
+        app:tint="@color/warning" />
+
+    <ImageView
+        android:id="@+id/button_complete_guest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:layout_toLeftOf="@+id/button_edit_guest"
+        android:contentDescription="@string/complete_button"
+        android:src="@drawable/ic_baseline_check_24"
+        app:tint="@color/success" />
+</RelativeLayout>

@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Todo App</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="save">Save</string>
+
+    <string name="open_todo">To do</string>
+    <string name="completed_todo">Completed</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="description">Description</string>
+    <string name="enter_the_description">Enter the description</string>
+    <string name="success">Success</string>
+    <string name="failed">Failed</string>
+    <string name="remove_button">remove button</string>
+    <string name="edit_button">edit button</string>
+    <string name="complete_button">complete button</string>
+    <string name="todo_removal">Todo removal</string>
+    <string name="want_to_remove">Do you want to remove this task?</string>
+    <string name="confirm_remove">remove</string>
+    <string name="remove">Remove</string>
+    <string name="cancel">Cancel</string>
+    <string name="todo_list">Todo List</string>
+</resources>
