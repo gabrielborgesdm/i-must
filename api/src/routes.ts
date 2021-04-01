@@ -1,11 +1,11 @@
-import { Router } from "express";
-import { TodoController } from "@controllers/TodoController";
+import { Router } from 'express'
+import { TodoController } from '@controllers/TodoController'
 
-const router = Router();
-const todo = new TodoController();
+const router = Router()
+const todo = new TodoController()
 
-router.post('/insert', (request, response) => {
-    return todo.insertTodos(request, response);
-});
+router.post('/tasks', (request, response) => {
+  return todo.insertMany(request, response)
+})
 
 export { router }

@@ -1,3 +1,6 @@
-import { app } from "./app";
+import * as dotenv from 'dotenv'
 
-app.listen(3333);
+dotenv.config()
+import { app } from './app'
+
+app.listen(3333)
