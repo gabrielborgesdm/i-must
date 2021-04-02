@@ -61,4 +61,18 @@ export class TaskController {
 
     return response.status(200).json({ success: true, tasks: upsertedTasks })
   }
+
+  async remove (request: Request, response: Response): Promise<Response> {
+    const id = request.params.id
+    return await Task.findOneAndRemove({ id: id }, null, (err: any, doc: any, res: any) => {
+      if (err) {
+        console.log(err)
+        return response.status(200).json({ success: false, message: "It wasn't possible to delete task.", error: err.name })
+      } else if (!doc) {
+        return response.status(200).json({ success: false, message: 'There is no task with this \'id\'' })
+      } else {
+        return response.status(200).json({ success: true, message: 'Task removed with success', task: doc })
+      }
+    })
+  }
 }
