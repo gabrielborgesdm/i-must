@@ -1,5 +1,6 @@
-import { Request, Response } from 'express'
+import { Request, Response } from "express";
 
+<<<<<<< HEAD
 import Todo from '@models/Todo'
 import TodoJoi from '@models/TodoJoi'
 import { ValidationError } from 'joi'
@@ -15,16 +16,14 @@ export class TodoController {
       const { error } = TodoJoi.validate(task)
       if (error) errors.push(error)
     })
+=======
 
-    if (errors.length > 0) {
-      return response.status(200).json({ success: false, errors })
-    }
-    try {
-      await Todo.insertMany(tasks)
-    } catch (error) {
-      console.log(error)
-    }
+export class TodoController {
+>>>>>>> parent of 5eed574... Joi Validation, Mongoose, Insert MUltiple tasks
 
+    async insertTodos(request: Request, response: Response): Promise<Response> {
+
+<<<<<<< HEAD
     return response.status(200).json({ success: true })
   }
 
@@ -69,3 +68,8 @@ export class TodoController {
     }
   }
 }
+=======
+        return response.status(200).json({ "success": true });
+    }
+}
+>>>>>>> parent of 5eed574... Joi Validation, Mongoose, Insert MUltiple tasks

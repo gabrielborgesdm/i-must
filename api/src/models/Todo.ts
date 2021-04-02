@@ -1,25 +1,11 @@
-import mongoose from '@config/Database'
+export class Todo {
+    public id: string;
+    public description: string;
+    public completed: boolean;
 
-const TaskSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    unique: true,
-    require: true
-  },
-  description: {
-    type: String,
-    require: true
-  },
-  completed: {
-    type: Boolean,
-    require: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-})
-
-const Task = mongoose.model('Task', TaskSchema)
-
-export default Task
+    constructor(id: string, description: string, completed: boolean) {
+        this.id = id;
+        this.description = description;
+        this.completed = completed;
+    }
+}
