@@ -6,7 +6,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
-public class   TodoModel extends RealmObject {
+public class TodoModel extends RealmObject {
     @PrimaryKey
     private String id;
 

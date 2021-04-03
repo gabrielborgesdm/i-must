@@ -23,8 +23,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_description"
         android:hint="@string/enter_the_description"
+        android:inputType="text"
+        android:maxLines="1"
+        android:nextFocusUp="@id/button_save"
         app:layout_constraintRight_toRightOf="parent" />
-
 
     <Button
         android:id="@+id/button_save"

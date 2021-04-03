@@ -23,4 +23,10 @@
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
     <string name="todo_list">Todo List</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="enter_your_full_name">Enter your full name</string>
+    <string name="enter_your_e_mail">Enter your e-mail</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="create_account">Create account</string>
+    <string name="have_already_an_account_sign_in">Have already an account? Sign in</string>
 </resources>

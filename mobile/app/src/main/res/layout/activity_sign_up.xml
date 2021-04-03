@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.SignUpActivity">
+
+    <TextView
+        android:id="@+id/text_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:paddingBottom="40dp"
+        android:text="@string/sign_up"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@id/full_name_sign_up"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <EditText
+        android:id="@+id/full_name_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_your_full_name"
+        app:layout_constraintBottom_toTopOf="@id/email_sign_up"
+        app:layout_constraintLeft_toLeftOf="@id/text_sign_up"
+        app:layout_constraintRight_toRightOf="@id/text_sign_up"
+        app:layout_constraintTop_toBottomOf="@id/text_sign_up" />
+
+    <EditText
+        android:id="@+id/email_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_your_e_mail"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@id/password_sign_up"
+        app:layout_constraintLeft_toLeftOf="@id/full_name_sign_up"
+        app:layout_constraintRight_toRightOf="@id/full_name_sign_up"
+        app:layout_constraintTop_toBottomOf="@id/full_name_sign_up" />
+
+    <EditText
+        android:id="@+id/password_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_your_password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="@id/button_save_sign_up"
+        app:layout_constraintLeft_toLeftOf="@id/email_sign_up"
+        app:layout_constraintRight_toRightOf="@id/email_sign_up"
+        app:layout_constraintTop_toBottomOf="@id/email_sign_up" />
+
+    <Button
+        android:id="@+id/button_save_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/create_account"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="@id/text_have_an_account_sign_in"
+        app:layout_constraintLeft_toLeftOf="@id/password_sign_up"
+        app:layout_constraintRight_toRightOf="@id/password_sign_up"
+        app:layout_constraintTop_toBottomOf="@id/password_sign_up" />
+
+    <TextView
+        android:id="@+id/text_have_an_account_sign_in"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/have_already_an_account_sign_in"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/button_save_sign_up"
+        app:layout_constraintRight_toRightOf="@id/button_save_sign_up"
+        app:layout_constraintTop_toBottomOf="@id/button_save_sign_up" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
