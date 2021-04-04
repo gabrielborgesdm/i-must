@@ -16,7 +16,9 @@
         "@typescript-eslint/parser": "^4.20.0",
         "axios": "^0.21.1",
         "express": "^4.17.1",
-        "oracledb": "^5.1.0"
+        "joi": "^17.4.0",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.12.3"
     },
     "devDependencies": {
         "@babel/cli": "^7.13.14",
