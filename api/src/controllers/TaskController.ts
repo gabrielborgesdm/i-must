@@ -9,7 +9,7 @@ export class TaskController {
     let error = false
 
     try {
-      doc = await Task.findOne({ id: id })
+      doc = await Task.findOne({ $and: [{ id }, { userId: request.body.userId }] })
     } catch (err) {
       console.log(err)
       error = true
@@ -29,7 +29,7 @@ export class TaskController {
     let error = false
 
     try {
-      docs = await Task.find({})
+      docs = await Task.find({ userId: request.body.userId })
     } catch (err) {
       console.log(err)
       error = true
@@ -43,13 +43,14 @@ export class TaskController {
   }
 
   async upsertMany (request: Request, response: Response): Promise<Response> {
-    const { tasks } = request.body
+    const { tasks, userId } = request.body
     const upsertedTasks: Array<Object> = []
     let error = false
 
     for (const task of tasks) {
       try {
-        const res = await Task.updateOne({ id: task.id }, task, { new: true, upsert: true })
+        task.userId = userId
+        const res = await Task.updateOne({ $and: [{ id: task.id }, { userId }] }, task, { new: true, upsert: true })
         if (res.ok) upsertedTasks.push(task)
       } catch (err) {
         error = true
@@ -63,22 +64,24 @@ export class TaskController {
     }
   }
 
-  async remove (request: Request, response: Response): Promise<Response> {
+  async delete (request: Request, response: Response): Promise<Response> {
     const id = request.params.id
+    let doc: any = null
     let error = false
-    let doc = null
+
     try {
-      doc = await Task.findOneAndRemove({ id: id })
+      doc = await Task.findOneAndRemove({ $and: [{ id }, { userId: request.body.userId }] })
     } catch (err) {
       console.log(err)
       error = true
     }
+
     if (error) {
-      return response.status(200).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
+      return response.status(200).json({ success: false, status: 'server_error', message: 'It wasn\'t possible to delete task.' })
     } else if (!doc) {
       return response.status(200).json({ success: false, status: 'not_found', message: 'There is no task with this \'id\'.' })
     } else {
-      return response.status(200).json({ success: true, status: 'operation_executed', message: 'Task removed with success.', task: doc })
+      return response.status(200).json({ success: true, status: 'operation_executed', task: doc })
     }
   }
 }

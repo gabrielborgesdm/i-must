@@ -1,9 +1,11 @@
 import mongoose from '@config/Database'
+import { Schema } from 'mongoose'
 
 const TaskSchema = new mongoose.Schema({
   id: {
     type: String,
     unique: true,
+    index: true,
     require: true
   },
   description: {
@@ -12,6 +14,11 @@ const TaskSchema = new mongoose.Schema({
   },
   completed: {
     type: Boolean,
+    require: true
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     require: true
   },
   createdAt: {

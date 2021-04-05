@@ -8,10 +8,10 @@ export default class AuthMiddleware {
     const authHeader = request.headers.authorization
     const token = authHeader && authHeader.split(' ')[1]
     const requestIp: string | null = auth.getIp(request)
-    if (!token) return response.status(401).json({ state: 'Unauthorized.' })
+    if (!token) return response.status(401).json({ success: false, status: 'unauthorized', message: 'Access Unauthorized.' })
     const _id = auth.verifyToken(token, requestIp)
-    if (!_id) return response.status(403).json({ state: 'Forbidden.' })
-    request.body.user = { _id }
+    if (!_id) return response.status(403).json({ success: false, status: 'forbidden', message: 'Access forbidden.' })
+    request.body.userId = _id
     next()
   }
 }

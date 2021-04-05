@@ -34,7 +34,7 @@ router.get('/task/:id', validation.validate(TaskIdSchema, 'id', 'params'), (requ
 })
 
 router.delete('/task/:id', validation.validate(TaskIdSchema, 'id', 'params'), (request, response) => {
-  return task.remove(request, response)
+  return task.delete(request, response)
 })
 
 export { router }
