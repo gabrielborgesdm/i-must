@@ -1,42 +1,55 @@
 import { Request, Response } from 'express'
 
 import Task from '@models/Task'
-import { ValidationError } from 'joi'
 
 export class TaskController {
-  async get(request: Request, response: Response): Promise<Response> {
+  async get (request: Request, response: Response): Promise<Response> {
     const id = request.params.id
-    return await Task.findOne({ id: id }, (err: any, doc: typeof Task) => {
-      if (err) {
-        console.log(err)
-        return response.status(200).json({ success: false, message: "It wasn't possible to get task.", error: err.name })
-      } else if (!doc) {
-        return response.status(200).json({ success: false, message: 'There is no task with this \'id\'.' })
-      } else {
-        return response.status(200).json({ success: true, task: doc })
-      }
-    })
+    let doc: any = null
+    let error = false
+
+    try {
+      doc = await Task.findOne({ id: id })
+    } catch (err) {
+      console.log(err)
+      error = true
+    }
+
+    if (error) {
+      return response.status(200).json({ success: false, status: 'server_error', message: 'It wasn\'t possible to get task.' })
+    } else if (!doc) {
+      return response.status(200).json({ success: false, status: 'not_found', message: 'There is no task with this \'id\'.' })
+    } else {
+      return response.status(200).json({ success: true, status: 'operation_executed', task: doc })
+    }
   }
 
-  async getAll(request: Request, response: Response): Promise<Response> {
-    return await Task.find({}, (err: any, docs: Array<typeof Task>) => {
-      if (err) {
-        console.log(err)
-        return response.status(200).json({ success: false, message: "It wasn't possible to get tasks.", error: err.name })
-      } else {
-        return response.status(200).json({ success: true, taks: docs })
-      }
-    })
+  async getAll (request: Request, response: Response): Promise<Response> {
+    let docs: any = null
+    let error = false
+
+    try {
+      docs = await Task.find({})
+    } catch (err) {
+      console.log(err)
+      error = true
+    }
+    if (error) {
+      console.log(error)
+      return response.status(200).json({ success: false, status: 'server_error', message: "It wasn't possible to get tasks." })
+    } else {
+      return response.status(200).json({ success: true, status: 'operation_executed', taks: docs })
+    }
   }
 
-  async upsertMany(request: Request, response: Response): Promise<Response> {
+  async upsertMany (request: Request, response: Response): Promise<Response> {
     const { tasks } = request.body
     const upsertedTasks: Array<Object> = []
     let error = false
 
     for (const task of tasks) {
       try {
-        let res = await Task.updateOne({ id: task.id }, task, { new: true, upsert: true })
+        const res = await Task.updateOne({ id: task.id }, task, { new: true, upsert: true })
         if (res.ok) upsertedTasks.push(task)
       } catch (err) {
         error = true
@@ -44,13 +57,13 @@ export class TaskController {
       }
     }
     if (error && upsertedTasks.length === 0) {
-      return response.status(200).json({ success: false, message: 'Something went wrong, try again later.' })
+      return response.status(200).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
     } else {
-      return response.status(200).json({ success: true, tasks: upsertedTasks })
+      return response.status(200).json({ success: true, status: 'operation_executed', tasks: upsertedTasks })
     }
   }
 
-  async remove(request: Request, response: Response): Promise<Response> {
+  async remove (request: Request, response: Response): Promise<Response> {
     const id = request.params.id
     let error = false
     let doc = null
@@ -61,11 +74,11 @@ export class TaskController {
       error = true
     }
     if (error) {
-      return response.status(200).json({ success: false, message: 'Something went wrong, try again later.' })
+      return response.status(200).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
     } else if (!doc) {
-      return response.status(200).json({ success: false, message: 'There is no task with this \'id\'.' })
+      return response.status(200).json({ success: false, status: 'not_found', message: 'There is no task with this \'id\'.' })
     } else {
-      return response.status(200).json({ success: true, message: 'Task removed with success.', task: doc })
+      return response.status(200).json({ success: true, status: 'operation_executed', message: 'Task removed with success.', task: doc })
     }
   }
 }

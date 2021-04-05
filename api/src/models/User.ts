@@ -1,11 +1,6 @@
 import mongoose from '@config/Database'
 
 const UserSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    unique: true,
-    require: true
-  },
   name: {
     type: String,
     require: true

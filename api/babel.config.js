@@ -15,7 +15,9 @@ module.exports = {
       alias: {
         '@config': './src/config',
         '@models': './src/models',
-        '@controllers': './src/controllers'
+        '@controllers': './src/controllers',
+        '@middlewares': './src/middlewares',
+        '@services': './src/services'
       }
     }]
   ]

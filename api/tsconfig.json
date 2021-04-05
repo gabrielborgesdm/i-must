@@ -5,11 +5,10 @@
         "lib": [
             "ES2016"
         ],
-        "allowJs": true,
         "outDir": "./dist",
         "rootDir": "./src",
         "removeComments": true,
-        "strict": true,
+        "strict": false,
         "typeRoots": [
             "./node_modules/@types",
             "./src/@types"
@@ -31,6 +30,9 @@
             ],
             "@config/*": [
                 "./src/config/*"
+            ],
+            "@services/*": [
+                "./src/services/*"
             ]
         }
     }
