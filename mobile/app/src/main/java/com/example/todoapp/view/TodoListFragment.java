@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,12 +17,9 @@ import com.example.todoapp.R;
 import com.example.todoapp.service.constants.DatabaseConstants;
 import com.example.todoapp.service.model.TodoModel;
 import com.example.todoapp.view.adapter.TodoAdapter;
-import com.example.todoapp.view.listener.TodoListener;
+import com.example.todoapp.service.listener.TodoListener;
 import com.example.todoapp.viewmodel.TodoListViewModel;
 
-import java.util.List;
-
-import static com.example.todoapp.service.constants.TodoConstants.TODO_OBJECT;
 import static com.example.todoapp.service.constants.TodoConstants.TODO_TAG;
 
 public class TodoListFragment extends Fragment {

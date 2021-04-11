@@ -1,9 +1,8 @@
-package com.example.todoapp.service.repository;
+package com.example.todoapp.service.repository.local;
 
 import android.content.Context;
 
 import com.example.todoapp.service.constants.DatabaseConstants;
-import com.example.todoapp.service.model.TodoModel;
 
 import io.realm.DynamicRealm;
 import io.realm.FieldAttribute;

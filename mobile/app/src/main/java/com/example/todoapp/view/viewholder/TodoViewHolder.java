@@ -1,9 +1,7 @@
 package com.example.todoapp.view.viewholder;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
 import com.example.todoapp.service.model.TodoModel;
-import com.example.todoapp.view.listener.TodoListener;
+import com.example.todoapp.service.listener.TodoListener;
 
 public class TodoViewHolder extends RecyclerView.ViewHolder {
     TodoListener mListener;

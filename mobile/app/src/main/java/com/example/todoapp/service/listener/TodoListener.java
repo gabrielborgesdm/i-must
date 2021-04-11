@@ -1,4 +1,4 @@
-package com.example.todoapp.view.listener;
+package com.example.todoapp.service.listener;
 
 import com.example.todoapp.service.model.TodoModel;
 

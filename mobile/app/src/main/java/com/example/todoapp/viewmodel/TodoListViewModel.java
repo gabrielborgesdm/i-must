@@ -10,11 +10,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.todoapp.service.model.TodoModel;
-import com.example.todoapp.service.repository.TodoRepository;
+import com.example.todoapp.service.repository.local.TodoRepository;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 import static com.example.todoapp.service.constants.TodoConstants.TODO_TAG;
 

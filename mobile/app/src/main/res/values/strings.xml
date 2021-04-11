@@ -28,5 +28,26 @@
     <string name="enter_your_e_mail">Enter your e-mail</string>
     <string name="enter_your_password">Enter your password</string>
     <string name="create_account">Create account</string>
-    <string name="have_already_an_account_sign_in">Have already an account? Sign in</string>
+    <string name="already_have_an_account_sign_in">Already have an account? Sign in</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync tasks periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="authentication_necessary">Authentication is necessary</string>
+    <string name="sign_in">Sign in</string>
+    <string name="log_off">Log off</string>
+    <string name="dont_have_an_account_create_one">Don\'t have an account? Sign Up</string>
+    <string name="something_went_wrong">Something went wrong.</string>
 </resources>

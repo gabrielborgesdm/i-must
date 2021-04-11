@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoapp.R;
 import com.example.todoapp.service.model.TodoModel;
-import com.example.todoapp.view.listener.TodoListener;
+import com.example.todoapp.service.listener.TodoListener;
 import com.example.todoapp.view.viewholder.TodoViewHolder;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mTodoList.size();
+        return mTodoList == null ? 0 : mTodoList.size();
     }
 
     public void updateTodo(List<TodoModel> list){

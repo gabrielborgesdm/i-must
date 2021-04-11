@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.todoapp.service.model.TodoModel;
-import com.example.todoapp.service.repository.TodoRepository;
+import com.example.todoapp.service.repository.local.TodoRepository;
 
 public class TodoFormViewModel extends AndroidViewModel {
     private Context mContext;

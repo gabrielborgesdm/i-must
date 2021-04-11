@@ -1,4 +1,4 @@
-package com.example.todoapp.service.repository;
+package com.example.todoapp.service.repository.local;
 
 import android.util.Log;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import io.realm.Realm;
 
 import static com.example.todoapp.service.constants.TodoConstants.TODO_TAG;
-import static com.example.todoapp.service.repository.RealmHelpers.getRealm;
+import static com.example.todoapp.service.repository.local.RealmHelpers.getRealm;
 
 public class TodoRepository {
     private static TodoRepository repository = null;
