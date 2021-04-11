@@ -8,11 +8,11 @@ import static com.example.todoapp.service.constants.PersonConstants.PERSON_TOKEN
 
 public class HeaderModel {
     @SerializedName(PERSON_TOKEN)
-    String token = "";
+    public String token = "";
 
     @SerializedName(PERSON_SUCCESS)
-    boolean success = false;
+    public boolean success = false;
 
     @SerializedName(PERSON_STATUS)
-    String status = "";
+    public String status = "";
 }

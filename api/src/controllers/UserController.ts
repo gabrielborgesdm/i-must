@@ -30,7 +30,7 @@ export class UserController {
     if (error === 'user_exists') {
       return response.status(200).json({ success: false, status: 'in_use', message: 'E-mail already being used, try with a different one.' })
     } else if (error) {
-      return response.status(200).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
+      return response.status(500).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
     } else if (doc) {
       return response.status(200).json({ success: true, status: 'operation_executed', message: 'User created with success.' })
     } else {
@@ -54,7 +54,7 @@ export class UserController {
     }
 
     if (error) {
-      return response.status(200).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
+      return response.status(500).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
     } else if (token) {
       return response.status(200).json({ success: true, status: 'operation_executed', token })
     } else {

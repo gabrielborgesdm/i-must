@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 public class SecurityPreferences {
     private SharedPreferences mPreferences;
 
-    SecurityPreferences(Context context){
+    public SecurityPreferences(Context context){
         mPreferences = context.getSharedPreferences("taskShared", Context.MODE_PRIVATE);
     }
 

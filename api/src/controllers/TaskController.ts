@@ -16,7 +16,7 @@ export class TaskController {
     }
 
     if (error) {
-      return response.status(200).json({ success: false, status: 'server_error', message: 'It wasn\'t possible to get task.' })
+      return response.status(500).json({ success: false, status: 'server_error', message: 'It wasn\'t possible to get task.' })
     } else if (!doc) {
       return response.status(200).json({ success: false, status: 'not_found', message: 'There is no task with this \'id\'.' })
     } else {
@@ -36,7 +36,7 @@ export class TaskController {
     }
     if (error) {
       console.log(error)
-      return response.status(200).json({ success: false, status: 'server_error', message: "It wasn't possible to get tasks." })
+      return response.status(500).json({ success: false, status: 'server_error', message: "It wasn't possible to get tasks." })
     } else {
       return response.status(200).json({ success: true, status: 'operation_executed', taks: docs })
     }
@@ -58,7 +58,7 @@ export class TaskController {
       }
     }
     if (error && upsertedTasks.length === 0) {
-      return response.status(200).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
+      return response.status(500).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
     } else {
       return response.status(200).json({ success: true, status: 'operation_executed', tasks: upsertedTasks })
     }
@@ -77,7 +77,7 @@ export class TaskController {
     }
 
     if (error) {
-      return response.status(200).json({ success: false, status: 'server_error', message: 'It wasn\'t possible to delete task.' })
+      return response.status(500).json({ success: false, status: 'server_error', message: 'It wasn\'t possible to delete task.' })
     } else if (!doc) {
       return response.status(200).json({ success: false, status: 'not_found', message: 'There is no task with this \'id\'.' })
     } else {

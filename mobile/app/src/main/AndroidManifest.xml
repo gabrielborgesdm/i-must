@@ -12,7 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.SignInActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".view.SignInActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".view.SignUpActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".view.TodoFormActivity"
@@ -22,11 +28,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.TodoApp.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
