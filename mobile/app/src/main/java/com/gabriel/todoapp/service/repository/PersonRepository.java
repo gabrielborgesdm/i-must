@@ -3,9 +3,9 @@ package com.gabriel.todoapp.service.repository;
 import android.content.Context;
 
 import com.gabriel.todoapp.R;
-import com.gabriel.todoapp.service.listener.HeaderListener;
+import com.gabriel.todoapp.service.listener.APIListener;
 import com.gabriel.todoapp.service.model.remote.HeaderModel;
-import com.gabriel.todoapp.service.listener.SignUpListener;
+import com.gabriel.todoapp.service.listener.APIListener;
 import com.gabriel.todoapp.service.model.remote.SignUpModel;
 import com.gabriel.todoapp.service.repository.remote.PersonService;
 import com.gabriel.todoapp.service.repository.remote.RetrofitClient;
@@ -33,7 +33,7 @@ public class PersonRepository {
         mContext = context;
     }
 
-    public void login(String email, String password, HeaderListener listener){
+    public void login(String email, String password, APIListener listener){
         JSONObject body = new JSONObject();
         JSONObject user = new JSONObject();
         try {
@@ -63,7 +63,7 @@ public class PersonRepository {
         });
     }
 
-    public void signUp(String name, String email, String password, SignUpListener listener){
+    public void signUp(String name, String email, String password, APIListener listener){
         JSONObject body = new JSONObject();
         JSONObject user = new JSONObject();
         try {

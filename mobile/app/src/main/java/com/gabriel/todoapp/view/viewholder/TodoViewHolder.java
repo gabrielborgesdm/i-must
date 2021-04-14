@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gabriel.todoapp.R;
-import com.gabriel.todoapp.service.model.local.TodoModel;
-import com.gabriel.todoapp.service.listener.TodoListener;
+import com.gabriel.todoapp.service.model.local.TaskModel;
+import com.gabriel.todoapp.service.listener.TaskListener;
 
 public class TodoViewHolder extends RecyclerView.ViewHolder {
-    TodoListener mListener;
-    public TodoViewHolder(@NonNull View itemView, TodoListener listener) {
+    TaskListener mListener;
+    public TodoViewHolder(@NonNull View itemView, TaskListener listener) {
         super(itemView);
         mListener = listener;
     }
 
-    public void bind(TodoModel todo){
+    public void bind(TaskModel todo){
         ImageView buttonEdit = itemView.findViewById(R.id.button_edit_guest);
         ImageView buttonComplete = itemView.findViewById(R.id.button_complete_guest);
         ImageView buttonRemove = itemView.findViewById(R.id.button_remove_guest);

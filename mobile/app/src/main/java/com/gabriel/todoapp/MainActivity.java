@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.gabriel.todoapp.service.repository.SyncRepository;
 import com.gabriel.todoapp.view.TodoFormActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -25,5 +26,8 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view ->
                 startActivity(new Intent(getApplicationContext(), TodoFormActivity.class)));
+
+        SyncRepository sync = new SyncRepository(getApplicationContext());
+        sync.syncTasks();
     }
 }

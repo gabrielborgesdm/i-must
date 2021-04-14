@@ -6,7 +6,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
-public class TodoModel extends RealmObject {
+public class TaskModel extends RealmObject {
     @PrimaryKey
     private String id;
 
@@ -15,7 +15,7 @@ public class TodoModel extends RealmObject {
 
     private boolean completed;
 
-    public TodoModel() {
+    public TaskModel() {
         this.id = UUID.randomUUID().toString();
     }
 

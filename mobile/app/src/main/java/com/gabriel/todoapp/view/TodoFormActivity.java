@@ -10,13 +10,13 @@ import android.widget.Toast;
 
 import com.gabriel.todoapp.R;
 import com.gabriel.todoapp.service.constants.DatabaseConstants;
-import com.gabriel.todoapp.service.model.local.TodoModel;
+import com.gabriel.todoapp.service.model.local.TaskModel;
 import com.gabriel.todoapp.viewmodel.TodoFormViewModel;
 
 public class TodoFormActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TodoFormViewModel mViewModel;
-    private TodoModel mTodo = null;
+    private TaskModel mTodo = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class TodoFormActivity extends AppCompatActivity implements View.OnClickL
     private void loadData() {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-            mTodo = new TodoModel();
+            mTodo = new TaskModel();
             mTodo.setId(bundle.getString(DatabaseConstants.TODO.ID));
             mTodo.setDescription(bundle.getString(DatabaseConstants.TODO.DESCRIPTION));
             mTodo.setCompleted(bundle.getBoolean(DatabaseConstants.TODO.COMPLETED));

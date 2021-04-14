@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.gabriel.todoapp.service.model.local.TodoModel;
+import com.gabriel.todoapp.service.model.local.TaskModel;
 import com.gabriel.todoapp.service.repository.local.TodoRepository;
 
 public class TodoFormViewModel extends AndroidViewModel {
@@ -24,7 +24,7 @@ public class TodoFormViewModel extends AndroidViewModel {
     }
 
     public void saveOrUpdate(final String id, final String description, final boolean completed){
-        TodoModel todo = new TodoModel();
+        TaskModel todo = new TaskModel();
         if(id != null) {
             todo.setId(id);
         }

@@ -3,13 +3,16 @@ package com.gabriel.todoapp.service.repository.local;
 import android.util.Log;
 
 import com.gabriel.todoapp.service.constants.DatabaseConstants;
-import com.gabriel.todoapp.service.model.local.TodoModel;
+import com.gabriel.todoapp.service.model.local.TaskModel;
 
 import java.util.List;
 
 import io.realm.Realm;
 
-import static com.gabriel.todoapp.service.constants.TodoConstants.TODO_TAG;
+import static com.gabriel.todoapp.service.constants.TaskConstants.TASK_FILTER_ALL;
+import static com.gabriel.todoapp.service.constants.TaskConstants.TASK_FILTER_COMPLETED;
+import static com.gabriel.todoapp.service.constants.TaskConstants.TASK_FILTER_OPEN;
+import static com.gabriel.todoapp.service.constants.TaskConstants.TASK_TAG;
 import static com.gabriel.todoapp.service.repository.local.RealmHelpers.getRealm;
 
 public class TodoRepository {
@@ -25,13 +28,13 @@ public class TodoRepository {
         return repository;
     }
 
-    public TodoModel get(final String id) {
-        TodoModel todo;
+    public TaskModel get(final String id) {
+        TaskModel todo;
         Realm realm = null;
         try {
             realm = getRealm();
             todo = realm
-                    .where(TodoModel.class)
+                    .where(TaskModel.class)
                     .equalTo(DatabaseConstants.TODO.ID, id)
                     .findFirst();
         } finally {
@@ -42,27 +45,33 @@ public class TodoRepository {
         return todo;
     }
 
-    public List<TodoModel> getAllFiltered(boolean completed) {
-        List<TodoModel> todo = null;
+    public List<TaskModel> getAllFiltered(int filter) {
+        List<TaskModel> todo = null;
         Realm realm = null;
         try {
             realm = Realm.getDefaultInstance();
-            todo = realm.where(TodoModel.class).equalTo(DatabaseConstants.TODO.COMPLETED, completed).findAll();
+            if(filter == TASK_FILTER_ALL){
+                todo = realm.where(TaskModel.class).findAll();
+            } else {
+                Boolean completed = filter == TASK_FILTER_COMPLETED;
+                todo = realm.where(TaskModel.class).equalTo(DatabaseConstants.TODO.COMPLETED, completed).findAll();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d(TODO_TAG, "getAll: " + todo);
+        Log.d(TASK_TAG, "getAll: " + todo);
         return todo;
     }
 
-    public boolean saveOrUpdate(final TodoModel todo) {
+    public boolean saveOrUpdate(final TaskModel todo) {
         boolean success = true;
         Realm realm = null;
         try {
             realm = getRealm();
             realm.executeTransaction(realm1 -> realm1.insertOrUpdate(todo));
         } catch (Exception e) {
-            Log.d(TODO_TAG, "saveOrUpdate: " + e.getLocalizedMessage());
+            Log.d(TASK_TAG, "saveOrUpdate: " + e.getLocalizedMessage());
             success = false;
         }finally {
             if (realm != null) {
@@ -77,7 +86,7 @@ public class TodoRepository {
         try {
             realm = getRealm();
             realm.executeTransaction(inRealm ->
-                    inRealm.where(TodoModel.class)
+                    inRealm.where(TaskModel.class)
                             .equalTo(DatabaseConstants.TODO.ID, id)
                             .findFirst()
                             .deleteFromRealm());
@@ -88,15 +97,15 @@ public class TodoRepository {
         }
     }
 
-    public List<TodoModel> getTodo() {
-        return getAllFiltered(false);
+    public List<TaskModel> getTodo() {
+        return getAllFiltered(TASK_FILTER_OPEN);
     }
 
-    public List<TodoModel> getCompleted() {
-        return getAllFiltered(true);
+    public List<TaskModel> getCompleted() {
+        return getAllFiltered(TASK_FILTER_COMPLETED);
     }
 
-    public boolean complete(TodoModel todo) {
+    public boolean complete(TaskModel todo) {
         boolean success = true;
         Realm realm = null;
         try {
@@ -106,7 +115,7 @@ public class TodoRepository {
                 realm1.insertOrUpdate(todo);
             });
         } catch (Exception e) {
-            Log.d(TODO_TAG, "saveOrUpdate: " + e.getLocalizedMessage());
+            Log.d(TASK_TAG, "saveOrUpdate: " + e.getLocalizedMessage());
             success = false;
         }finally {
             if (realm != null) {

@@ -15,21 +15,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gabriel.todoapp.R;
 import com.gabriel.todoapp.service.constants.DatabaseConstants;
-import com.gabriel.todoapp.service.model.local.TodoModel;
+import com.gabriel.todoapp.service.model.local.TaskModel;
 import com.gabriel.todoapp.view.adapter.TodoAdapter;
-import com.gabriel.todoapp.service.listener.TodoListener;
+import com.gabriel.todoapp.service.listener.TaskListener;
 import com.gabriel.todoapp.viewmodel.TodoListViewModel;
 
-import static com.gabriel.todoapp.service.constants.TodoConstants.TODO_TAG;
+import static com.gabriel.todoapp.service.constants.TaskConstants.TASK_TAG;
 
 public class TodoListFragment extends Fragment {
 
     TodoListViewModel todoListViewModel;
     TodoAdapter mTodoAdapter = new TodoAdapter();
     TodoAdapter mCompletedAdapter = new TodoAdapter();
-    TodoListener mListener = new TodoListener() {
+    TaskListener mListener = new TaskListener() {
         @Override
-        public void onEdit(TodoModel todo) {
+        public void onEdit(TaskModel todo) {
             Intent intent = new Intent(getContext(), TodoFormActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString(DatabaseConstants.TODO.ID, todo.getId());
@@ -40,13 +40,13 @@ public class TodoListFragment extends Fragment {
         }
 
         @Override
-        public void onDelete(TodoModel todo) {
+        public void onDelete(TaskModel todo) {
             todoListViewModel.delete(todo);
             todoListViewModel.load();
         }
 
         @Override
-        public void onComplete(TodoModel todo) {
+        public void onComplete(TaskModel todo) {
             todoListViewModel.complete(todo);
             todoListViewModel.load();
         }
@@ -55,7 +55,7 @@ public class TodoListFragment extends Fragment {
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         todoListViewModel = new ViewModelProvider(this).get(TodoListViewModel.class);
-        Log.d(TODO_TAG, "onCreateView: teste");
+        Log.d(TASK_TAG, "onCreateView: teste");
         View root = inflater.inflate(R.layout.fragment_todo_list, container, false);
 
         RecyclerView todoRecycler = root.findViewById(R.id.todo_open_view);
@@ -75,7 +75,7 @@ public class TodoListFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TODO_TAG, "getAll: ");
+        Log.d(TASK_TAG, "getAll: ");
     }
 
     @Override

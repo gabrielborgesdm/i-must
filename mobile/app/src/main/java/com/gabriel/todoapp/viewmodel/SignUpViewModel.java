@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.gabriel.todoapp.R;
 import com.gabriel.todoapp.service.constants.PersonConstants;
-import com.gabriel.todoapp.service.listener.SignUpListener;
+import com.gabriel.todoapp.service.listener.APIListener;
 import com.gabriel.todoapp.service.model.remote.SignUpModel;
 import com.gabriel.todoapp.service.repository.PersonRepository;
 import com.gabriel.todoapp.service.repository.local.SecurityPreferences;
@@ -33,7 +33,7 @@ public class SignUpViewModel extends AndroidViewModel {
     }
 
     public void signUp(String name, String email, String password) {
-        mPersonRepository.signUp(name, email, password, new SignUpListener() {
+        mPersonRepository.signUp(name, email, password, new APIListener<SignUpModel>() {
 
             @Override
             public void onSuccess(SignUpModel model) {

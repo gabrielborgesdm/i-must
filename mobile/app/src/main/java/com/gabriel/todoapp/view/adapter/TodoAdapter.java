@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gabriel.todoapp.R;
-import com.gabriel.todoapp.service.model.local.TodoModel;
-import com.gabriel.todoapp.service.listener.TodoListener;
+import com.gabriel.todoapp.service.model.local.TaskModel;
+import com.gabriel.todoapp.service.listener.TaskListener;
 import com.gabriel.todoapp.view.viewholder.TodoViewHolder;
 
 import java.util.ArrayList;
@@ -17,8 +17,8 @@ import java.util.List;
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoViewHolder> {
 
-    private List<TodoModel> mTodoList = new ArrayList();
-    private TodoListener mListener;
+    private List<TaskModel> mTodoList = new ArrayList();
+    private TaskListener mListener;
 
     @NonNull
     @Override
@@ -37,12 +37,12 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoViewHolder> {
         return mTodoList == null ? 0 : mTodoList.size();
     }
 
-    public void updateTodo(List<TodoModel> list){
+    public void updateTodo(List<TaskModel> list){
         mTodoList = list;
         notifyDataSetChanged();
     }
 
-    public void attachListener(TodoListener listener){
+    public void attachListener(TaskListener listener){
         mListener = listener;
     }
 }

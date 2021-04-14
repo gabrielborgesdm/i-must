@@ -9,12 +9,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.gabriel.todoapp.R;
-import com.gabriel.todoapp.service.listener.HeaderListener;
+import com.gabriel.todoapp.service.listener.APIListener;
 import com.gabriel.todoapp.service.model.remote.HeaderModel;
 import com.gabriel.todoapp.service.constants.PersonConstants;
-import com.gabriel.todoapp.service.listener.SignUpListener;
 import com.gabriel.todoapp.service.repository.PersonRepository;
 import com.gabriel.todoapp.service.repository.local.SecurityPreferences;
+import com.gabriel.todoapp.service.repository.remote.RetrofitClient;
 
 import static com.gabriel.todoapp.service.constants.PersonConstants.PERSON_MESSAGE;
 import static com.gabriel.todoapp.service.constants.PersonConstants.PERSON_SUCCESS;
@@ -36,13 +36,14 @@ public class SignInViewModel extends AndroidViewModel {
     }
 
     public void doLogin(String email, String password) {
-        mPersonRepository.login(email, password, new HeaderListener() {
+        mPersonRepository.login(email, password, new APIListener<HeaderModel>() {
 
             @Override
             public void onSuccess(HeaderModel model) {
                 Bundle login = new Bundle();
                 if(model.status.equals(PersonConstants.PERSON_OPERATION_EXECUTED)){
                     mSharedPreferences.store(PersonConstants.PERSON_TOKEN, model.token);
+                    RetrofitClient.addToken(model.token);
                     login.putBoolean(PERSON_SUCCESS, true);
                     login.putString(PERSON_MESSAGE, getApplication().getApplicationContext().getString(R.string.person_found_with_success));
                 } else if(model.status.equals(PersonConstants.PERSON_NOT_FOUND)){
@@ -68,6 +69,7 @@ public class SignInViewModel extends AndroidViewModel {
 
     public void verifyLoggedUser() {
         String token = mSharedPreferences.get(PERSON_TOKEN);
+        RetrofitClient.addToken(token);
         mLoggedUser.setValue(!token.equals(""));
     }
 }
