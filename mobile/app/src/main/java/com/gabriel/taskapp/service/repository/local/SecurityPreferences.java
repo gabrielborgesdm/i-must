@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SecurityPreferences {
-    private SharedPreferences mPreferences;
+    private final SharedPreferences mPreferences;
 
     public SecurityPreferences(Context context){
         mPreferences = context.getSharedPreferences("taskShared", Context.MODE_PRIVATE);
@@ -19,8 +19,7 @@ public class SecurityPreferences {
     }
 
     public String get(String key) {
-        String value = mPreferences.getString(key, "");
-        return value;
+        return mPreferences.getString(key, "");
     }
 
 }

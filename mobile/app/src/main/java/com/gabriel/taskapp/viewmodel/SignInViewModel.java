@@ -9,15 +9,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.gabriel.taskapp.R;
+import com.gabriel.taskapp.service.constants.APIConstants;
 import com.gabriel.taskapp.service.listener.APIListener;
 import com.gabriel.taskapp.service.model.remote.HeaderModel;
-import com.gabriel.taskapp.service.constants.PersonConstants;
-import com.gabriel.taskapp.service.repository.PersonRepository;
+import com.gabriel.taskapp.service.repository.remote.PersonRepository;
 import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
 import com.gabriel.taskapp.service.repository.remote.RetrofitClient;
 
-import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_MESSAGE;
-import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_SUCCESS;
+import static com.gabriel.taskapp.service.constants.APIConstants.API_MESSAGE;
+import static com.gabriel.taskapp.service.constants.APIConstants.API_OPERATION_EXECUTED;
+import static com.gabriel.taskapp.service.constants.APIConstants.API_SUCCESS;
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_TOKEN;
 
 public class SignInViewModel extends AndroidViewModel {
@@ -41,17 +42,15 @@ public class SignInViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(HeaderModel model) {
                 Bundle login = new Bundle();
-                if(model.status.equals(PersonConstants.PERSON_OPERATION_EXECUTED)){
-                    mSharedPreferences.store(PersonConstants.PERSON_TOKEN, model.token);
-                    RetrofitClient.addToken(model.token);
-                    login.putBoolean(PERSON_SUCCESS, true);
-                    login.putString(PERSON_MESSAGE, getApplication().getApplicationContext().getString(R.string.person_found_with_success));
-                } else if(model.status.equals(PersonConstants.PERSON_NOT_FOUND)){
-                    login.putBoolean(PERSON_SUCCESS, false);
-                    login.putString(PERSON_MESSAGE, getApplication().getApplicationContext().getString(R.string.person_not_found));
+                if (model.status.equals(API_OPERATION_EXECUTED)) {
+                    login.putBoolean(API_SUCCESS, true);
+                    login.putString(API_MESSAGE, getApplication().getApplicationContext().getString(R.string.person_found_with_success));
+                } else if (model.status.equals(APIConstants.API_NOT_FOUND)) {
+                    login.putBoolean(API_SUCCESS, false);
+                    login.putString(API_MESSAGE, getApplication().getApplicationContext().getString(R.string.person_not_found));
                 } else {
-                    login.putBoolean(PERSON_SUCCESS, false);
-                    login.putString(PERSON_MESSAGE, getApplication().getApplicationContext().getString(R.string.something_went_wrong));
+                    login.putBoolean(API_SUCCESS, false);
+                    login.putString(API_MESSAGE, getApplication().getApplicationContext().getString(R.string.something_went_wrong));
                 }
 
                 mLogin.setValue(login);
@@ -60,8 +59,8 @@ public class SignInViewModel extends AndroidViewModel {
             @Override
             public void onFailure(String message) {
                 Bundle login = new Bundle();
-                login.putBoolean(PERSON_SUCCESS, false);
-                login.putString(PersonConstants.PERSON_MESSAGE, message);
+                login.putBoolean(API_SUCCESS, false);
+                login.putString(APIConstants.API_MESSAGE, message);
                 mLogin.setValue(login);
             }
         });
@@ -69,7 +68,6 @@ public class SignInViewModel extends AndroidViewModel {
 
     public void verifyLoggedUser() {
         String token = mSharedPreferences.get(PERSON_TOKEN);
-        RetrofitClient.addToken(token);
         mLoggedUser.setValue(!token.equals(""));
     }
 }

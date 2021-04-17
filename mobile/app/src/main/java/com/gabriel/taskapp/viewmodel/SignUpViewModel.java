@@ -9,14 +9,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.constants.PersonConstants;
 import com.gabriel.taskapp.service.listener.APIListener;
 import com.gabriel.taskapp.service.model.remote.SignUpModel;
-import com.gabriel.taskapp.service.repository.PersonRepository;
+import com.gabriel.taskapp.service.repository.remote.PersonRepository;
 import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
 
-import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_MESSAGE;
-import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_SUCCESS;
+import static com.gabriel.taskapp.service.constants.APIConstants.API_MESSAGE;
+import static com.gabriel.taskapp.service.constants.APIConstants.API_OPERATION_EXECUTED;
+import static com.gabriel.taskapp.service.constants.APIConstants.API_SUCCESS;
 
 public class SignUpViewModel extends AndroidViewModel {
 
@@ -38,12 +38,12 @@ public class SignUpViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(SignUpModel model) {
                 Bundle signUp = new Bundle();
-                if(model.status.equals(PersonConstants.PERSON_OPERATION_EXECUTED)){
-                    signUp.putBoolean(PERSON_SUCCESS, true);
-                    signUp.putString(PERSON_MESSAGE, model.message);
+                if (model.status.equals(API_OPERATION_EXECUTED)) {
+                    signUp.putBoolean(API_SUCCESS, true);
+                    signUp.putString(API_MESSAGE, model.message);
                 } else {
-                    signUp.putBoolean(PERSON_SUCCESS, false);
-                    signUp.putString(PERSON_MESSAGE, getApplication().getApplicationContext().getString(R.string.something_went_wrong));
+                    signUp.putBoolean(API_SUCCESS, false);
+                    signUp.putString(API_MESSAGE, getApplication().getApplicationContext().getString(R.string.something_went_wrong));
                 }
 
                 mSignUp.setValue(signUp);
@@ -52,8 +52,8 @@ public class SignUpViewModel extends AndroidViewModel {
             @Override
             public void onFailure(String message) {
                 Bundle signUp = new Bundle();
-                signUp.putBoolean(PERSON_SUCCESS, false);
-                signUp.putString(PersonConstants.PERSON_MESSAGE, message);
+                signUp.putBoolean(API_SUCCESS, false);
+                signUp.putString(API_MESSAGE, message);
                 mSignUp.setValue(signUp);
             }
         });

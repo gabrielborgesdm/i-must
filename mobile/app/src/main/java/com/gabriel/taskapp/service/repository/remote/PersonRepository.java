@@ -1,4 +1,4 @@
-package com.gabriel.taskapp.service.repository;
+package com.gabriel.taskapp.service.repository.remote;
 
 import android.content.Context;
 
@@ -6,8 +6,6 @@ import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.listener.APIListener;
 import com.gabriel.taskapp.service.model.remote.HeaderModel;
 import com.gabriel.taskapp.service.model.remote.SignUpModel;
-import com.gabriel.taskapp.service.repository.remote.PersonService;
-import com.gabriel.taskapp.service.repository.remote.RetrofitClient;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -25,14 +23,15 @@ import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_USER;
 
 public class PersonRepository {
 
-    private PersonService mRemote =  RetrofitClient.createService(PersonService.class);
-    private Context mContext;
+    private final PersonService mRemote;
+    private final Context mContext;
 
     public  PersonRepository(Context context){
         mContext = context;
+        mRemote = RetrofitClient.createService(mContext, PersonService.class);
     }
 
-    public void login(String email, String password, APIListener listener){
+    public void login(String email, String password, APIListener<HeaderModel> listener){
         JSONObject body = new JSONObject();
         JSONObject user = new JSONObject();
         try {
@@ -62,7 +61,7 @@ public class PersonRepository {
         });
     }
 
-    public void signUp(String name, String email, String password, APIListener listener){
+    public void signUp(String name, String email, String password, APIListener<SignUpModel> listener){
         JSONObject body = new JSONObject();
         JSONObject user = new JSONObject();
         try {

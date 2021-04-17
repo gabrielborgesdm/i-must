@@ -16,6 +16,9 @@ import com.gabriel.taskapp.viewmodel.SignUpViewModel;
 
 import java.util.regex.Pattern;
 
+import static com.gabriel.taskapp.service.constants.APIConstants.API_MESSAGE;
+import static com.gabriel.taskapp.service.constants.APIConstants.API_SUCCESS;
+
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
     SignUpViewModel mViewModel;
     @Override
@@ -72,11 +75,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private void observe() {
 
         mViewModel.signUp.observe(this, data -> {
-            if(data.getBoolean(PersonConstants.PERSON_SUCCESS)){
-                Toast.makeText(this, data.getString(PersonConstants.PERSON_MESSAGE), Toast.LENGTH_LONG).show();
+            if(data.getBoolean(API_SUCCESS)){
+                Toast.makeText(this, data.getString(API_MESSAGE), Toast.LENGTH_LONG).show();
                 navigate();
             } else {
-                Toast.makeText(this, data.getString(PersonConstants.PERSON_MESSAGE), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, data.getString(API_MESSAGE), Toast.LENGTH_SHORT).show();
             }
         });
 
