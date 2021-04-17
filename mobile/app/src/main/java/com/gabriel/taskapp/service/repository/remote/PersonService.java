@@ -11,8 +11,8 @@ import retrofit2.http.POST;
 public interface PersonService {
 
     @POST("signin")
-    public Call<HeaderModel> login(@Body RequestBody body);
+    Call<HeaderModel> login(@Body RequestBody body);
 
     @POST("signup")
-    public Call<SignUpModel> signUp(@Body RequestBody body);
+    Call<SignUpModel> signUp(@Body RequestBody body);
 }

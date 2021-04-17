@@ -38,7 +38,7 @@ export class TaskController {
       console.log(error)
       return response.status(500).json({ success: false, status: 'server_error', message: "It wasn't possible to get tasks." })
     } else {
-      return response.status(200).json({ success: true, status: 'operation_executed', taks: docs })
+      return response.status(200).json({ success: true, status: 'operation_executed', tasks: docs })
     }
   }
 

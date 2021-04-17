@@ -2,6 +2,7 @@ package com.gabriel.taskapp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,6 +16,8 @@ import com.gabriel.taskapp.service.constants.APIConstants;
 import com.gabriel.taskapp.viewmodel.SignInViewModel;
 
 import java.util.regex.Pattern;
+
+import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
     SignInViewModel mViewModel;

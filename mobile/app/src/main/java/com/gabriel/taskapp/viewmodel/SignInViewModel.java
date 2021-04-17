@@ -2,6 +2,7 @@ package com.gabriel.taskapp.viewmodel;
 
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,6 +21,7 @@ import static com.gabriel.taskapp.service.constants.APIConstants.API_MESSAGE;
 import static com.gabriel.taskapp.service.constants.APIConstants.API_OPERATION_EXECUTED;
 import static com.gabriel.taskapp.service.constants.APIConstants.API_SUCCESS;
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_TOKEN;
+import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class SignInViewModel extends AndroidViewModel {
     PersonRepository mPersonRepository = new PersonRepository(getApplication().getApplicationContext());
@@ -43,6 +45,7 @@ public class SignInViewModel extends AndroidViewModel {
             public void onSuccess(HeaderModel model) {
                 Bundle login = new Bundle();
                 if (model.status.equals(API_OPERATION_EXECUTED)) {
+                    mSharedPreferences.store(PERSON_TOKEN, model.token);
                     login.putBoolean(API_SUCCESS, true);
                     login.putString(API_MESSAGE, getApplication().getApplicationContext().getString(R.string.person_found_with_success));
                 } else if (model.status.equals(APIConstants.API_NOT_FOUND)) {

@@ -48,4 +48,25 @@ public class TaskRepository {
             }
         });
     }
+
+    public void getTasks(APIListener<TasksModel> listener) {
+        Call<TasksModel> call = mRemote.getTasks();
+        call.enqueue(new Callback<TasksModel>() {
+            @Override
+            public void onResponse(@NotNull Call<TasksModel> call, @NotNull Response<TasksModel> response) {
+                Log.d(TASK_TAG, "onResponse: ");
+                if (response.isSuccessful()) {
+                    listener.onSuccess(response.body());
+                } else {
+                    listener.onFailure(mContext.getString(R.string.something_went_wrong));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<TasksModel> call, @NotNull Throwable t) {
+                Log.d(TASK_TAG, "onFailure: " + t.getMessage());
+                listener.onFailure(mContext.getString(R.string.something_went_wrong));
+            }
+        });
+    }
 }
