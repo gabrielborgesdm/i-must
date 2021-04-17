@@ -26,7 +26,6 @@ public class AuthInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request.Builder requestBuilder = chain.request().newBuilder();
         String token = mSecurityPreferences.get(PERSON_TOKEN);
-        Log.d(TASK_TAG, "intercept: " + token);
         requestBuilder.addHeader("Authorization", "Bearer " + token);
         return chain.proceed(requestBuilder.build());
     }

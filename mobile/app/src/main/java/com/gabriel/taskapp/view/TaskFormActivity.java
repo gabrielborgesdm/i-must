@@ -58,9 +58,9 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             mTodo = new TaskModel();
-            mTodo.setId(bundle.getString(DatabaseConstants.TODO.ID));
-            mTodo.setDescription(bundle.getString(DatabaseConstants.TODO.DESCRIPTION));
-            mTodo.setCompleted(bundle.getBoolean(DatabaseConstants.TODO.COMPLETED));
+            mTodo.setId(bundle.getString(DatabaseConstants.TASK.ID));
+            mTodo.setDescription(bundle.getString(DatabaseConstants.TASK.DESCRIPTION));
+            mTodo.setCompleted(bundle.getBoolean(DatabaseConstants.TASK.COMPLETED));
             EditText editDescription = findViewById(R.id.edit_description);
             editDescription.setText(mTodo.getDescription());
         }

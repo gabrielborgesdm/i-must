@@ -1,9 +1,7 @@
 package com.gabriel.taskapp.service.model.remote;
 
+import com.gabriel.taskapp.service.model.local.TaskModel;
 import com.google.gson.annotations.SerializedName;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;

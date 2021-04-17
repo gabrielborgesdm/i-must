@@ -17,9 +17,7 @@ import static com.gabriel.taskapp.service.repository.local.RealmHelpers.getRealm
 
 public class TaskRepository {
     private static TaskRepository repository = null;
-
-    private TaskRepository() {
-    }
+    private TaskRepository() {  }
 
     public static TaskRepository getRealmRepository() {
         if (repository == null) {
@@ -29,47 +27,46 @@ public class TaskRepository {
     }
 
     public TaskModel get(final String id) {
-        TaskModel todo;
+        TaskModel task;
         Realm realm = null;
         try {
             realm = getRealm();
-            todo = realm
+            task = realm
                     .where(TaskModel.class)
-                    .equalTo(DatabaseConstants.TODO.ID, id)
+                    .equalTo(DatabaseConstants.TASK.ID, id)
                     .findFirst();
         } finally {
             if (realm != null) {
                 realm.close();
             }
         }
-        return todo;
+        return task;
     }
 
     public List<TaskModel> getAllFiltered(int filter) {
-        List<TaskModel> todo = null;
+        List<TaskModel> task = null;
         Realm realm = null;
         try {
             realm = Realm.getDefaultInstance();
             if(filter == TASK_FILTER_ALL){
-                todo = realm.where(TaskModel.class).findAll();
+                task = realm.where(TaskModel.class).findAll();
             } else {
                 Boolean completed = filter == TASK_FILTER_COMPLETED;
-                todo = realm.where(TaskModel.class).equalTo(DatabaseConstants.TODO.COMPLETED, completed).findAll();
+                task = realm.where(TaskModel.class).equalTo(DatabaseConstants.TASK.COMPLETED, completed).findAll();
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d(TASK_TAG, "getAll: " + todo);
-        return todo;
+        return task;
     }
 
-    public boolean saveOrUpdate(final TaskModel todo) {
+    public boolean saveOrUpdate(final TaskModel task) {
         boolean success = true;
         Realm realm = null;
         try {
             realm = getRealm();
-            realm.executeTransaction(realm1 -> realm1.insertOrUpdate(todo));
+            realm.executeTransaction(realm1 -> realm1.insertOrUpdate(task));
         } catch (Exception e) {
             Log.d(TASK_TAG, "saveOrUpdate: " + e.getLocalizedMessage());
             success = false;
@@ -87,7 +84,7 @@ public class TaskRepository {
             realm = getRealm();
             realm.executeTransaction(inRealm ->
                     inRealm.where(TaskModel.class)
-                            .equalTo(DatabaseConstants.TODO.ID, id)
+                            .equalTo(DatabaseConstants.TASK.ID, id)
                             .findFirst()
                             .deleteFromRealm());
         } finally {
@@ -105,14 +102,14 @@ public class TaskRepository {
         return getAllFiltered(TASK_FILTER_COMPLETED);
     }
 
-    public boolean complete(TaskModel todo) {
+    public boolean complete(TaskModel task) {
         boolean success = true;
         Realm realm = null;
         try {
             realm = getRealm();
             realm.executeTransaction(realm1 -> {
-                todo.setCompleted(true);
-                realm1.insertOrUpdate(todo);
+                task.setCompleted(true);
+                realm1.insertOrUpdate(task);
             });
         } catch (Exception e) {
             Log.d(TASK_TAG, "saveOrUpdate: " + e.getLocalizedMessage());

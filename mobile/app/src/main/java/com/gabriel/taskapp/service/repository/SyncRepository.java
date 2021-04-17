@@ -3,6 +3,7 @@ package com.gabriel.taskapp.service.repository;
 import android.content.Context;
 import android.util.Log;
 
+import com.gabriel.taskapp.service.constants.APIConstants;
 import com.gabriel.taskapp.service.constants.TaskConstants;
 import com.gabriel.taskapp.service.listener.APIListener;
 import com.gabriel.taskapp.service.model.local.TaskModel;
@@ -16,14 +17,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gabriel.taskapp.service.constants.APIConstants.API_OPERATION_EXECUTED;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class SyncRepository extends BaseRepository {
+
     private final TaskRepository mRepository = TaskRepository.getRealmRepository();
-    private final com.gabriel.taskapp.service.repository.remote.TaskRepository mTaskRepository;
+    private final com.gabriel.taskapp.service.repository.remote.TaskRepository mRemoteTaskRepository;
+    private TaskRepository mLocalRepository = TaskRepository.getRealmRepository();
+
     public SyncRepository(Context context){
         super(context);
-        mTaskRepository = new com.gabriel.taskapp.service.repository.remote.TaskRepository(context);
+        mRemoteTaskRepository = new com.gabriel.taskapp.service.repository.remote.TaskRepository(context);
     }
 
     public void syncTasks() {
@@ -41,11 +46,16 @@ public class SyncRepository extends BaseRepository {
 
         try {
             JSONObject tasksObject = buildTasksObject(filteredTasks);
-            Log.d(TASK_TAG, "chamando post: " + tasksObject);
-            mTaskRepository.createTasks(tasksObject, new APIListener<TasksModel>() {
+            mRemoteTaskRepository.createTasks(tasksObject, new APIListener<TasksModel>() {
                 @Override
                 public void onSuccess(TasksModel model) {
-                    Log.d(TASK_TAG, "onSuccess: " + model);
+                    if(!model.status.equals(API_OPERATION_EXECUTED)) return;
+                    if(model.tasks == null || model.tasks.size() == 0) return;
+                    model.tasks.forEach( taskModel -> {
+                        Log.d(TASK_TAG, "syncyng: " + taskModel);
+                        taskModel.setLastSync(System.currentTimeMillis());
+                        mLocalRepository.saveOrUpdate(taskModel);
+                    });
                 }
 
                 @Override

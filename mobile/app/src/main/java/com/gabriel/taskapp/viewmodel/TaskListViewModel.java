@@ -32,7 +32,6 @@ public class TaskListViewModel extends AndroidViewModel {
     }
 
     public void load() {
-        Log.d(TASK_TAG, "load: ");
         mTodoList.setValue(mRepository.getTodo());
         mCompletedList.setValue(mRepository.getCompleted());
     }

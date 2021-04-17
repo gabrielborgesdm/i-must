@@ -32,9 +32,9 @@ public class TaskListFragment extends Fragment {
         public void onEdit(TaskModel todo) {
             Intent intent = new Intent(getContext(), TaskFormActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString(DatabaseConstants.TODO.ID, todo.getId());
-            bundle.putString(DatabaseConstants.TODO.DESCRIPTION, todo.getDescription());
-            bundle.putBoolean(DatabaseConstants.TODO.COMPLETED, todo.getCompleted());
+            bundle.putString(DatabaseConstants.TASK.ID, todo.getId());
+            bundle.putString(DatabaseConstants.TASK.DESCRIPTION, todo.getDescription());
+            bundle.putBoolean(DatabaseConstants.TASK.COMPLETED, todo.getCompleted());
             intent.putExtras(bundle);
             startActivity(intent);
         }
@@ -55,7 +55,6 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         taskListViewModel = new ViewModelProvider(this).get(TaskListViewModel.class);
-        Log.d(TASK_TAG, "onCreateView: teste");
         View root = inflater.inflate(R.layout.fragment_todo_list, container, false);
 
         RecyclerView todoRecycler = root.findViewById(R.id.todo_open_view);
@@ -75,7 +74,6 @@ public class TaskListFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TASK_TAG, "getAll: ");
     }
 
     @Override
