@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gabriel.todoapp">
+    package="com.gabriel.taskapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,19 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoApp"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.gabriel.todoapp.view.SignInActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name="com.gabriel.taskapp.view.SignInActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.gabriel.todoapp.view.SignUpActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name="com.gabriel.taskapp.view.SignUpActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
-            android:name="com.gabriel.todoapp.view.TodoFormActivity"
+            android:name="com.gabriel.taskapp.view.TaskFormActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.gabriel.todoapp.MainActivity"
+            android:name="com.gabriel.taskapp.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.TodoApp.NoActionBar">
