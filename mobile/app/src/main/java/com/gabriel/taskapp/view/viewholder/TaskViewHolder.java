@@ -20,23 +20,23 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         mListener = listener;
     }
 
-    public void bind(TaskModel todo){
+    public void bind(TaskModel task){
         ImageView buttonEdit = itemView.findViewById(R.id.button_edit_guest);
         ImageView buttonComplete = itemView.findViewById(R.id.button_complete_guest);
         ImageView buttonRemove = itemView.findViewById(R.id.button_remove_guest);
         TextView textName = itemView.findViewById(R.id.text_description);
 
-        textName.setText(todo.getDescription());
+        textName.setText(task.getDescription());
 
-        if(!todo.getCompleted()){
+        if(!task.isCompleted()){
 
             buttonEdit.setOnClickListener(v -> {
-                mListener.onEdit(todo);
+                mListener.onEdit(task);
             });
 
 
             buttonComplete.setOnClickListener(v -> {
-                mListener.onComplete(todo);
+                mListener.onComplete(task);
             });
         } else {
             buttonEdit.setVisibility(View.INVISIBLE);
@@ -49,7 +49,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
                     .setTitle(R.string.todo_removal)
                     .setMessage(R.string.want_to_remove)
                     .setPositiveButton(R.string.remove, (dialog, which) -> {
-                        mListener.onDelete(todo);
+                        mListener.onDelete(task);
                     })
                     .setNeutralButton(R.string.cancel, null)
                     .show();

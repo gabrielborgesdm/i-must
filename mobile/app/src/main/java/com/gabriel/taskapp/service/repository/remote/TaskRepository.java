@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.listener.APIListener;
+import com.gabriel.taskapp.service.model.remote.TaskModel;
 import com.gabriel.taskapp.service.model.remote.TasksModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -64,6 +65,27 @@ public class TaskRepository {
 
             @Override
             public void onFailure(@NotNull Call<TasksModel> call, @NotNull Throwable t) {
+                Log.d(TASK_TAG, "onFailure: " + t.getMessage());
+                listener.onFailure(mContext.getString(R.string.something_went_wrong));
+            }
+        });
+    }
+
+    public void removeTask(String id, APIListener<TaskModel> listener) {
+        Call<TaskModel> call = mRemote.removeTask(id);
+        call.enqueue(new Callback<TaskModel>() {
+            @Override
+            public void onResponse(@NotNull Call<TaskModel> call, @NotNull Response<TaskModel> response) {
+                Log.d(TASK_TAG, "onResponse: ");
+                if (response.isSuccessful()) {
+                    listener.onSuccess(response.body());
+                } else {
+                    listener.onFailure(mContext.getString(R.string.something_went_wrong));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<TaskModel> call, @NotNull Throwable t) {
                 Log.d(TASK_TAG, "onFailure: " + t.getMessage());
                 listener.onFailure(mContext.getString(R.string.something_went_wrong));
             }

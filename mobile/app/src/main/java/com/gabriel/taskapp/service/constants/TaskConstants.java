@@ -10,5 +10,6 @@ public class TaskConstants {
     public static final int TASK_FILTER_ALL = 0;
     public static final int TASK_FILTER_OPEN = 1;
     public static final int TASK_FILTER_COMPLETED = 2;
+    public static final int TASK_FILTER_REMOVED = 3;
 
 }

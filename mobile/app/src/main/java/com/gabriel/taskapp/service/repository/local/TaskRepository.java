@@ -17,7 +17,9 @@ import static com.gabriel.taskapp.service.repository.local.RealmHelpers.getRealm
 
 public class TaskRepository {
     private static TaskRepository repository = null;
-    private TaskRepository() {  }
+
+    private TaskRepository() {
+    }
 
     public static TaskRepository getRealmRepository() {
         if (repository == null) {
@@ -45,14 +47,29 @@ public class TaskRepository {
 
     public List<TaskModel> getAllFiltered(int filter) {
         List<TaskModel> task = null;
-        Realm realm = null;
+        Realm realm;
         try {
             realm = Realm.getDefaultInstance();
-            if(filter == TASK_FILTER_ALL){
-                task = realm.where(TaskModel.class).findAll();
-            } else {
-                Boolean completed = filter == TASK_FILTER_COMPLETED;
-                task = realm.where(TaskModel.class).equalTo(DatabaseConstants.TASK.COMPLETED, completed).findAll();
+            switch (filter){
+                case TASK_FILTER_ALL:
+                    task = realm.where(TaskModel.class)
+                            .equalTo(DatabaseConstants.TASK.REMOVED, false)
+                            .findAll();
+                    break;
+                case TASK_FILTER_COMPLETED:
+                case TASK_FILTER_OPEN:
+                    Boolean completed = filter == TASK_FILTER_COMPLETED;
+                    task = realm.where(TaskModel.class)
+                            .equalTo(DatabaseConstants.TASK.COMPLETED, completed)
+                            .equalTo(DatabaseConstants.TASK.REMOVED, false)
+                            .findAll();
+                    break;
+                default:
+                    task = realm.where(TaskModel.class)
+                            .equalTo(DatabaseConstants.TASK.REMOVED, true)
+                            .findAll();
+                    break;
+
             }
 
         } catch (Exception e) {
@@ -70,7 +87,7 @@ public class TaskRepository {
         } catch (Exception e) {
             Log.d(TASK_TAG, "saveOrUpdate: " + e.getLocalizedMessage());
             success = false;
-        }finally {
+        } finally {
             if (realm != null) {
                 realm.close();
             }
@@ -78,15 +95,24 @@ public class TaskRepository {
         return success;
     }
 
-    public void delete(final String id) {
-        Realm realm = null;
+    public void delete(final String id, Boolean removeFromDatabase) {
+        Realm realm = getRealm();
         try {
-            realm = getRealm();
-            realm.executeTransaction(inRealm ->
-                    inRealm.where(TaskModel.class)
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm inRealm) {
+                    TaskModel task = inRealm.where(TaskModel.class)
                             .equalTo(DatabaseConstants.TASK.ID, id)
-                            .findFirst()
-                            .deleteFromRealm());
+                            .findFirst();
+                    if (task == null) return;
+                    if (removeFromDatabase) {
+                        task.deleteFromRealm();
+                    } else {
+                        task.setRemoved(true);
+                        inRealm.insertOrUpdate(task);
+                    }
+                }
+            });
         } finally {
             if (realm != null) {
                 realm.close();
@@ -94,7 +120,7 @@ public class TaskRepository {
         }
     }
 
-    public List<TaskModel> getTodo() {
+    public List<TaskModel> getOpenTasks() {
         return getAllFiltered(TASK_FILTER_OPEN);
     }
 
@@ -114,7 +140,7 @@ public class TaskRepository {
         } catch (Exception e) {
             Log.d(TASK_TAG, "saveOrUpdate: " + e.getLocalizedMessage());
             success = false;
-        }finally {
+        } finally {
             if (realm != null) {
                 realm.close();
             }

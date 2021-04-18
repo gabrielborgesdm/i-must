@@ -32,12 +32,12 @@ public class TaskListViewModel extends AndroidViewModel {
     }
 
     public void load() {
-        mTodoList.setValue(mRepository.getTodo());
+        mTodoList.setValue(mRepository.getOpenTasks());
         mCompletedList.setValue(mRepository.getCompleted());
     }
 
     public void delete(TaskModel todo) {
-        mRepository.delete(todo.getId());
+        mRepository.delete(todo.getId(), false);
     }
 
     public void complete(TaskModel todo) {

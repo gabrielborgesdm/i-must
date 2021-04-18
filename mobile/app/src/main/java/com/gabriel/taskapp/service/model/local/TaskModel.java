@@ -9,12 +9,10 @@ import io.realm.annotations.Required;
 public class TaskModel extends RealmObject {
     @PrimaryKey
     private String id;
-
     @Required
     private String description;
-
     private boolean completed;
-
+    private boolean removed;
     private long lastSync;
 
     public TaskModel() {
@@ -24,7 +22,6 @@ public class TaskModel extends RealmObject {
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -32,20 +29,20 @@ public class TaskModel extends RealmObject {
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public boolean getCompleted() {
+    public boolean isCompleted() {
         return completed;
     }
-
     public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 
     public long getLastSync() { return lastSync; }
-
     public void setLastSync(long lastSync) { this.lastSync = lastSync; }
+
+    public boolean isRemoved() { return removed; }
+    public void setRemoved(boolean removed) {  this.removed = removed; }
 }

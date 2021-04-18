@@ -29,25 +29,25 @@ public class TaskListFragment extends Fragment {
     TaskAdapter mCompletedAdapter = new TaskAdapter();
     TaskListener mListener = new TaskListener() {
         @Override
-        public void onEdit(TaskModel todo) {
+        public void onEdit(TaskModel task) {
             Intent intent = new Intent(getContext(), TaskFormActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString(DatabaseConstants.TASK.ID, todo.getId());
-            bundle.putString(DatabaseConstants.TASK.DESCRIPTION, todo.getDescription());
-            bundle.putBoolean(DatabaseConstants.TASK.COMPLETED, todo.getCompleted());
+            bundle.putString(DatabaseConstants.TASK.ID, task.getId());
+            bundle.putString(DatabaseConstants.TASK.DESCRIPTION, task.getDescription());
+            bundle.putBoolean(DatabaseConstants.TASK.COMPLETED, task.isCompleted());
             intent.putExtras(bundle);
             startActivity(intent);
         }
 
         @Override
-        public void onDelete(TaskModel todo) {
-            taskListViewModel.delete(todo);
+        public void onDelete(TaskModel task) {
+            taskListViewModel.delete(task);
             taskListViewModel.load();
         }
 
         @Override
-        public void onComplete(TaskModel todo) {
-            taskListViewModel.complete(todo);
+        public void onComplete(TaskModel task) {
+            taskListViewModel.complete(task);
             taskListViewModel.load();
         }
     };

@@ -36,9 +36,9 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             EditText edit_description = findViewById(R.id.edit_description);
             String description = edit_description.getText().toString();
             if(mTodo == null) {
-                mViewModel.saveOrUpdate(null, description, false, 0);
+                mViewModel.saveOrUpdate(null, description, false, 0, false);
             } else {
-                mViewModel.saveOrUpdate(mTodo.getId(), description, mTodo.getCompleted(), 0);
+                mViewModel.saveOrUpdate(mTodo.getId(), description, mTodo.isCompleted(), 0, false);
             }
         }
     }

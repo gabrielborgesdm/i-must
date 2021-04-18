@@ -9,5 +9,6 @@ public class DatabaseConstants {
         public static final String ID = "id";
         public static final String DESCRIPTION = "description";
         public static final String COMPLETED = "completed";
+        public static final String REMOVED = "removed";
     }
 }

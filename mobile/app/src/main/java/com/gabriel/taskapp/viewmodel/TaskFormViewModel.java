@@ -23,9 +23,14 @@ public class TaskFormViewModel extends AndroidViewModel {
         mContext = application.getApplicationContext();
     }
 
-    public void saveOrUpdate(final String id, final String description, final boolean completed, final long lastSync){
+    public void saveOrUpdate(
+            final String id,
+            final String description,
+            final boolean completed,
+            final long lastSync,
+            final boolean removed) {
         TaskModel todo = new TaskModel();
-        if(id != null) {
+        if (id != null) {
             todo.setId(id);
         }
         todo.setDescription(description);
