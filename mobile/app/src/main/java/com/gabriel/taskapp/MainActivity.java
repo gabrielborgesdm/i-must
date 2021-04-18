@@ -1,12 +1,14 @@
 package com.gabriel.taskapp;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.gabriel.taskapp.service.repository.SyncRepository;
+import com.gabriel.taskapp.service.services.SyncService;
 import com.gabriel.taskapp.view.TaskFormActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -27,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(view ->
                 startActivity(new Intent(getApplicationContext(), TaskFormActivity.class)));
 
-        SyncRepository sync = new SyncRepository(getApplicationContext());
-        sync.syncTasks();
+
     }
 }

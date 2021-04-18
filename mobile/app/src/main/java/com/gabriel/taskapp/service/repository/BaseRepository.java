@@ -11,7 +11,7 @@ class BaseRepository {
         this.mContext = context;
     }
 
-    public boolean isOnline() {
+    public boolean checkIsOnline() {
         ConnectivityManager connMgr = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());

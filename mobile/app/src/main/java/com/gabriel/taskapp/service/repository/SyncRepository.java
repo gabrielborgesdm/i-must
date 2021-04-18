@@ -30,13 +30,11 @@ public class SyncRepository extends BaseRepository {
     }
 
     public void syncTasks() {
-        if (!isOnline()) return;
-        deleteRemovedTasks();
-        postNewOrUpdatedTasks();
-        getNonSyncedTasks();
+        if (!checkIsOnline()) return;
+
     }
 
-    private void postNewOrUpdatedTasks() {
+    public void postNewOrUpdatedTasks() {
         List<TaskModel> tasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_ALL);
         List<TaskModel> filteredTasks = filterNonSyncedTasks(tasks);
 
@@ -100,7 +98,7 @@ public class SyncRepository extends BaseRepository {
         return tasksObject;
     }
 
-    private void getNonSyncedTasks() {
+    public void getNonSyncedTasks() {
         List<TaskModel> localTasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_ALL);
         mRemoteTaskRepository.getTasks(new APIListener<TasksModel>() {
             @Override
@@ -135,7 +133,7 @@ public class SyncRepository extends BaseRepository {
         return isSynced;
     }
 
-    private void deleteRemovedTasks() {
+    public void deleteRemovedTasks() {
         List<TaskModel> localTasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_REMOVED);
         Log.d(TASK_TAG, "deleteRemovedTasks: " + localTasks);
         if (localTasks == null || localTasks.size() == 0) return;

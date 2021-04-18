@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Todo App</string>
+    <string name="app_name">Task App</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -38,4 +38,11 @@
     <string name="person_not_found">Person not found</string>
     <string name="fields_cannot_be_empty">Fields cannot be empty</string>
     <string name="enter_a_valid_email">Enter a valid email</string>
+
+    <!-- Strings used for Sync notification -->
+    <string name="sync_notification_title">Syncing tasks</string>
+    <string name="sync_notification_getting_started">Getting started</string>
+    <string name="sync_notification_syncing">Syncing tasks</string>
+    <string name="sync_notification_finishing">Finishing</string>
+
 </resources>
