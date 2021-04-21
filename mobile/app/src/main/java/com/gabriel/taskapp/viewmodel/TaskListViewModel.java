@@ -21,7 +21,6 @@ import java.util.List;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class TaskListViewModel extends AndroidViewModel {
-    private Context mContext;
     private TaskRepository mRepository = TaskRepository.getRealmRepository();
 
     private MutableLiveData<List<TaskModel>> mTodoList = new MutableLiveData();
@@ -30,33 +29,8 @@ public class TaskListViewModel extends AndroidViewModel {
     private MutableLiveData<List<TaskModel>> mCompletedList = new MutableLiveData();
     public LiveData<List<TaskModel>> completedList = mCompletedList;
 
-    private MutableLiveData<SyncService.MyBinder> mBinder = new MutableLiveData<>();
-    
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            SyncService.MyBinder binder = (SyncService.MyBinder) service;
-            mBinder.postValue(binder);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBinder.postValue(null);
-        }
-    };
-
-    public ServiceConnection getServiceConnection(){
-        return serviceConnection;
-    }
-
-    public LiveData<SyncService.MyBinder> getBinder(){
-        return mBinder;
-    }
-
     public TaskListViewModel(@NonNull Application application) {
         super(application);
-        mContext = application.getApplicationContext();
     }
 
     public void load() {

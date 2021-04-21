@@ -22,4 +22,12 @@ public class SecurityPreferences {
         return mPreferences.getString(key, "");
     }
 
+    public Long getLong(String key) {
+        return mPreferences.getLong(key, 0L);
+    }
+
+    public void storeLong(String key, Long value) {
+        mPreferences.edit().putLong(key, value).apply();
+    }
+
 }

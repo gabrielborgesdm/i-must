@@ -23,22 +23,21 @@ public class SyncRepository extends BaseRepository {
 
     private final com.gabriel.taskapp.service.repository.remote.TaskRepository mRemoteTaskRepository;
     private final TaskRepository mLocalRepository = TaskRepository.getRealmRepository();
+    private Boolean isPostFinished = false;
+    private Boolean isGetFinished = false;
+    private Boolean isDeleteFinished = false;
 
     public SyncRepository(Context context) {
         super(context);
         mRemoteTaskRepository = new com.gabriel.taskapp.service.repository.remote.TaskRepository(context);
     }
 
-    public void syncTasks() {
-        if (!checkIsOnline()) return;
-
-    }
 
     public void postNewOrUpdatedTasks() {
         List<TaskModel> tasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_ALL);
         List<TaskModel> filteredTasks = filterNonSyncedTasks(tasks);
 
-        if (filteredTasks == null || filteredTasks.size() == 0) return;
+        if (filteredTasks.size() == 0) return;
 
         try {
             JSONObject tasksObject = buildTasksObject(filteredTasks);
@@ -53,11 +52,13 @@ public class SyncRepository extends BaseRepository {
                         taskModel.setRemoved(false);
                         mLocalRepository.saveOrUpdate(taskModel);
                     });
+                    isPostFinished = true;
                 }
 
                 @Override
                 public void onFailure(String message) {
                     Log.d(TASK_TAG, "onFailure: " + message);
+                    isPostFinished = true;
                 }
             });
         } catch (JSONException e) {
@@ -111,11 +112,13 @@ public class SyncRepository extends BaseRepository {
                         mLocalRepository.saveOrUpdate(taskModel);
                     }
                 });
+                isGetFinished = true;
             }
 
             @Override
             public void onFailure(String message) {
                 Log.d(TASK_TAG, "onFailure: " + message);
+                isGetFinished = true;
             }
         });
     }
@@ -146,14 +149,20 @@ public class SyncRepository extends BaseRepository {
                     if (model.task == null) return;
                     Log.d(TASK_TAG, "deleteRemovedTasks: " + model.task.getDescription());
                     mLocalRepository.delete(model.task.getId(), true);
+                    isDeleteFinished = true;
                 }
 
                 @Override
                 public void onFailure(String message) {
                     Log.d(TASK_TAG, "onFailure: " + message);
+                    isDeleteFinished = true;
                 }
             });
         });
 
+    }
+
+    public Boolean isSyncFinished(){
+        return isDeleteFinished && isGetFinished && isPostFinished;
     }
 }

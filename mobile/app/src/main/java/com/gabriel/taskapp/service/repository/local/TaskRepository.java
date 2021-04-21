@@ -33,6 +33,7 @@ public class TaskRepository {
         Realm realm = null;
         try {
             realm = getRealm();
+            realm.refresh();
             task = realm
                     .where(TaskModel.class)
                     .equalTo(DatabaseConstants.TASK.ID, id)
@@ -47,9 +48,10 @@ public class TaskRepository {
 
     public List<TaskModel> getAllFiltered(int filter) {
         List<TaskModel> task = null;
-        Realm realm;
+        Realm realm = null;
         try {
-            realm = Realm.getDefaultInstance();
+            realm = getRealm();
+            realm.beginTransaction();
             switch (filter){
                 case TASK_FILTER_ALL:
                     task = realm.where(TaskModel.class)
@@ -72,8 +74,14 @@ public class TaskRepository {
 
             }
 
+            task = realm.copyFromRealm(task);
+
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (realm != null) {
+                realm.close();
+            }
         }
         return task;
     }

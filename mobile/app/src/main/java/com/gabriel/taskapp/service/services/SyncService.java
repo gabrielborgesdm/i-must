@@ -1,57 +1,74 @@
 package com.gabriel.taskapp.service.services;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.os.ResultReceiver;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.gabriel.taskapp.MainActivity;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.repository.SyncRepository;
+import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
 
 import static android.app.NotificationManager.IMPORTANCE_LOW;
 import static com.gabriel.taskapp.service.constants.SyncConstants.ACTION_SHOW_SYNC_FRAGMENT;
+import static com.gabriel.taskapp.service.constants.SyncConstants.BUNDLED_LISTENER;
+import static com.gabriel.taskapp.service.constants.SyncConstants.LAST_SYNC_SHARED_PREFERENCE;
 import static com.gabriel.taskapp.service.constants.SyncConstants.NOTIFICATION_CHANNEL_ID;
 import static com.gabriel.taskapp.service.constants.SyncConstants.NOTIFICATION_CHANNEL_NAME;
 import static com.gabriel.taskapp.service.constants.SyncConstants.NOTIFICATION_ID;
+import static com.gabriel.taskapp.service.constants.SyncConstants.SYNC_SERVICE_MESSAGE;
+import static com.gabriel.taskapp.service.constants.SyncConstants.SYNC_SERVICE_SUCCESS;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class SyncService extends Service {
 
-    private final IBinder mBinder = new MyBinder();
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        ResultReceiver receiver = intent.getParcelableExtra(BUNDLED_LISTENER);
+        SyncRepository sync = new SyncRepository(getApplicationContext());
+        Bundle bundle = new Bundle();
+        if (!sync.checkIsOnline()) {
+            bundle.putBoolean(SYNC_SERVICE_SUCCESS, false);
+            bundle.putString(SYNC_SERVICE_MESSAGE, this.getString(R.string.sync_internet_connection_required));
+            receiver.send(Activity.RESULT_CANCELED, bundle);
+        } else {
+            syncTasks(sync);
+            bundle.putBoolean(SYNC_SERVICE_SUCCESS, true);
 
-    public class MyBinder extends Binder {
+            new Thread(() -> {
+                boolean isFinished;
+                do {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    isFinished = !sync.isSyncFinished();
+                }while (!isFinished);
 
-        public SyncService getService(){
-            return SyncService.this;
+                SecurityPreferences mSharedPreferences = new SecurityPreferences(this);
+                mSharedPreferences.storeLong(LAST_SYNC_SHARED_PREFERENCE, System.currentTimeMillis());
+                receiver.send(Activity.RESULT_OK, bundle);
+                stopService();
+
+            }).start();
         }
 
-    }
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
+        return Service.START_STICKY;
     }
 
-    public void startSyncing() {
-        SyncRepository sync = new SyncRepository(getApplicationContext());
-        if(!sync.checkIsOnline()) return;
-
-        startOrUpdateNotification(false, this.getString(R.string.sync_notification_getting_started));
-        sync.deleteRemovedTasks();
-        startOrUpdateNotification(true, this.getString(R.string.sync_notification_syncing));
-        sync.postNewOrUpdatedTasks();
-        startOrUpdateNotification(true, this.getString(R.string.sync_notification_finishing));
-        sync.getNonSyncedTasks();
-        stopService();
-    }
 
     @Override
     public void onDestroy() {
@@ -59,7 +76,13 @@ public class SyncService extends Service {
         stopService();
     }
 
-    private void stopService(){
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    private void stopService() {
         stopForeground(true);
         stopSelf();
     }
@@ -67,10 +90,10 @@ public class SyncService extends Service {
     private void startOrUpdateNotification(Boolean isUpdating, String text) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        if(isUpdating){
+        if (isUpdating) {
             notificationManager.notify(NOTIFICATION_ID, getNotification(text));
         } else {
-            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 createNotificationChannel(notificationManager);
             }
             startForeground(NOTIFICATION_ID, getNotification(text));
@@ -101,5 +124,14 @@ public class SyncService extends Service {
                 IMPORTANCE_LOW
         );
         notificationManager.createNotificationChannel(channel);
+    }
+
+    private void syncTasks(SyncRepository sync) {
+        startOrUpdateNotification(false, this.getString(R.string.sync_notification_getting_started));
+        sync.deleteRemovedTasks();
+        startOrUpdateNotification(true, this.getString(R.string.sync_notification_syncing));
+        sync.postNewOrUpdatedTasks();
+        startOrUpdateNotification(true, this.getString(R.string.sync_notification_finishing));
+        sync.getNonSyncedTasks();
     }
 }

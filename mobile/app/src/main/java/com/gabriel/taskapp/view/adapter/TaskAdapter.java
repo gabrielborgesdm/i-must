@@ -38,8 +38,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     }
 
     public void updateTodo(List<TaskModel> list){
-        mTodoList = list;
-        notifyDataSetChanged();
+        if(list != null){
+            mTodoList = list;
+            notifyDataSetChanged();
+        }
+
     }
 
     public void attachListener(TaskListener listener){

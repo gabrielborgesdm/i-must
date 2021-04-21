@@ -50,8 +50,6 @@ public class RealmHelpers {
         return Realm.getDefaultInstance();
     }
 
-
-
     public static void startRealmContext(Context context) {
         Realm.init(context);
         Realm.setDefaultConfiguration(getRealmConfig());
