@@ -15,7 +15,7 @@ import com.gabriel.taskapp.view.viewholder.TaskViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
+public class  TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     private List<TaskModel> mTodoList = new ArrayList();
     private TaskListener mListener;

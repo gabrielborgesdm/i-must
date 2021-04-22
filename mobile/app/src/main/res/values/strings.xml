@@ -8,6 +8,8 @@
     <string name="save">Save</string>
 
     <string name="open_todo">To do</string>
+    <string name="text_no_todo">There are no tasks to do</string>
+    <string name="text_no_completed">There are no tasks to complete</string>
     <string name="completed_todo">Completed</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="description">Description</string>

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -100,16 +101,24 @@ public class TaskListFragment extends Fragment {
 
     private void observer() {
         taskListViewModel.todoList.observe(getViewLifecycleOwner(), list -> {
-            if (list != null) {
-                Log.d(TASK_TAG, "todo: " + list.size());
+            if (list == null || list.size() == 0) {
+                TextView textNoTodo = getActivity().findViewById(R.id.text_no_todo);
+                textNoTodo.setVisibility(View.VISIBLE);
+            } else {
+                TextView textNoTodo = getActivity().findViewById(R.id.text_no_todo);
+                textNoTodo.setVisibility(View.GONE);
             }
 
             mTaskAdapter.updateTodo(list);
         });
 
         taskListViewModel.completedList.observe(getViewLifecycleOwner(), list -> {
-            if (list != null) {
-                Log.d(TASK_TAG, "completed: " + list.size());
+            if (list== null || list.size() == 0) {
+                TextView textNoCompleted = getActivity().findViewById(R.id.text_no_completed);
+                textNoCompleted.setVisibility(View.VISIBLE);
+            } else {
+                TextView textNoCompleted = getActivity().findViewById(R.id.text_no_completed);
+                textNoCompleted.setVisibility(View.INVISIBLE);
             }
             mCompletedAdapter.updateTodo(list);
         });
