@@ -101,10 +101,13 @@ public class TaskListFragment extends Fragment {
 
     private void observer() {
         taskListViewModel.todoList.observe(getViewLifecycleOwner(), list -> {
+
             if (list == null || list.size() == 0) {
+                Log.d(TASK_TAG, "observer: Entrou todolist vazio");
                 TextView textNoTodo = getActivity().findViewById(R.id.text_no_todo);
                 textNoTodo.setVisibility(View.VISIBLE);
             } else {
+                Log.d(TASK_TAG, "observer: Entrou todolist cheio");
                 TextView textNoTodo = getActivity().findViewById(R.id.text_no_todo);
                 textNoTodo.setVisibility(View.GONE);
             }
@@ -113,12 +116,15 @@ public class TaskListFragment extends Fragment {
         });
 
         taskListViewModel.completedList.observe(getViewLifecycleOwner(), list -> {
+
             if (list== null || list.size() == 0) {
+                Log.d(TASK_TAG, "observer: Entrou completedlist  vazio");
                 TextView textNoCompleted = getActivity().findViewById(R.id.text_no_completed);
                 textNoCompleted.setVisibility(View.VISIBLE);
             } else {
+                Log.d(TASK_TAG, "observer: Entrou completedlist  cheio");
                 TextView textNoCompleted = getActivity().findViewById(R.id.text_no_completed);
-                textNoCompleted.setVisibility(View.INVISIBLE);
+                textNoCompleted.setVisibility(View.GONE);
             }
             mCompletedAdapter.updateTodo(list);
         });

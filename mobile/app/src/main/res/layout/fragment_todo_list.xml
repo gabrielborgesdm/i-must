@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical"
     tools:context=".view.TaskListFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view_todo"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/middle_blue_green"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/middle_blue_green">
 
         <TextView
             android:id="@+id/text_todo"
@@ -35,33 +33,24 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todo_open_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@id/view_todo"
-        app:layout_constraintRight_toRightOf="@id/view_todo"
-        app:layout_constraintTop_toBottomOf="@+id/view_todo" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/text_no_todo"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="25dp"
+        android:paddingVertical="25dp"
         android:paddingHorizontal="16dp"
         android:text="@string/text_no_todo"
         android:textSize="16sp"
-        android:visibility="invisible"
-        app:layout_constraintLeft_toLeftOf="@id/todo_open_view"
-        app:layout_constraintRight_toRightOf="@id/todo_open_view"
-        app:layout_constraintTop_toBottomOf="@id/todo_open_view" />
+        android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view_completed"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/middle_blue_green"
-        app:layout_constraintLeft_toLeftOf="@id/text_no_todo"
-        app:layout_constraintRight_toRightOf="@id/text_no_todo"
-        app:layout_constraintTop_toBottomOf="@id/text_no_todo">
+        android:background="@color/middle_blue_green">
 
         <TextView
             android:id="@+id/text_completed_todo"
@@ -81,7 +70,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todo_completed_view"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -89,14 +78,11 @@
 
     <TextView
         android:id="@+id/text_no_completed"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="25dp"
         android:paddingHorizontal="16dp"
         android:text="@string/text_no_completed"
         android:textSize="16sp"
-        android:visibility="invisible"
-        app:layout_constraintLeft_toLeftOf="@id/todo_completed_view"
-        app:layout_constraintRight_toRightOf="@id/todo_completed_view"
-        app:layout_constraintTop_toBottomOf="@id/todo_completed_view" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:visibility="gone" />
+</LinearLayout>
