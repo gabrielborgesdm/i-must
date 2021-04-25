@@ -131,8 +131,8 @@ public class TaskListFragment extends Fragment {
     }
 
     private void syncTasks() {
-        Long lastSync = mSharedPreferences.getLong(LAST_SYNC_SHARED_PREFERENCE);
-        Long differenceInMillis = System.currentTimeMillis() - lastSync;
+        long lastSync = mSharedPreferences.getLong(LAST_SYNC_SHARED_PREFERENCE);
+        long differenceInMillis = System.currentTimeMillis() - lastSync;
         long minutes = TimeUnit.MILLISECONDS.toMinutes(differenceInMillis);
         if (minutes > 2) {
             startSyncService();

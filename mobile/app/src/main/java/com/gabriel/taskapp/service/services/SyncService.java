@@ -49,6 +49,7 @@ public class SyncService extends Service {
 
             new Thread(() -> {
                 boolean isFinished;
+                int timeout = 0;
                 do {
                     try {
                         Thread.sleep(2000);
@@ -56,7 +57,8 @@ public class SyncService extends Service {
                         e.printStackTrace();
                     }
                     isFinished = !sync.isSyncFinished();
-                }while (!isFinished);
+                    timeout += 2;
+                }while (!isFinished || timeout <= 20);
 
                 SecurityPreferences mSharedPreferences = new SecurityPreferences(this);
                 mSharedPreferences.storeLong(LAST_SYNC_SHARED_PREFERENCE, System.currentTimeMillis());
