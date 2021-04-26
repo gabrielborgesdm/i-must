@@ -5,7 +5,7 @@
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
-    <string name="save">Save</string>
+    <string name="save_task">Save Task</string>
 
     <string name="open_todo">To do</string>
     <string name="text_no_todo">There are no tasks to do</string>
@@ -48,5 +48,6 @@
     <string name="sync_notification_finishing">Finishing sync</string>
     <string name="sync_notification_retrieving_updated_tasks">Retrieving updated tasks</string>
     <string name="sync_internet_connection_required">Synchronization failed. Internet connection required</string>
+    <string name="speak_task_description">Speak the task\'s description</string>
 
 </resources>

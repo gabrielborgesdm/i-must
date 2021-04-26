@@ -69,7 +69,7 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         taskListViewModel = new ViewModelProvider(this).get(TaskListViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_todo_list, container, false);
+        View root = inflater.inflate(R.layout.fragment_task_list, container, false);
 
         mSharedPreferences = new SecurityPreferences(getContext());
 

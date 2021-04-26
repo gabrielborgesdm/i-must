@@ -9,7 +9,7 @@
         android:id="@+id/fragment_list"
         android:name="com.gabriel.taskapp.view.TaskListFragment"
         android:label="@string/todo_list"
-        tools:layout="@layout/fragment_todo_list">
+        tools:layout="@layout/fragment_task_list">
     </fragment>
 
 </navigation>
