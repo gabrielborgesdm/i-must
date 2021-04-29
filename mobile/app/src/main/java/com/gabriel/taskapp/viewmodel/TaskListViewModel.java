@@ -19,6 +19,7 @@ import com.gabriel.taskapp.service.services.SyncService;
 import java.util.List;
 
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
+import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
 
 public class TaskListViewModel extends AndroidViewModel {
     private TaskRepository mRepository = TaskRepository.getRealmRepository();
@@ -36,6 +37,7 @@ public class TaskListViewModel extends AndroidViewModel {
     public void load() {
         mTodoList.setValue(mRepository.getOpenTasks());
         mCompletedList.setValue(mRepository.getCompleted());
+        sendRefreshBroadcast(getApplication().getApplicationContext());
     }
 
     public void delete(TaskModel todo) {

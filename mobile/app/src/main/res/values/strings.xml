@@ -49,5 +49,8 @@
     <string name="sync_notification_retrieving_updated_tasks">Retrieving updated tasks</string>
     <string name="sync_internet_connection_required">Synchronization failed. Internet connection required</string>
     <string name="speak_task_description">Speak the task\'s description</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="authentication_needed">Sign in the application before using the widget</string>
 
 </resources>

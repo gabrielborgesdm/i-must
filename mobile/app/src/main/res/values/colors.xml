@@ -11,4 +11,8 @@
     <color name="pacific_blue">#00B2CA</color>
     <color name="yale_blue">#1d4e89</color>
     <color name="mint_cream">#F3F8F2</color>
+    <color name="light_blue_50">#FFE1F5FE</color>
+    <color name="light_blue_200">#FF81D4FA</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
 </resources>
