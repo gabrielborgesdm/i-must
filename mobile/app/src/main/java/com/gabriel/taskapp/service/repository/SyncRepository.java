@@ -109,6 +109,7 @@ public class SyncRepository extends BaseRepository {
                 model.tasks.forEach(taskModel -> {
                     if (!checkTaskIsSynced(taskModel, localTasks)) {
                         taskModel.setLastSync(System.currentTimeMillis());
+                        Log.d(TASK_TAG, "onSuccess: " + taskModel.toString());
                         mLocalRepository.saveOrUpdate(taskModel);
                     }
                 });
@@ -138,7 +139,6 @@ public class SyncRepository extends BaseRepository {
 
     public void deleteRemovedTasks() {
         List<TaskModel> localTasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_REMOVED);
-        Log.d(TASK_TAG, "deleteRemovedTasks: " + localTasks);
         if (localTasks == null || localTasks.size() == 0) return;
 
         localTasks.forEach( localTask -> {

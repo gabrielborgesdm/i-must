@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 import static com.gabriel.taskapp.service.constants.SyncConstants.BUNDLED_LISTENER;
 import static com.gabriel.taskapp.service.constants.SyncConstants.LAST_SYNC_SHARED_PREFERENCE;
 import static com.gabriel.taskapp.service.constants.SyncConstants.SYNC_SERVICE_MESSAGE;
-import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class TaskListFragment extends Fragment {
 
@@ -103,11 +101,9 @@ public class TaskListFragment extends Fragment {
         taskListViewModel.todoList.observe(getViewLifecycleOwner(), list -> {
 
             if (list == null || list.size() == 0) {
-                Log.d(TASK_TAG, "observer: Entrou todolist vazio");
                 TextView textNoTodo = getActivity().findViewById(R.id.text_no_todo);
                 textNoTodo.setVisibility(View.VISIBLE);
             } else {
-                Log.d(TASK_TAG, "observer: Entrou todolist cheio");
                 TextView textNoTodo = getActivity().findViewById(R.id.text_no_todo);
                 textNoTodo.setVisibility(View.GONE);
             }
@@ -117,12 +113,10 @@ public class TaskListFragment extends Fragment {
 
         taskListViewModel.completedList.observe(getViewLifecycleOwner(), list -> {
 
-            if (list== null || list.size() == 0) {
-                Log.d(TASK_TAG, "observer: Entrou completedlist  vazio");
+            if (list == null || list.size() == 0) {
                 TextView textNoCompleted = getActivity().findViewById(R.id.text_no_completed);
                 textNoCompleted.setVisibility(View.VISIBLE);
             } else {
-                Log.d(TASK_TAG, "observer: Entrou completedlist  cheio");
                 TextView textNoCompleted = getActivity().findViewById(R.id.text_no_completed);
                 textNoCompleted.setVisibility(View.GONE);
             }

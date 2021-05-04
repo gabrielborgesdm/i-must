@@ -3,6 +3,7 @@ package com.gabriel.taskapp.view.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_FILTER_OPEN;
+import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class TasksWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
@@ -36,6 +38,7 @@ public class TasksWidgetRemoteViewsFactory implements RemoteViewsService.RemoteV
     @Override
     public void onDataSetChanged() {
         mTodoList = mRepository.getAllFiltered(TASK_FILTER_OPEN);
+        Log.d(TASK_TAG, "onDataSetChanged: ");
     }
 
     @Override

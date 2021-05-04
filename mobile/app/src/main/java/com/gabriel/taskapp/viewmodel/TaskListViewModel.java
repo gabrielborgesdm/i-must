@@ -1,11 +1,6 @@
 package com.gabriel.taskapp.viewmodel;
 
 import android.app.Application;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -14,11 +9,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.gabriel.taskapp.service.model.local.TaskModel;
 import com.gabriel.taskapp.service.repository.local.TaskRepository;
-import com.gabriel.taskapp.service.services.SyncService;
 
 import java.util.List;
 
-import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
 
 public class TaskListViewModel extends AndroidViewModel {

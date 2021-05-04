@@ -37,7 +37,6 @@ public class TaskRepository {
                 if (response.isSuccessful()) {
                     listener.onSuccess(response.body());
                 } else {
-                    Log.d(TASK_TAG, "onResponse: ");
                     listener.onFailure(mContext.getString(R.string.something_went_wrong));
                 }
             }
@@ -55,7 +54,6 @@ public class TaskRepository {
         call.enqueue(new Callback<TasksModel>() {
             @Override
             public void onResponse(@NotNull Call<TasksModel> call, @NotNull Response<TasksModel> response) {
-                Log.d(TASK_TAG, "onResponse: ");
                 if (response.isSuccessful()) {
                     listener.onSuccess(response.body());
                 } else {
@@ -76,7 +74,6 @@ public class TaskRepository {
         call.enqueue(new Callback<TaskModel>() {
             @Override
             public void onResponse(@NotNull Call<TaskModel> call, @NotNull Response<TaskModel> response) {
-                Log.d(TASK_TAG, "onResponse: ");
                 if (response.isSuccessful()) {
                     listener.onSuccess(response.body());
                 } else {

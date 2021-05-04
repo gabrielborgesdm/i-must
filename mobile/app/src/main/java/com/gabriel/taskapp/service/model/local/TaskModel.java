@@ -14,6 +14,7 @@ public class TaskModel extends RealmObject {
     private boolean completed;
     private boolean removed;
     private long lastSync;
+    private long lastUpdated;
 
     public TaskModel() {
         this.id = UUID.randomUUID().toString();
@@ -43,6 +44,13 @@ public class TaskModel extends RealmObject {
     public long getLastSync() { return lastSync; }
     public void setLastSync(long lastSync) { this.lastSync = lastSync; }
 
-    public boolean isRemoved() { return removed; }
+    public long getLastUpdated() { return lastUpdated; }
+    public void setLastUpdated(long lastUpdated) { this.lastUpdated = lastUpdated; }
+    public void updateLastUpdated(){
+        setLastUpdated(System.currentTimeMillis());
+    }
+
+
+    public boolean getIsRemoved() { return removed; }
     public void setRemoved(boolean removed) {  this.removed = removed; }
 }

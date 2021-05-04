@@ -8,6 +8,7 @@ import com.gabriel.taskapp.service.model.local.TaskModel;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.Sort;
 
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_FILTER_ALL;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_FILTER_COMPLETED;
@@ -56,6 +57,7 @@ public class TaskRepository {
                 case TASK_FILTER_ALL:
                     task = realm.where(TaskModel.class)
                             .equalTo(DatabaseConstants.TASK.REMOVED, false)
+                            .sort("lastUpdated", Sort.ASCENDING)
                             .findAll();
                     break;
                 case TASK_FILTER_COMPLETED:
@@ -64,11 +66,13 @@ public class TaskRepository {
                     task = realm.where(TaskModel.class)
                             .equalTo(DatabaseConstants.TASK.COMPLETED, completed)
                             .equalTo(DatabaseConstants.TASK.REMOVED, false)
+                            .sort("lastUpdated", Sort.ASCENDING)
                             .findAll();
                     break;
                 default:
                     task = realm.where(TaskModel.class)
                             .equalTo(DatabaseConstants.TASK.REMOVED, true)
+                            .sort("lastUpdated", Sort.ASCENDING)
                             .findAll();
                     break;
 
@@ -87,6 +91,7 @@ public class TaskRepository {
     }
 
     public boolean saveOrUpdate(final TaskModel task) {
+        task.updateLastUpdated();
         boolean success = true;
         Realm realm = null;
         try {
@@ -106,19 +111,17 @@ public class TaskRepository {
     public void delete(final String id, Boolean removeFromDatabase) {
         Realm realm = getRealm();
         try {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm inRealm) {
-                    TaskModel task = inRealm.where(TaskModel.class)
-                            .equalTo(DatabaseConstants.TASK.ID, id)
-                            .findFirst();
-                    if (task == null) return;
-                    if (removeFromDatabase) {
-                        task.deleteFromRealm();
-                    } else {
-                        task.setRemoved(true);
-                        inRealm.insertOrUpdate(task);
-                    }
+            realm.executeTransaction(inRealm -> {
+                TaskModel task = inRealm.where(TaskModel.class)
+                        .equalTo(DatabaseConstants.TASK.ID, id)
+                        .findFirst();
+                if (task == null) return;
+                if (removeFromDatabase) {
+                    task.deleteFromRealm();
+                } else {
+                    task.updateLastUpdated();
+                    task.setRemoved(true);
+                    inRealm.insertOrUpdate(task);
                 }
             });
         } finally {
@@ -143,6 +146,7 @@ public class TaskRepository {
             realm = getRealm();
             realm.executeTransaction(realm1 -> {
                 task.setCompleted(true);
+                task.updateLastUpdated();
                 realm1.insertOrUpdate(task);
             });
         } catch (Exception e) {
