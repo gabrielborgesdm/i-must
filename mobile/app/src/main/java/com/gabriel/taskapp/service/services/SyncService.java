@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,9 @@ import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.repository.SyncRepository;
 import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static android.app.NotificationManager.IMPORTANCE_LOW;
 import static com.gabriel.taskapp.service.constants.SyncConstants.ACTION_SHOW_SYNC_FRAGMENT;
 import static com.gabriel.taskapp.service.constants.SyncConstants.BUNDLED_LISTENER;
@@ -33,9 +37,11 @@ import static com.gabriel.taskapp.service.constants.SyncConstants.SYNC_SERVICE_S
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class SyncService extends Service {
-
+    public static int timeout;
+    private Context mContext;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        mContext = this;
         ResultReceiver receiver = intent.getParcelableExtra(BUNDLED_LISTENER);
         SyncRepository sync = new SyncRepository(getApplicationContext());
         Bundle bundle = new Bundle();
@@ -48,22 +54,26 @@ public class SyncService extends Service {
             bundle.putBoolean(SYNC_SERVICE_SUCCESS, true);
 
             new Thread(() -> {
-                boolean isFinished;
-                int timeout = 0;
-                do {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    isFinished = !sync.isSyncFinished();
-                    timeout += 2;
-                }while (!isFinished || timeout <= 20);
+                timeout = 30 * 1000;
+                Timer timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        boolean isFinished = sync.isSyncFinished();
+                        timeout -= 100;
 
-                SecurityPreferences mSharedPreferences = new SecurityPreferences(this);
-                mSharedPreferences.storeLong(LAST_SYNC_SHARED_PREFERENCE, System.currentTimeMillis());
-                receiver.send(Activity.RESULT_OK, bundle);
-                stopService();
+                        if(isFinished || timeout <= 0){
+                            SecurityPreferences mSharedPreferences = new SecurityPreferences(mContext);
+                            mSharedPreferences.storeLong(LAST_SYNC_SHARED_PREFERENCE, System.currentTimeMillis());
+                            receiver.send(Activity.RESULT_OK, bundle);
+                            stopService();
+                            timer.cancel();
+                        }
+                    }
+                }, 0, 100);
+
+
+
 
             }).start();
         }

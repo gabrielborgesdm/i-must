@@ -37,7 +37,10 @@ public class SyncRepository extends BaseRepository {
         List<TaskModel> tasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_ALL);
         List<TaskModel> filteredTasks = filterNonSyncedTasks(tasks);
 
-        if (filteredTasks.size() == 0) return;
+        if (filteredTasks.size() == 0) {
+            isPostFinished = true;
+            return;
+        }
 
         try {
             JSONObject tasksObject = buildTasksObject(filteredTasks);
@@ -45,14 +48,17 @@ public class SyncRepository extends BaseRepository {
             mRemoteTaskRepository.createTasks(tasksObject, new APIListener<TasksModel>() {
                 @Override
                 public void onSuccess(TasksModel model) {
-                    if (!model.status.equals(API_OPERATION_EXECUTED)) return;
-                    if (model.tasks == null || model.tasks.size() == 0) return;
-                    model.tasks.forEach(taskModel -> {
-                        Log.d(TASK_TAG, "postNewOrUpdatedTasks: " + taskModel.getDescription());
-                        taskModel.setLastSync(System.currentTimeMillis());
-                        taskModel.setRemoved(false);
-                        mLocalRepository.saveOrUpdate(taskModel);
-                    });
+                    boolean isOkay = true;
+                    if (!model.status.equals(API_OPERATION_EXECUTED)) isOkay = false;
+                    if (model.tasks == null || model.tasks.size() == 0) isOkay = false;
+                    if(isOkay){
+                        model.tasks.forEach(taskModel -> {
+                            Log.d(TASK_TAG, "postNewOrUpdatedTasks: " + taskModel.getDescription());
+                            taskModel.setLastSync(System.currentTimeMillis());
+                            taskModel.setRemoved(false);
+                            mLocalRepository.saveOrUpdate(taskModel);
+                        });
+                    }
                     isPostFinished = true;
                 }
 
@@ -64,6 +70,7 @@ public class SyncRepository extends BaseRepository {
             });
         } catch (JSONException e) {
             e.printStackTrace();
+            isPostFinished = true;
         }
 
     }
@@ -106,18 +113,21 @@ public class SyncRepository extends BaseRepository {
         mRemoteTaskRepository.getTasks(new APIListener<TasksModel>() {
             @Override
             public void onSuccess(TasksModel model) {
-                if (!model.status.equals(API_OPERATION_EXECUTED)) return;
-                if (model.tasks == null || model.tasks.size() == 0) return;
-                model.tasks.forEach(taskModel -> {
-                    if (!checkTaskIsSynced(taskModel, localTasks)) {
-                        taskModel.setLastSync(System.currentTimeMillis());
-                        Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getDescription());
-                        Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getLastUpdated());
-                        Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getCompleted());
-                        Log.d(TASK_TAG, "getNonSyncedTasks: ----------------------------");
-                        mLocalRepository.saveOrUpdate(taskModel);
-                    }
-                });
+                boolean isOkay = true;
+                if (!model.status.equals(API_OPERATION_EXECUTED)) isOkay = false;
+                if (model.tasks == null || model.tasks.size() == 0) isOkay = false;
+                if(isOkay) {
+                    model.tasks.forEach(taskModel -> {
+                        if (!checkTaskIsSynced(taskModel, localTasks)) {
+                            taskModel.setLastSync(System.currentTimeMillis());
+                            Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getDescription());
+                            Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getLastUpdated());
+                            Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getCompleted());
+                            Log.d(TASK_TAG, "getNonSyncedTasks: ----------------------------");
+                            mLocalRepository.saveOrUpdate(taskModel);
+                        }
+                    });
+                }
                 isGetFinished = true;
             }
 
@@ -130,8 +140,8 @@ public class SyncRepository extends BaseRepository {
     }
 
     private Boolean checkTaskIsSynced(TaskModel remoteTask, List<TaskModel> localTasks) {
-        Boolean isSynced = false;
-        if (localTasks == null || localTasks.size() == 0) return isSynced;
+        boolean isSynced = false;
+        if (localTasks == null || localTasks.size() == 0) return false;
 
         for (TaskModel localTask : localTasks) {
             if (localTask.getId().equals(remoteTask.getId())) {
@@ -144,30 +154,31 @@ public class SyncRepository extends BaseRepository {
 
     public void deleteRemovedTasks() {
         List<TaskModel> localTasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_REMOVED);
-        if (localTasks == null || localTasks.size() == 0) return;
+        if (localTasks != null && localTasks.size() > 0) {
+            localTasks.forEach(localTask -> {
+                mRemoteTaskRepository.removeTask(localTask.getId(), new APIListener<com.gabriel.taskapp.service.model.remote.TaskModel>() {
+                    @Override
+                    public void onSuccess(com.gabriel.taskapp.service.model.remote.TaskModel model) {
+                        if (!model.status.equals(API_OPERATION_EXECUTED)) return;
+                        if (model.task == null) return;
+                        Log.d(TASK_TAG, "deleteRemovedTasks: " + model.task.getDescription());
+                        mLocalRepository.delete(model.task.getId(), true);
+                        isDeleteFinished = true;
+                    }
 
-        localTasks.forEach( localTask -> {
-            mRemoteTaskRepository.removeTask(localTask.getId(), new APIListener<com.gabriel.taskapp.service.model.remote.TaskModel>() {
-                @Override
-                public void onSuccess(com.gabriel.taskapp.service.model.remote.TaskModel model) {
-                    if (!model.status.equals(API_OPERATION_EXECUTED)) return;
-                    if (model.task == null) return;
-                    Log.d(TASK_TAG, "deleteRemovedTasks: " + model.task.getDescription());
-                    mLocalRepository.delete(model.task.getId(), true);
-                    isDeleteFinished = true;
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    Log.d(TASK_TAG, "onFailure: " + message);
-                    isDeleteFinished = true;
-                }
+                    @Override
+                    public void onFailure(String message) {
+                        Log.d(TASK_TAG, "onFailure: " + message);
+                        isDeleteFinished = true;
+                    }
+                });
             });
-        });
-
+        } else {
+            isDeleteFinished = true;
+        }
     }
 
-    public Boolean isSyncFinished(){
+    public Boolean isSyncFinished() {
         return isDeleteFinished && isGetFinished && isPostFinished;
     }
 }
