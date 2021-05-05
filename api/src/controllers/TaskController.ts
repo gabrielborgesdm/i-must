@@ -10,6 +10,7 @@ export class TaskController {
 
     try {
       doc = await Task.findOne({ $and: [{ id }, { userId: request.body.userId }] })
+      doc = this.filterTaskDoc(doc._doc)
     } catch (err) {
       console.log(err)
       error = true
@@ -24,12 +25,26 @@ export class TaskController {
     }
   }
 
+  filterTaskDoc (task: any): any {
+    const newDoc = { ...task }
+    newDoc.lastUpdated = new Date(task.lastUpdated).getTime()
+    if (newDoc.createdAt) {
+      newDoc.createdAt = new Date(task.createdAt).getTime()
+    }
+    delete newDoc.__v
+    delete newDoc._id
+    delete newDoc.$setOnInsert
+    console.log(newDoc)
+    return newDoc
+  }
+
   async getAll (request: Request, response: Response): Promise<Response> {
     let docs: any = null
     let error = false
 
     try {
       docs = await Task.find({ userId: request.body.userId })
+      docs = docs.map((doc: any) => this.filterTaskDoc(doc._doc))
     } catch (err) {
       console.log(err)
       error = true
@@ -51,7 +66,7 @@ export class TaskController {
       try {
         task.userId = userId
         const res = await Task.updateOne({ $and: [{ id: task.id }, { userId }] }, task, { new: true, upsert: true })
-        if (res.ok) upsertedTasks.push(task)
+        if (res.ok) upsertedTasks.push(this.filterTaskDoc(task))
       } catch (err) {
         error = true
         console.log(err)
@@ -71,6 +86,9 @@ export class TaskController {
 
     try {
       doc = await Task.findOneAndRemove({ $and: [{ id }, { userId: request.body.userId }] })
+      if (doc && doc._doc) {
+        doc = this.filterTaskDoc(doc._doc)
+      }
     } catch (err) {
       console.log(err)
       error = true

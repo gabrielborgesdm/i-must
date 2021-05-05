@@ -46,7 +46,7 @@ public class TaskListFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString(DatabaseConstants.TASK.ID, task.getId());
             bundle.putString(DatabaseConstants.TASK.DESCRIPTION, task.getDescription());
-            bundle.putBoolean(DatabaseConstants.TASK.COMPLETED, task.isCompleted());
+            bundle.putBoolean(DatabaseConstants.TASK.COMPLETED, task.getCompleted());
             intent.putExtras(bundle);
             startActivity(intent);
         }
@@ -128,7 +128,7 @@ public class TaskListFragment extends Fragment {
         long lastSync = mSharedPreferences.getLong(LAST_SYNC_SHARED_PREFERENCE);
         long differenceInMillis = System.currentTimeMillis() - lastSync;
         long minutes = TimeUnit.MILLISECONDS.toMinutes(differenceInMillis);
-        if (minutes > 2) {
+        if (minutes > 1) {
             startSyncService();
         }
     }

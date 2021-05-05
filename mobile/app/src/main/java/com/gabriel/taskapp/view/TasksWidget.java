@@ -28,7 +28,6 @@ public class TasksWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         SecurityPreferences sharedPreferences = new SecurityPreferences(context);
-        Log.d(TASK_TAG, "onUpdate: WIDGET_UPDATE");
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(
                     context.getPackageName(),
@@ -36,12 +35,10 @@ public class TasksWidget extends AppWidgetProvider {
             );
 
             if(!sharedPreferences.get(PERSON_TOKEN).equals("")){
-                Log.d(TASK_TAG, "onUpdate: tem token");
                 Intent intent = new Intent(context, TasksWidgetRemoteViewsService.class);
                 views.setRemoteAdapter(R.id.widgetListView, intent);
                 views.setViewVisibility(R.id.not_authenticated, View.GONE);
             } else {
-                Log.d(TASK_TAG, "onUpdate: nao tem token");
                 views.setViewVisibility(R.id.not_authenticated, View.VISIBLE);
             }
 
@@ -66,7 +63,6 @@ public class TasksWidget extends AppWidgetProvider {
     }
 
     public static void sendRefreshBroadcast(Context context) {
-        Log.d(TASK_TAG, "sendRefreshBroadcast: ");
         Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intent.setComponent(new ComponentName(context, TasksWidget.class));
         context.sendBroadcast(intent);
@@ -77,7 +73,6 @@ public class TasksWidget extends AppWidgetProvider {
 
         final String action = intent.getAction();
         if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
-            Log.d(TASK_TAG, "onReceive: update");
             updateWidgets(context);
         }
 

@@ -37,6 +37,7 @@ public class TaskRepository {
                 if (response.isSuccessful()) {
                     listener.onSuccess(response.body());
                 } else {
+                    Log.d(TASK_TAG, "onResponse: " +  response.message());
                     listener.onFailure(mContext.getString(R.string.something_went_wrong));
                 }
             }

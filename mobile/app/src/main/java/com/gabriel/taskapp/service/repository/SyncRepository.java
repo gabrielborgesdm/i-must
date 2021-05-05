@@ -41,6 +41,7 @@ public class SyncRepository extends BaseRepository {
 
         try {
             JSONObject tasksObject = buildTasksObject(filteredTasks);
+            Log.d(TASK_TAG, "postNewOrUpdatedTasks: " + tasksObject.toString());
             mRemoteTaskRepository.createTasks(tasksObject, new APIListener<TasksModel>() {
                 @Override
                 public void onSuccess(TasksModel model) {
@@ -88,7 +89,8 @@ public class SyncRepository extends BaseRepository {
             JSONObject taskObject = new JSONObject();
             try {
                 taskObject.put(TaskConstants.TASK_DESCRIPTION, task.getDescription());
-                taskObject.put(TaskConstants.TASK_COMPLETED, task.isCompleted());
+                taskObject.put(TaskConstants.TASK_COMPLETED, task.getCompleted());
+                taskObject.put(TaskConstants.TASK_LAST_UPDATED, task.getLastUpdated());
                 taskObject.put(TaskConstants.TASK_ID, task.getId());
                 tasksArray.put(taskObject);
             } catch (JSONException e) {
@@ -109,7 +111,10 @@ public class SyncRepository extends BaseRepository {
                 model.tasks.forEach(taskModel -> {
                     if (!checkTaskIsSynced(taskModel, localTasks)) {
                         taskModel.setLastSync(System.currentTimeMillis());
-                        Log.d(TASK_TAG, "onSuccess: " + taskModel.toString());
+                        Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getDescription());
+                        Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getLastUpdated());
+                        Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getCompleted());
+                        Log.d(TASK_TAG, "getNonSyncedTasks: ----------------------------");
                         mLocalRepository.saveOrUpdate(taskModel);
                     }
                 });

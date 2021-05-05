@@ -41,7 +41,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         mButtonComplete.setOnClickListener(this);
         mButtonRemove.setOnClickListener(this);
 
-        if (!task.isCompleted()) {
+        if (!task.getCompleted()) {
             mButtonComplete.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_baseline_crop_square_24));
         } else {
             textName.setPaintFlags(textName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

@@ -6,6 +6,9 @@ export const TaskSchema = Joi.object({
   description: Joi.string()
     .required(),
 
+  lastUpdated: Joi.number()
+    .required(),
+
   completed: Joi.boolean()
     .required()
 

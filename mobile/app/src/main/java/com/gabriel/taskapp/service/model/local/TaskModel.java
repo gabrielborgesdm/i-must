@@ -34,7 +34,7 @@ public class TaskModel extends RealmObject {
         this.description = description;
     }
 
-    public boolean isCompleted() {
+    public boolean getCompleted() {
         return completed;
     }
     public void setCompleted(Boolean completed) {
@@ -51,6 +51,5 @@ public class TaskModel extends RealmObject {
     }
 
 
-    public boolean getIsRemoved() { return removed; }
     public void setRemoved(boolean removed) {  this.removed = removed; }
 }

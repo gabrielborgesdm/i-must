@@ -24,6 +24,9 @@ const TaskSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  lastUpdated: {
+    type: Date
   }
 })
 

@@ -44,7 +44,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             if(mTodo == null) {
                 mViewModel.saveOrUpdate(null, description, false, 0, false);
             } else {
-                mViewModel.saveOrUpdate(mTodo.getId(), description, mTodo.isCompleted(), 0, false);
+                mViewModel.saveOrUpdate(mTodo.getId(), description, mTodo.getCompleted(), 0, false);
             }
         }
         if(id == R.id.speech_to_text_button){
