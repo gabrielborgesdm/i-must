@@ -52,5 +52,14 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="authentication_needed">Sign in the application before using the widget</string>
+    <string name="text_to_speech">text to speech</string>
+    <string name="add_task">Add Task</string>
+    <string name="more_options">More options</string>
+    <string name="due_date">Due date</string>
+    <string name="upload_image">Upload image</string>
+    <string name="add_images_to_your_task">Add images to your task</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

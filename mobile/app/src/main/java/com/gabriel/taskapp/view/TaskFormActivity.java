@@ -1,28 +1,43 @@
 package com.gabriel.taskapp.view;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
 import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.view.adapter.ImageAdapter;
 import com.gabriel.taskapp.viewmodel.TaskFormViewModel;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_IMAGE;
 
 public class TaskFormActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
     private TaskFormViewModel mViewModel;
     private TaskModel mTodo = null;
+    List<String> list;
+    int[] imageIds = {
+            R.drawable.ic_baseline_add_24,
+            R.drawable.ic_baseline_add_box_24,
+            R.drawable.ic_baseline_calendar_today_24,
+            R.drawable.widget_preview
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +45,21 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_task_form);
 
         mViewModel = new ViewModelProvider(this).get(TaskFormViewModel.class);
+        ImageAdapter adapter = new ImageAdapter(this, imageIds);
+        GridView grid = findViewById(R.id.grid_view_form_images);
+        grid.setAdapter(adapter);
+        grid.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(this, FullscreenActivity.class);
+            final ImageView image = view.findViewById(R.id.grid_item_image);
+            image.setDrawingCacheEnabled(true);
+            image.buildDrawingCache(true);
+            Bitmap bitmapImage = Bitmap.createBitmap(image.getDrawingCache());
+            image.setDrawingCacheEnabled(false); // clear drawing cache
+            Bundle extras = new Bundle();
+            extras.putParcelable(TASK_IMAGE, bitmapImage);
+            intent.putExtras(extras);
+            startActivity(intent);
+        });
         setListeners();
         observe();
         loadData();
@@ -38,23 +68,20 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if(id == R.id.button_save){
-            EditText edit_description = findViewById(R.id.edit_description);
+        if (id == R.id.button_save) {
+            EditText edit_description = findViewById(R.id.task_form_description);
             String description = edit_description.getText().toString();
-            if(mTodo == null) {
+            if (mTodo == null) {
                 mViewModel.saveOrUpdate(null, description, false, 0, false);
             } else {
                 mViewModel.saveOrUpdate(mTodo.getId(), description, mTodo.getCompleted(), 0, false);
             }
         }
-        if(id == R.id.speech_to_text_button){
-            speak();
-        }
     }
 
     private void observe() {
         mViewModel.saveTodo.observe(this, success -> {
-            if(success){
+            if (success) {
                 Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_LONG).show();
@@ -65,22 +92,25 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
 
     private void loadData() {
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
+        if (bundle != null) {
             mTodo = new TaskModel();
             mTodo.setId(bundle.getString(DatabaseConstants.TASK.ID));
             mTodo.setDescription(bundle.getString(DatabaseConstants.TASK.DESCRIPTION));
             mTodo.setCompleted(bundle.getBoolean(DatabaseConstants.TASK.COMPLETED));
-            EditText editDescription = findViewById(R.id.edit_description);
+            EditText editDescription = findViewById(R.id.task_form_description);
             editDescription.setText(mTodo.getDescription());
         }
     }
 
     private void setListeners() {
         findViewById(R.id.button_save).setOnClickListener(this);
-        findViewById(R.id.speech_to_text_button).setOnClickListener(this);
+        TextInputLayout textDescription = findViewById(R.id.task_form_text_layout);
+        textDescription.setEndIconOnClickListener(view -> {
+            speak();
+        });
     }
 
-    private void speak(){
+    private void speak() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
@@ -97,9 +127,9 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_CODE_SPEECH_INPUT:
-                if(resultCode == RESULT_OK && data != null){
+                if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    EditText edit_description = findViewById(R.id.edit_description);
+                    EditText edit_description = findViewById(R.id.task_form_description);
                     edit_description.setText(result.get(0));
                 }
         }

@@ -4,62 +4,181 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
     tools:context=".view.TaskFormActivity">
 
-    <TextView
-        android:id="@+id/text_description"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/task_form_app_bar_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/description"
-        android:textSize="22sp"
+        android:theme="@style/Theme.TodoApp.AppBarOverlay"
+        app:layout_constraintBottom_toTopOf="@+id/task_form_text_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.TodoApp.PopupOverlay">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/add_task"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/task_form_text_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/description"
+        app:endIconContentDescription="@string/text_to_speech"
+        app:endIconDrawable="@drawable/ic_baseline_mic_24"
+
+        app:endIconMode="custom"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_form_app_bar_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/task_form_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/image_view_form_more_options"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_baseline_arrow_drop_down_24"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="@+id/task_form_text_layout"
+        app:layout_constraintRight_toLeftOf="@+id/text_view_more_options"
+        app:layout_constraintTop_toBottomOf="@+id/task_form_text_layout" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_more_options"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/more_options"
+        android:textSize="18sp"
+        app:layout_constraintHorizontal_weight="15"
+        app:layout_constraintLeft_toRightOf="@+id/image_view_form_more_options"
+        app:layout_constraintRight_toRightOf="@+id/task_form_text_layout"
+        app:layout_constraintTop_toTopOf="@+id/image_view_form_more_options" />
+
+    <View
+        android:id="@+id/view_form_options_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/light_grey"
+        app:layout_constraintLeft_toLeftOf="@+id/image_view_form_more_options"
+        app:layout_constraintRight_toRightOf="@+id/text_view_more_options"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_more_options" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_edit_description"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/text_description"
-        app:layout_constraintRight_toRightOf="@+id/text_description"
-        app:layout_constraintTop_toBottomOf="@+id/text_description">
+        app:layout_constraintLeft_toLeftOf="@+id/view_form_options_line"
+        app:layout_constraintRight_toRightOf="@+id/view_form_options_line"
+        app:layout_constraintTop_toBottomOf="@+id/view_form_options_line">
 
-        <EditText
-            android:id="@+id/edit_description"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_form_date"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/enter_the_description"
-            android:inputType="textMultiLine"
-            app:layout_constraintHorizontal_weight="7"
-            app:layout_constraintLeft_toLeftOf="@+id/constraint_edit_description"
-            app:layout_constraintRight_toLeftOf="@+id/speech_to_text_button"
-            app:layout_constraintTop_toTopOf="@+id/constraint_edit_description" />
-
-        <ImageView
-            android:id="@+id/speech_to_text_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_mic_24"
-            app:layout_constraintBottom_toBottomOf="@+id/edit_description"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintLeft_toRightOf="@+id/edit_description"
+            android:layout_marginTop="16dp"
+            android:hint="@string/due_date"
+            app:endIconDrawable="@drawable/ic_baseline_calendar_today_24"
+            app:endIconMode="custom"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/edit_description" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_form_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="datetime" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_form_upload_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableTint="@color/white"
+            android:paddingVertical="10dp"
+            android:text="@string/upload_image"
+            android:textAlignment="center"
+            app:icon="@drawable/ic_baseline_image_24"
+            app:iconGravity="end"
+            app:layout_constraintLeft_toLeftOf="@+id/input_layout_form_date"
+            app:layout_constraintRight_toRightOf="@+id/input_layout_form_date"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_form_date" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginVertical="16dp"
+            app:layout_constraintLeft_toLeftOf="@id/button_form_upload_image"
+            app:layout_constraintRight_toRightOf="@+id/button_form_upload_image"
+            app:layout_constraintTop_toBottomOf="@+id/button_form_upload_image">
+
+            <GridView
+                android:id="@+id/grid_view_form_images"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="10dp"
+                android:numColumns="3"
+                android:stretchMode="columnWidth" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_view_no_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_images_to_your_task"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                 />
+
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/middle_blue_green"
         android:gravity="center"
         android:text="@string/save_task"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
