@@ -9,18 +9,20 @@ import android.widget.ImageView;
 
 import com.gabriel.taskapp.R;
 
+import java.util.List;
+
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private final int[] imageIds;
+    private final List<Integer> imageIds;
 
-    public ImageAdapter(Context context, int[] imageIds) {
+    public ImageAdapter(Context context, List<Integer> imageIds) {
         mContext = context;
         this.imageIds = imageIds;
     }
 
     @Override
     public int getCount() {
-        return imageIds.length;
+        return imageIds.size();
     }
 
     @Override
@@ -41,7 +43,7 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             gridView = inflater.inflate(R.layout.grid_image_layout, null);
             ImageView imageView = gridView.findViewById(R.id.grid_item_image);
-            imageView.setImageResource(imageIds[position]);
+            imageView.setImageResource(imageIds.get(position));
         } else {
             gridView = convertView;
         }

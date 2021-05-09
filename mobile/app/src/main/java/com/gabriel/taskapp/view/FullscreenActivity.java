@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.gabriel.taskapp.R;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_IMAGE;
 
@@ -25,13 +26,11 @@ public class FullscreenActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         Bitmap bmp = extras.getParcelable(TASK_IMAGE);
 
-        ImageView image_view_fullscreen;
+        PhotoView image_view_fullscreen;
         Button button_fullscreen_close;
-
 
         image_view_fullscreen = findViewById(R.id.image_view_fullscreen);
         button_fullscreen_close = findViewById(R.id.button_fullscreen_close);
-
 
         button_fullscreen_close.setOnClickListener(v -> FullscreenActivity.this.finish());
 

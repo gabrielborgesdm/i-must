@@ -58,45 +58,30 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <ImageView
-        android:id="@+id/image_view_form_more_options"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_form_more_options"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_baseline_arrow_drop_down_24"
-        app:layout_constraintHorizontal_weight="1"
+        android:drawableLeft="@drawable/ic_baseline_arrow_right_24"
+        android:paddingVertical="10dp"
+        android:text="@string/more_options"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="@+id/task_form_text_layout"
-        app:layout_constraintRight_toLeftOf="@+id/text_view_more_options"
+        app:layout_constraintRight_toRightOf="@+id/task_form_text_layout"
         app:layout_constraintTop_toBottomOf="@+id/task_form_text_layout" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_view_more_options"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/more_options"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_weight="15"
-        app:layout_constraintLeft_toRightOf="@+id/image_view_form_more_options"
-        app:layout_constraintRight_toRightOf="@+id/task_form_text_layout"
-        app:layout_constraintTop_toTopOf="@+id/image_view_form_more_options" />
-
-    <View
-        android:id="@+id/view_form_options_line"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/light_grey"
-        app:layout_constraintLeft_toLeftOf="@+id/image_view_form_more_options"
-        app:layout_constraintRight_toRightOf="@+id/text_view_more_options"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_more_options" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_form_task"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/view_form_options_line"
-        app:layout_constraintRight_toRightOf="@+id/view_form_options_line"
-        app:layout_constraintTop_toBottomOf="@+id/view_form_options_line">
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@+id/button_form_more_options"
+        app:layout_constraintRight_toRightOf="@+id/button_form_more_options"
+        app:layout_constraintTop_toBottomOf="@+id/button_form_more_options">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_form_date"
@@ -137,8 +122,8 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginVertical="16dp"
+            android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="@id/button_form_upload_image"
             app:layout_constraintRight_toRightOf="@+id/button_form_upload_image"
             app:layout_constraintTop_toBottomOf="@+id/button_form_upload_image">
@@ -157,8 +142,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/add_images_to_your_task"
                 android:textAlignment="center"
-                android:textSize="18sp"
-                 />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
