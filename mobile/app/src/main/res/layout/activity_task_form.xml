@@ -98,6 +98,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/text_input_form_date"
+                android:focusable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="datetime" />
@@ -132,7 +133,6 @@
                 android:id="@+id/grid_view_form_images"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:horizontalSpacing="10dp"
                 android:numColumns="3"
                 android:stretchMode="columnWidth" />
 
