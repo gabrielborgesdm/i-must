@@ -31,8 +31,8 @@ public class TaskFormViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> mSaveTodo = new MutableLiveData();
     public LiveData<Boolean> saveTodo = mSaveTodo;
 
-    private List<String> mLocalImagePaths = new ArrayList<>();
-    private MutableLiveData<List<String>> mImagePaths = new MutableLiveData(mLocalImagePaths);
+    public List<String> localImagePaths = new ArrayList<>();
+    private MutableLiveData<List<String>> mImagePaths = new MutableLiveData(localImagePaths);
     public LiveData<List<String>> imagePaths = mImagePaths;
 
     private MutableLiveData<Boolean> mIsCollapsed = new MutableLiveData(true);
@@ -71,16 +71,28 @@ public class TaskFormViewModel extends AndroidViewModel {
             return;
         }
 
-        mLocalImagePaths.add(imageName);
-        mImagePaths.setValue(mLocalImagePaths);
+        localImagePaths.add(imageName);
+        mImagePaths.setValue(localImagePaths);
+    }
+
+    public void removeImage(int position) {
+        localImagePaths.remove(position);
+        mImagePaths.setValue(localImagePaths);
     }
 
 
     public void toggleCollapsed() {
+        if(!mIsCollapsed.getValue()){
+            localImagePaths = new ArrayList<>();
+            mImagePaths.setValue(localImagePaths);
+            mDueDate.setValue("");
+        }
         mIsCollapsed.setValue(!mIsCollapsed.getValue());
     }
 
     public void updateDatetime(int year, int month, int dayOfMonth, int hourOfDay, int minute) {
         mDueDate.setValue(DateRepository.getFormattedDatetime(year, month, dayOfMonth, hourOfDay, minute));
     }
+
+
 }

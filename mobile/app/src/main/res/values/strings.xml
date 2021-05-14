@@ -40,8 +40,6 @@
     <string name="person_not_found">Person not found</string>
     <string name="fields_cannot_be_empty">Fields cannot be empty</string>
     <string name="enter_a_valid_email">Enter a valid email</string>
-
-    <!-- Strings used for Sync notification -->
     <string name="sync_notification_title">Syncing tasks</string>
     <string name="sync_notification_getting_started">Getting started</string>
     <string name="sync_notification_syncing">Syncing tasks</string>
@@ -49,7 +47,6 @@
     <string name="sync_notification_retrieving_updated_tasks">Retrieving updated tasks</string>
     <string name="sync_internet_connection_required">Synchronization failed. Internet connection required</string>
     <string name="speak_task_description">Speak the task\'s description</string>
-    <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="authentication_needed">Sign in the application before using the widget</string>
     <string name="text_to_speech">text to speech</string>
@@ -59,8 +56,13 @@
     <string name="upload_image">Upload image</string>
     <string name="add_images_to_your_task">Add images to your task</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="wait_before_trying_again">Wait a few seconds before trying again</string>
+    <string name="modal_collapse_title">Do you want to collapse More Options?</string>
+    <string name="modal_collapse_message">By collapsing More Options, all the data inside of it will be erased</string>
+    <string name="modal_collapse_button_collapse">Collapse</string>
+    <string name="cannot_add_more_images_to_task">You cannot add more Images to this task</string>
+    <string name="modal_remove_media_title">Do you want to remove this image</string>
+    <string name="modal_remove_media_message">Are you sure you want to remove this image?</string>
+    <string name="modal_remove_media_button_remove">Remove</string>
 
 </resources>

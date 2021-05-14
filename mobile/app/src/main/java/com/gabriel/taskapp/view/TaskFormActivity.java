@@ -1,5 +1,6 @@
 package com.gabriel.taskapp.view;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -53,6 +54,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
     private static int mYear;
     private static int mMonth;
     private static int mDayOfMonth;
+    private static int MAX_IMAGES_ALLOWED = 3;
     int SELECT_IMAGE = 200;
 
     @Override
@@ -70,16 +72,30 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.button_form_more_options) {
-            mViewModel.toggleCollapsed();
+            if(!mViewModel.isCollapsed.getValue()){
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.modal_collapse_title)
+                        .setMessage(R.string.modal_collapse_message)
+                        .setPositiveButton(R.string.modal_collapse_button_collapse, (dialog, which) -> {
+                            mViewModel.toggleCollapsed();
+                        })
+                        .setNeutralButton(R.string.cancel, null)
+                        .show();
+            } else {
+                mViewModel.toggleCollapsed();
+            }
         }
         if (id == R.id.button_form_upload_image) {
+            if(mViewModel.localImagePaths != null && mViewModel.localImagePaths.size() >= MAX_IMAGES_ALLOWED){
+                Toast.makeText(this, getString(R.string.cannot_add_more_images_to_task), Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent i = new Intent();
             i.setType("image/*");
             i.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(i, "Select Image"), SELECT_IMAGE);
         }
         if (id == R.id.text_input_form_date) {
-            Log.d(TASK_TAG, "onClick: teste");
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getSupportFragmentManager(), "datePicker");
         }
@@ -94,6 +110,16 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private void setListeners() {
+        findViewById(R.id.button_save).setOnClickListener(this);
+        findViewById(R.id.button_form_more_options).setOnClickListener(this);
+        findViewById(R.id.text_input_form_date).setOnClickListener(this);
+        findViewById(R.id.button_form_upload_image).setOnClickListener(this);
+        TextInputLayout textDescription = findViewById(R.id.task_form_text_layout);
+        textDescription.setEndIconOnClickListener(view -> {
+            speak();
+        });
+    }
 
     private void observe() {
         mViewModel.isCollapsed.observe(this, isCollapsed -> {
@@ -117,6 +143,19 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             ImageAdapter adapter = new ImageAdapter(this, imagePaths);
             GridView grid = findViewById(R.id.grid_view_form_images);
             grid.setAdapter(adapter);
+
+            grid.setOnItemLongClickListener((parent, view, position, id) -> {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.modal_remove_media_title)
+                        .setMessage(R.string.modal_remove_media_message)
+                        .setPositiveButton(R.string.modal_remove_media_button_remove, (dialog, which) -> {
+                            mViewModel.removeImage(position);
+                        })
+
+                        .setNeutralButton(R.string.cancel, null)
+                        .show();
+                return true;
+            });
             grid.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent(this, FullscreenActivity.class);
                 intent.putExtra(TASK_IMAGE, imagePaths.get(position));
@@ -153,16 +192,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void setListeners() {
-        findViewById(R.id.button_save).setOnClickListener(this);
-        findViewById(R.id.button_form_more_options).setOnClickListener(this);
-        findViewById(R.id.text_input_form_date).setOnClickListener(this);
-        findViewById(R.id.button_form_upload_image).setOnClickListener(this);
-        TextInputLayout textDescription = findViewById(R.id.task_form_text_layout);
-        textDescription.setEndIconOnClickListener(view -> {
-            speak();
-        });
-    }
+
 
     private void speak() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -187,7 +217,6 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             }
         }
         if (requestCode == SELECT_IMAGE) {
-            // Get the url of the image from data
             assert data != null;
             Uri selectedImageUri = data.getData();
             if (null != selectedImageUri) {
@@ -224,12 +253,10 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         public @NotNull Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
-            // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
