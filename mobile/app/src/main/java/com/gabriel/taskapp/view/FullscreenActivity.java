@@ -3,6 +3,7 @@ package com.gabriel.taskapp.view;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.gabriel.taskapp.R;
+import com.gabriel.taskapp.service.repository.ImageRepository;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_IMAGE;
@@ -22,9 +24,9 @@ public class FullscreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_fullscreen);
+        ImageRepository imageRepository = ImageRepository.getRepository(this);
 
-        Bundle extras = getIntent().getExtras();
-        Bitmap bmp = extras.getParcelable(TASK_IMAGE);
+        Bitmap bitmapImage = imageRepository.getImage(getIntent().getStringExtra(TASK_IMAGE));
 
         PhotoView image_view_fullscreen;
         Button button_fullscreen_close;
@@ -34,7 +36,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         button_fullscreen_close.setOnClickListener(v -> FullscreenActivity.this.finish());
 
-        image_view_fullscreen.setImageBitmap(bmp);
+        image_view_fullscreen.setImageBitmap(bitmapImage);
     }
 
 

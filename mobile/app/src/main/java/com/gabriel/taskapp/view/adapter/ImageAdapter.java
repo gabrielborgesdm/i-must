@@ -1,6 +1,8 @@
 package com.gabriel.taskapp.view.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,21 +10,24 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.gabriel.taskapp.R;
+import com.gabriel.taskapp.service.repository.ImageRepository;
 
 import java.util.List;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private final List<Integer> imageIds;
+    private final List<String> imagePaths;
+    private ImageRepository mImageRepository;
 
-    public ImageAdapter(Context context, List<Integer> imageIds) {
+    public ImageAdapter(Context context, List<String> imagePaths) {
         mContext = context;
-        this.imageIds = imageIds;
+        this.imagePaths = imagePaths;
+        mImageRepository = ImageRepository.getRepository(mContext);
     }
 
     @Override
     public int getCount() {
-        return imageIds.size();
+        return imagePaths.size();
     }
 
     @Override
@@ -43,7 +48,8 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             gridView = inflater.inflate(R.layout.grid_image_layout, null);
             ImageView imageView = gridView.findViewById(R.id.grid_item_image);
-            imageView.setImageResource(imageIds.get(position));
+            Bitmap image = mImageRepository.getImage(imagePaths.get(position));
+            imageView.setImageBitmap(image);
         } else {
             gridView = convertView;
         }

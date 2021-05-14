@@ -56,7 +56,7 @@ export class UserController {
     if (error) {
       return response.status(500).json({ success: false, status: 'server_error', message: 'Something went wrong, try again later.' })
     } else if (token) {
-      return response.status(200).json({ success: true, status: 'operation_executed', token })
+      return response.status(200).json({ success: true, status: 'operation_executed', token, email: user.email })
     } else {
       return response.status(200).json({ success: false, status: 'not_found', message: 'User not found.' })
     }

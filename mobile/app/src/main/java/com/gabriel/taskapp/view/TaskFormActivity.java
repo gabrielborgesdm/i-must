@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.text.format.DateFormat;
@@ -27,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
 import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.service.repository.ImageRepository;
 import com.gabriel.taskapp.view.adapter.ImageAdapter;
 import com.gabriel.taskapp.viewmodel.TaskFormViewModel;
 import com.google.android.material.button.MaterialButton;
@@ -46,16 +48,18 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
     private static TaskFormViewModel mViewModel;
     private TaskModel mTodo = null;
+    private ImageRepository mImageRepository;
 
     private static int mYear;
     private static int mMonth;
     private static int mDayOfMonth;
+    int SELECT_IMAGE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_form);
-
+        mImageRepository = ImageRepository.getRepository(this);
         mViewModel = new ViewModelProvider(this).get(TaskFormViewModel.class);
         setListeners();
         observe();
@@ -69,7 +73,10 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             mViewModel.toggleCollapsed();
         }
         if (id == R.id.button_form_upload_image) {
-            mViewModel.uploadImage();
+            Intent i = new Intent();
+            i.setType("image/*");
+            i.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(i, "Select Image"), SELECT_IMAGE);
         }
         if (id == R.id.text_input_form_date) {
             Log.d(TASK_TAG, "onClick: teste");
@@ -87,6 +94,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+
     private void observe() {
         mViewModel.isCollapsed.observe(this, isCollapsed -> {
             MaterialButton moreOptionsButton = findViewById(R.id.button_form_more_options);
@@ -100,25 +108,18 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        mViewModel.imageIds.observe(this, imageIds -> {
-            if (imageIds.size() > 0) {
+        mViewModel.imagePaths.observe(this, imagePaths -> {
+            if (imagePaths.size() > 0) {
                 findViewById(R.id.text_view_no_image).setVisibility(View.GONE);
             } else {
                 findViewById(R.id.text_view_no_image).setVisibility(View.VISIBLE);
             }
-            ImageAdapter adapter = new ImageAdapter(this, imageIds);
+            ImageAdapter adapter = new ImageAdapter(this, imagePaths);
             GridView grid = findViewById(R.id.grid_view_form_images);
             grid.setAdapter(adapter);
             grid.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent(this, FullscreenActivity.class);
-                final ImageView image = view.findViewById(R.id.grid_item_image);
-                image.setDrawingCacheEnabled(true);
-                image.buildDrawingCache(true);
-                Bitmap bitmapImage = Bitmap.createBitmap(image.getDrawingCache());
-                image.setDrawingCacheEnabled(false); // clear drawing cache
-                Bundle extras = new Bundle();
-                extras.putParcelable(TASK_IMAGE, bitmapImage);
-                intent.putExtras(extras);
+                intent.putExtra(TASK_IMAGE, imagePaths.get(position));
                 startActivity(intent);
             });
         });
@@ -183,6 +184,14 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 EditText edit_description = findViewById(R.id.task_form_description);
                 edit_description.setText(result.get(0));
+            }
+        }
+        if (requestCode == SELECT_IMAGE) {
+            // Get the url of the image from data
+            assert data != null;
+            Uri selectedImageUri = data.getData();
+            if (null != selectedImageUri) {
+                mViewModel.uploadImage(selectedImageUri);
             }
         }
     }
