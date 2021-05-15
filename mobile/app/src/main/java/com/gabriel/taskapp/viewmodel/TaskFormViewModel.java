@@ -3,7 +3,6 @@ package com.gabriel.taskapp.viewmodel;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,11 +16,10 @@ import com.gabriel.taskapp.service.repository.DateRepository;
 import com.gabriel.taskapp.service.repository.ImageRepository;
 import com.gabriel.taskapp.service.repository.local.TaskRepository;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
-import static java.util.Collections.emptyList;
 
 public class TaskFormViewModel extends AndroidViewModel {
     private Context mContext;
@@ -31,9 +29,9 @@ public class TaskFormViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> mSaveTodo = new MutableLiveData();
     public LiveData<Boolean> saveTodo = mSaveTodo;
 
-    public List<String> localImagePaths = new ArrayList<>();
-    private MutableLiveData<List<String>> mImagePaths = new MutableLiveData(localImagePaths);
-    public LiveData<List<String>> imagePaths = mImagePaths;
+    public JSONArray localImagesPath = new JSONArray();
+    private MutableLiveData<JSONArray> mImagesPaths = new MutableLiveData(localImagesPath);
+    public LiveData<JSONArray> imagesPaths = mImagesPaths;
 
     private MutableLiveData<Boolean> mIsCollapsed = new MutableLiveData(true);
     public LiveData<Boolean> isCollapsed = mIsCollapsed;
@@ -52,6 +50,8 @@ public class TaskFormViewModel extends AndroidViewModel {
             final String id,
             final String description,
             final boolean completed,
+            final String datetime,
+            final JSONArray imagesPaths,
             final long lastSync,
             final boolean removed) {
         TaskModel todo = new TaskModel();
@@ -61,30 +61,32 @@ public class TaskFormViewModel extends AndroidViewModel {
         todo.setDescription(description);
         todo.setCompleted(completed);
         todo.setLastSync(lastSync);
+        todo.setImagesPaths(imagesPaths);
+        todo.setDatetime(datetime);
+        todo.setRemoved(removed);
         mSaveTodo.setValue(mRepository.saveOrUpdate(todo));
     }
 
     public void uploadImage(Uri imageURI) {
         String imageName = mImageRepository.writeImage(imageURI);
-        if(imageName == null) {
+        if (imageName == null) {
             Toast.makeText(mContext, mContext.getString(R.string.wait_before_trying_again), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        localImagePaths.add(imageName);
-        mImagePaths.setValue(localImagePaths);
+        localImagesPath.put(imageName);
+        mImagesPaths.setValue(localImagesPath);
     }
 
     public void removeImage(int position) {
-        localImagePaths.remove(position);
-        mImagePaths.setValue(localImagePaths);
+        localImagesPath.remove(position);
+        mImagesPaths.setValue(localImagesPath);
     }
 
 
     public void toggleCollapsed() {
-        if(!mIsCollapsed.getValue()){
-            localImagePaths = new ArrayList<>();
-            mImagePaths.setValue(localImagePaths);
+        if (!mIsCollapsed.getValue()) {
+            loadImages(new JSONArray());
             mDueDate.setValue("");
         }
         mIsCollapsed.setValue(!mIsCollapsed.getValue());
@@ -95,4 +97,8 @@ public class TaskFormViewModel extends AndroidViewModel {
     }
 
 
+    public void loadImages(JSONArray imagesPaths) {
+        localImagesPath = imagesPaths;
+        mImagesPaths.setValue(localImagesPath);
+    }
 }

@@ -26,6 +26,9 @@ import com.gabriel.taskapp.service.services.SyncService;
 import com.gabriel.taskapp.view.adapter.TaskAdapter;
 import com.gabriel.taskapp.viewmodel.TaskListViewModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.concurrent.TimeUnit;
 
 import static com.gabriel.taskapp.service.constants.SyncConstants.BUNDLED_LISTENER;
@@ -41,12 +44,16 @@ public class TaskListFragment extends Fragment {
 
     TaskListener mListener = new TaskListener() {
         @Override
-        public void onEdit(TaskModel task) {
+        public void onEdit(TaskModel task) throws JSONException {
             Intent intent = new Intent(getContext(), TaskFormActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString(DatabaseConstants.TASK.ID, task.getId());
             bundle.putString(DatabaseConstants.TASK.DESCRIPTION, task.getDescription());
             bundle.putBoolean(DatabaseConstants.TASK.COMPLETED, task.getCompleted());
+            bundle.putString(DatabaseConstants.TASK.DATETIME, task.getDatetime());
+            if(task.getImagesPaths() != null){
+                bundle.putString(DatabaseConstants.TASK.IMAGES_PATHS, task.getImagesPaths().toString());
+            }
             intent.putExtras(bundle);
             startActivity(intent);
         }

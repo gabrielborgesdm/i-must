@@ -12,22 +12,25 @@ import android.widget.ImageView;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.repository.ImageRepository;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.List;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private final List<String> imagePaths;
+    private final JSONArray imagesPaths;
     private ImageRepository mImageRepository;
 
-    public ImageAdapter(Context context, List<String> imagePaths) {
+    public ImageAdapter(Context context, JSONArray imagesPaths) {
         mContext = context;
-        this.imagePaths = imagePaths;
+        this.imagesPaths = imagesPaths;
         mImageRepository = ImageRepository.getRepository(mContext);
     }
 
     @Override
     public int getCount() {
-        return imagePaths.size();
+        return imagesPaths.length();
     }
 
     @Override
@@ -48,7 +51,12 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             gridView = inflater.inflate(R.layout.grid_image_layout, null);
             ImageView imageView = gridView.findViewById(R.id.grid_item_image);
-            Bitmap image = mImageRepository.getImage(imagePaths.get(position));
+            Bitmap image = null;
+            try {
+                image = mImageRepository.getImage(imagesPaths.getString(position));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             imageView.setImageBitmap(image);
         } else {
             gridView = convertView;

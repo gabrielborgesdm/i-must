@@ -14,6 +14,8 @@ import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.listener.TaskListener;
 import com.gabriel.taskapp.service.model.local.TaskModel;
 
+import org.json.JSONException;
+
 public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     TaskListener mListener;
     TaskModel mTask;
@@ -52,7 +54,11 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.button_edit_task) {
-            mListener.onEdit(mTask);
+            try {
+                mListener.onEdit(mTask);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             changeTaskOptionsVisibility(false);
         } else if (id == R.id.button_complete_task) {
             mListener.onComplete(mTask);

@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -37,6 +35,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,144 +65,10 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         mViewModel = new ViewModelProvider(this).get(TaskFormViewModel.class);
         setListeners();
         observe();
-        loadData();
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.button_form_more_options) {
-            if(!mViewModel.isCollapsed.getValue()){
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.modal_collapse_title)
-                        .setMessage(R.string.modal_collapse_message)
-                        .setPositiveButton(R.string.modal_collapse_button_collapse, (dialog, which) -> {
-                            mViewModel.toggleCollapsed();
-                        })
-                        .setNeutralButton(R.string.cancel, null)
-                        .show();
-            } else {
-                mViewModel.toggleCollapsed();
-            }
-        }
-        if (id == R.id.button_form_upload_image) {
-            if(mViewModel.localImagePaths != null && mViewModel.localImagePaths.size() >= MAX_IMAGES_ALLOWED){
-                Toast.makeText(this, getString(R.string.cannot_add_more_images_to_task), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Intent i = new Intent();
-            i.setType("image/*");
-            i.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(i, "Select Image"), SELECT_IMAGE);
-        }
-        if (id == R.id.text_input_form_date) {
-            DialogFragment newFragment = new DatePickerFragment();
-            newFragment.show(getSupportFragmentManager(), "datePicker");
-        }
-        if (id == R.id.button_save) {
-            EditText edit_description = findViewById(R.id.task_form_description);
-            String description = edit_description.getText().toString();
-            if (mTodo == null) {
-                mViewModel.saveOrUpdate(null, description, false, 0, false);
-            } else {
-                mViewModel.saveOrUpdate(mTodo.getId(), description, mTodo.getCompleted(), 0, false);
-            }
-        }
-    }
-
-    private void setListeners() {
-        findViewById(R.id.button_save).setOnClickListener(this);
-        findViewById(R.id.button_form_more_options).setOnClickListener(this);
-        findViewById(R.id.text_input_form_date).setOnClickListener(this);
-        findViewById(R.id.button_form_upload_image).setOnClickListener(this);
-        TextInputLayout textDescription = findViewById(R.id.task_form_text_layout);
-        textDescription.setEndIconOnClickListener(view -> {
-            speak();
-        });
-    }
-
-    private void observe() {
-        mViewModel.isCollapsed.observe(this, isCollapsed -> {
-            MaterialButton moreOptionsButton = findViewById(R.id.button_form_more_options);
-            ConstraintLayout constraintLayout = findViewById(R.id.constraint_layout_form_task);
-            if (isCollapsed) {
-                moreOptionsButton.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_arrow_right_24));
-                constraintLayout.setVisibility(View.GONE);
-            } else {
-                moreOptionsButton.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_arrow_drop_down_24));
-                constraintLayout.setVisibility(View.VISIBLE);
-            }
-        });
-
-        mViewModel.imagePaths.observe(this, imagePaths -> {
-            if (imagePaths.size() > 0) {
-                findViewById(R.id.text_view_no_image).setVisibility(View.GONE);
-            } else {
-                findViewById(R.id.text_view_no_image).setVisibility(View.VISIBLE);
-            }
-            ImageAdapter adapter = new ImageAdapter(this, imagePaths);
-            GridView grid = findViewById(R.id.grid_view_form_images);
-            grid.setAdapter(adapter);
-
-            grid.setOnItemLongClickListener((parent, view, position, id) -> {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.modal_remove_media_title)
-                        .setMessage(R.string.modal_remove_media_message)
-                        .setPositiveButton(R.string.modal_remove_media_button_remove, (dialog, which) -> {
-                            mViewModel.removeImage(position);
-                        })
-
-                        .setNeutralButton(R.string.cancel, null)
-                        .show();
-                return true;
-            });
-            grid.setOnItemClickListener((parent, view, position, id) -> {
-                Intent intent = new Intent(this, FullscreenActivity.class);
-                intent.putExtra(TASK_IMAGE, imagePaths.get(position));
-                startActivity(intent);
-            });
-        });
-
-        mViewModel.dueDate.observe(this, dueDatetime -> {
-            TextInputEditText inputFormDate = findViewById(R.id.text_input_form_date);
-            inputFormDate.setText(dueDatetime);
-        });
-
-        mViewModel.saveTodo.observe(this, success -> {
-            if (success) {
-                Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_LONG).show();
-            }
-            finish();
-        });
-
-
-    }
-
-    private void loadData() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            mTodo = new TaskModel();
-            mTodo.setId(bundle.getString(DatabaseConstants.TASK.ID));
-            mTodo.setDescription(bundle.getString(DatabaseConstants.TASK.DESCRIPTION));
-            mTodo.setCompleted(bundle.getBoolean(DatabaseConstants.TASK.COMPLETED));
-            EditText editDescription = findViewById(R.id.task_form_description);
-            editDescription.setText(mTodo.getDescription());
-        }
-    }
-
-
-
-    private void speak() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speak_task_description));
         try {
-            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
-        } catch (Exception e) {
-            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            loadData();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -266,4 +132,174 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
 
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.button_form_more_options) {
+            if (!mViewModel.isCollapsed.getValue()) {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.modal_collapse_title)
+                        .setMessage(R.string.modal_collapse_message)
+                        .setPositiveButton(R.string.modal_collapse_button_collapse, (dialog, which) -> {
+                            mViewModel.toggleCollapsed();
+                        })
+                        .setNeutralButton(R.string.cancel, null)
+                        .show();
+            } else {
+                mViewModel.toggleCollapsed();
+            }
+        }
+        if (id == R.id.button_form_upload_image) {
+            if (mViewModel.localImagesPath != null && mViewModel.localImagesPath.length() >= MAX_IMAGES_ALLOWED) {
+                Toast.makeText(this, getString(R.string.cannot_add_more_images_to_task), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent i = new Intent();
+            i.setType("image/*");
+            i.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(i, "Select Image"), SELECT_IMAGE);
+        }
+        if (id == R.id.text_input_form_date) {
+            DialogFragment newFragment = new DatePickerFragment();
+            newFragment.show(getSupportFragmentManager(), "datePicker");
+        }
+        if (id == R.id.button_save) {
+            EditText edit_description = findViewById(R.id.task_form_description);
+            EditText edit_date = findViewById(R.id.text_input_form_date);
+            String description = edit_description.getText().toString();
+            String date = edit_date.getText().toString();
+
+            String todoId = null;
+            Boolean todoCompleted = false;
+            if (mTodo != null) {
+                todoId = mTodo.getId();
+                todoCompleted = mTodo.getCompleted();
+            }
+            mViewModel.saveOrUpdate(todoId, description, todoCompleted, date, mViewModel.localImagesPath, 0, false);
+        }
+    }
+
+    private void setListeners() {
+        findViewById(R.id.button_save).setOnClickListener(this);
+        findViewById(R.id.button_form_more_options).setOnClickListener(this);
+        findViewById(R.id.text_input_form_date).setOnClickListener(this);
+        findViewById(R.id.button_form_upload_image).setOnClickListener(this);
+        TextInputLayout textDescription = findViewById(R.id.task_form_text_layout);
+        textDescription.setEndIconOnClickListener(view -> {
+            speak();
+        });
+    }
+
+    private void observe() {
+        mViewModel.isCollapsed.observe(this, isCollapsed -> {
+            MaterialButton moreOptionsButton = findViewById(R.id.button_form_more_options);
+            ConstraintLayout constraintLayout = findViewById(R.id.constraint_layout_form_task);
+            if (isCollapsed) {
+                moreOptionsButton.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_arrow_right_24));
+                constraintLayout.setVisibility(View.GONE);
+            } else {
+                moreOptionsButton.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_arrow_drop_down_24));
+                constraintLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mViewModel.imagesPaths.observe(this, imagesPaths -> {
+            if (imagesPaths.length() > 0) {
+                findViewById(R.id.text_view_no_image).setVisibility(View.GONE);
+            } else {
+                findViewById(R.id.text_view_no_image).setVisibility(View.VISIBLE);
+            }
+            ImageAdapter adapter = new ImageAdapter(this, imagesPaths);
+            GridView grid = findViewById(R.id.grid_view_form_images);
+            grid.setAdapter(adapter);
+
+            grid.setOnItemLongClickListener((parent, view, position, id) -> {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.modal_remove_media_title)
+                        .setMessage(R.string.modal_remove_media_message)
+                        .setPositiveButton(R.string.modal_remove_media_button_remove, (dialog, which) -> {
+                            mViewModel.removeImage(position);
+                        })
+
+                        .setNeutralButton(R.string.cancel, null)
+                        .show();
+                return true;
+            });
+            grid.setOnItemClickListener((parent, view, position, id) -> {
+                Intent intent = new Intent(this, FullscreenActivity.class);
+                try {
+                    intent.putExtra(TASK_IMAGE, imagesPaths.getString(position));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                startActivity(intent);
+            });
+        });
+
+        mViewModel.dueDate.observe(this, dueDatetime -> {
+            TextInputEditText inputFormDate = findViewById(R.id.text_input_form_date);
+            inputFormDate.setText(dueDatetime);
+        });
+
+        mViewModel.saveTodo.observe(this, success -> {
+            if (success) {
+                Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_LONG).show();
+            }
+            finish();
+        });
+
+
+    }
+
+    private void loadData() throws JSONException {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mTodo = new TaskModel();
+            mTodo.setId(bundle.getString(DatabaseConstants.TASK.ID));
+            mTodo.setCompleted(bundle.getBoolean(DatabaseConstants.TASK.COMPLETED));
+
+            EditText editDescription = findViewById(R.id.task_form_description);
+            editDescription.setText(bundle.getString(DatabaseConstants.TASK.DESCRIPTION));
+
+            String datetime = bundle.getString(DatabaseConstants.TASK.DATETIME);
+            String imagesPathsString = bundle.getString(DatabaseConstants.TASK.IMAGES_PATHS);
+            Boolean isCollapsed = true;
+
+            if(datetime != null) {
+                Log.d(TASK_TAG, "loadData: " +  datetime);
+                EditText editDate = findViewById(R.id.text_input_form_date);
+                editDate.setText(datetime);
+                isCollapsed = false;
+            }
+
+            if(imagesPathsString != null){
+                JSONArray imagesPaths = new JSONArray(imagesPathsString);
+                mViewModel.loadImages(imagesPaths);
+                isCollapsed = false;
+            }
+
+            if(!isCollapsed){
+                mViewModel.toggleCollapsed();
+            }
+
+        }
+    }
+
+
+    private void speak() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speak_task_description));
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (Exception e) {
+            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

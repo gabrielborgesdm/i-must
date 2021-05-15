@@ -1,5 +1,9 @@
 package com.gabriel.taskapp.service.model.local;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.List;
 import java.util.UUID;
 
 import io.realm.RealmObject;
@@ -12,6 +16,8 @@ public class TaskModel extends RealmObject {
     @Required
     private String description;
     private boolean completed;
+    private String datetime;
+    private String imagesPaths;
     private boolean removed;
     private long lastSync;
     private long lastUpdated;
@@ -50,6 +56,30 @@ public class TaskModel extends RealmObject {
         setLastUpdated(System.currentTimeMillis());
     }
 
-
     public void setRemoved(boolean removed) {  this.removed = removed; }
+
+    public String getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
+    }
+
+    public JSONArray getImagesPaths() throws JSONException {
+        JSONArray imagesPathJsonArray = null;
+        if(this.imagesPaths != null){
+            imagesPathJsonArray = new JSONArray(this.imagesPaths);
+        }
+        return imagesPathJsonArray;
+    }
+
+    public void setImagesPaths(JSONArray imagesPaths) {
+        if(imagesPaths != null && imagesPaths.length() > 0){
+            this.imagesPaths = imagesPaths.toString();
+        } else {
+            this.imagesPaths = null;
+        }
+
+    }
 }
