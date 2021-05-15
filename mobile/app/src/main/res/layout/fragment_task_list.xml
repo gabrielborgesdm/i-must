@@ -16,7 +16,7 @@
             android:id="@+id/view_todo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/middle_blue_green">
+            android:background="@color/yale_blue">
 
             <TextView
                 android:id="@+id/text_todo"
@@ -26,6 +26,7 @@
                 android:text="@string/open_todo"
                 android:textAllCaps="true"
                 android:textSize="20sp"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -54,7 +55,7 @@
             android:id="@+id/view_completed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/middle_blue_green">
+            android:background="@color/yale_blue">
 
             <TextView
                 android:id="@+id/text_completed_todo"
@@ -64,6 +65,7 @@
                 android:text="@string/completed_todo"
                 android:textAllCaps="true"
                 android:textSize="20sp"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"

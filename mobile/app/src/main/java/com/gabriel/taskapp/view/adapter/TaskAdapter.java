@@ -12,6 +12,8 @@ import com.gabriel.taskapp.service.model.local.TaskModel;
 import com.gabriel.taskapp.service.listener.TaskListener;
 import com.gabriel.taskapp.view.viewholder.TaskViewHolder;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,11 @@ public class  TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
-        holder.bind(mTodoList.get(position));
+        try {
+            holder.bind(mTodoList.get(position));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

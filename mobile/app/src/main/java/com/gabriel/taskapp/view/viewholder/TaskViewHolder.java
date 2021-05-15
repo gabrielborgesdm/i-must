@@ -1,8 +1,12 @@
 package com.gabriel.taskapp.view.viewholder;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,8 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.listener.TaskListener;
 import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.view.FullscreenActivity;
+import com.gabriel.taskapp.view.adapter.ImageAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+
+import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_IMAGE;
+import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     TaskListener mListener;
@@ -28,7 +38,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         mListener = listener;
     }
 
-    public void bind(TaskModel task) {
+    public void bind(TaskModel task) throws JSONException {
         mTask = task;
         mButtonEdit = itemView.findViewById(R.id.button_edit_task);
         mButtonComplete = itemView.findViewById(R.id.button_complete_task);
@@ -42,6 +52,30 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         mButtonEdit.setOnClickListener(this);
         mButtonComplete.setOnClickListener(this);
         mButtonRemove.setOnClickListener(this);
+
+        if(task.getImagesPaths() != null){
+            JSONArray imagesPaths = task.getImagesPaths();
+            ImageAdapter adapter = new ImageAdapter(itemView.getContext(), imagesPaths);
+            GridView grid = itemView.findViewById(R.id.grid_view_row_task_images);
+            grid.setAdapter(adapter);
+            grid.setOnItemClickListener((parent, view, position, id) -> {
+                Intent intent = new Intent(itemView.getContext(), FullscreenActivity.class);
+                try {
+                    intent.putExtra(TASK_IMAGE, imagesPaths.getString(position));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                itemView.getContext().startActivity(intent);
+            });
+        }
+
+        TextView taskDateText = itemView.findViewById(R.id.text_row_task_date);
+
+        if(task.getDatetime() != null){
+            taskDateText.setText(task.getDatetime());
+        } else {
+            taskDateText.setVisibility(View.INVISIBLE);
+        }
 
         if (!task.getCompleted()) {
             mButtonComplete.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_baseline_crop_square_24));

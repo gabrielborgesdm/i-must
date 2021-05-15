@@ -3,10 +3,84 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:paddingVertical="18dp"
-    android:layout_marginVertical="2dp"
     android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_row_task"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:background="@color/light_blue_200"
+        app:layout_constraintVertical_bias="0"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_row_task_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="8"
+            android:text="00/00/0000 00:00:00"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/button_remove_task"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/button_remove_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/remove_button"
+            android:src="@drawable/ic_baseline_delete_24"
+            app:layout_constraintHorizontal_weight="1"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/text_row_task_date"
+            app:layout_constraintLeft_toRightOf="@+id/text_row_task_date"
+            app:layout_constraintRight_toLeftOf="@id/button_edit_task"
+            app:layout_constraintTop_toTopOf="@id/text_row_task_date"
+            app:tint="@color/danger" />
+
+        <ImageView
+            android:id="@+id/button_edit_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/edit_button"
+            app:layout_constraintHorizontal_weight="1"
+            android:src="@drawable/ic_baseline_edit_24"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/button_remove_task"
+            app:layout_constraintLeft_toRightOf="@+id/button_remove_task"
+            app:layout_constraintRight_toLeftOf="@id/button_task_menu"
+            app:layout_constraintTop_toTopOf="@id/button_remove_task"
+            app:tint="@color/warning" />
+
+
+        <ImageView
+            android:id="@+id/button_task_menu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:contentDescription="@string/complete_button"
+            android:src="@drawable/ic_baseline_more_vert_24"
+            app:layout_constraintBottom_toBottomOf="@id/button_edit_task"
+            app:layout_constraintLeft_toRightOf="@+id/button_edit_task"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/button_edit_task" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <GridView
+        android:id="@+id/grid_view_row_task_images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/constraint_row_task"
+        app:layout_constraintRight_toRightOf="@+id/constraint_row_task"
+        app:layout_constraintTop_toBottomOf="@+id/constraint_row_task"
+        app:layout_constraintBottom_toTopOf="@+id/button_complete_task"
+        android:numColumns="3"
+        android:layout_marginBottom="200dp"/>
 
     <ImageView
         android:id="@+id/button_complete_task"
@@ -14,11 +88,11 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/complete_button"
         android:src="@drawable/ic_baseline_check_box_24"
+        android:layout_marginVertical="16dp"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/grid_view_row_task_images"
         app:layout_constraintRight_toLeftOf="@+id/text_description"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grid_view_row_task_images"
         app:tint="@color/success" />
 
     <TextView
@@ -27,52 +101,13 @@
         android:layout_height="wrap_content"
         android:text="@string/open_todo"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/button_complete_task"
+        android:layout_marginVertical="16dp"
         app:layout_constraintHorizontal_weight="7"
         app:layout_constraintLeft_toRightOf="@+id/button_complete_task"
-        app:layout_constraintRight_toLeftOf="@id/button_remove_task"
-        app:layout_constraintTop_toTopOf="@id/button_complete_task" />
+        app:layout_constraintRight_toRightOf="@id/grid_view_row_task_images"
+        app:layout_constraintTop_toTopOf="@id/button_complete_task"
+        app:layout_constraintBottom_toBottomOf="@id/button_complete_task" />
 
-    <ImageView
-        android:id="@+id/button_remove_task"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/remove_button"
-        android:src="@drawable/ic_baseline_delete_24"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/text_description"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@+id/text_description"
-        app:layout_constraintRight_toLeftOf="@id/button_edit_task"
-        app:layout_constraintTop_toTopOf="@id/text_description"
-        app:tint="@color/danger" />
-
-    <ImageView
-        android:id="@+id/button_edit_task"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/edit_button"
-        android:src="@drawable/ic_baseline_edit_24"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/button_remove_task"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@+id/button_remove_task"
-        app:layout_constraintRight_toLeftOf="@id/button_task_menu"
-        app:layout_constraintTop_toTopOf="@id/button_remove_task"
-        app:tint="@color/warning" />
-
-
-    <ImageView
-        android:id="@+id/button_task_menu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/complete_button"
-        android:src="@drawable/ic_baseline_more_vert_24"
-        app:layout_constraintBottom_toBottomOf="@id/button_edit_task"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintLeft_toRightOf="@+id/button_edit_task"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/button_edit_task" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
