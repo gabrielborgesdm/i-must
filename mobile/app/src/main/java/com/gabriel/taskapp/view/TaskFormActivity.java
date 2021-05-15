@@ -137,7 +137,10 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.button_form_more_options) {
-            if (!mViewModel.isCollapsed.getValue()) {
+            if (!mViewModel.isCollapsed.getValue()
+                    && ((mViewModel.dueDate.getValue() != null && mViewModel.dueDate.getValue() != "")
+                    || mViewModel.localImagesPath.length() > 0)) {
+                Log.d(TASK_TAG, "onClick: " + mViewModel.dueDate.getValue());
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.modal_collapse_title)
                         .setMessage(R.string.modal_collapse_message)
@@ -268,20 +271,20 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             String imagesPathsString = bundle.getString(DatabaseConstants.TASK.IMAGES_PATHS);
             Boolean isCollapsed = true;
 
-            if(datetime != null) {
-                Log.d(TASK_TAG, "loadData: " +  datetime);
+            if (datetime != null) {
+                Log.d(TASK_TAG, "loadData: " + datetime);
                 EditText editDate = findViewById(R.id.text_input_form_date);
                 editDate.setText(datetime);
                 isCollapsed = false;
             }
 
-            if(imagesPathsString != null){
+            if (imagesPathsString != null) {
                 JSONArray imagesPaths = new JSONArray(imagesPathsString);
                 mViewModel.loadImages(imagesPaths);
                 isCollapsed = false;
             }
 
-            if(!isCollapsed){
+            if (!isCollapsed) {
                 mViewModel.toggleCollapsed();
             }
 
