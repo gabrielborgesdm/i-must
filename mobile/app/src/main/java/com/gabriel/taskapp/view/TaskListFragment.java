@@ -136,8 +136,9 @@ public class TaskListFragment extends Fragment {
         long differenceInMillis = System.currentTimeMillis() - lastSync;
         long minutes = TimeUnit.MILLISECONDS.toMinutes(differenceInMillis);
         if (minutes > 1) {
-            startSyncService();
+            //startSyncService();
         }
+        startSyncService();
     }
 
     private void startSyncService() {

@@ -159,10 +159,9 @@ public class SyncRepository extends BaseRepository {
                 mRemoteTaskRepository.removeTask(localTask.getId(), new APIListener<com.gabriel.taskapp.service.model.remote.TaskModel>() {
                     @Override
                     public void onSuccess(com.gabriel.taskapp.service.model.remote.TaskModel model) {
-                        if (!model.status.equals(API_OPERATION_EXECUTED)) return;
-                        if (model.task == null) return;
-                        Log.d(TASK_TAG, "deleteRemovedTasks: " + model.task.getDescription());
-                        mLocalRepository.delete(model.task.getId(), true);
+                        if (model.status.equals(API_OPERATION_EXECUTED) && model.task != null) {
+                            mLocalRepository.delete(model.task.getId(), true);
+                        }
                         isDeleteFinished = true;
                     }
 
