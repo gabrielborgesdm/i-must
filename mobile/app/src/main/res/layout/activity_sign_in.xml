@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/middle_blue_green"
+    android:background="@drawable/background_gradient"
     tools:context=".view.SignInActivity">
 
     <TextView
@@ -41,6 +41,7 @@
         android:drawablePadding="10dp"
         android:hint="@string/enter_your_e_mail"
         android:inputType="textEmailAddress"
+        android:textColor="@color/mint_cream"
         app:layout_constraintBottom_toTopOf="@id/password_sign_in"
         app:layout_constraintLeft_toLeftOf="@id/image_logo"
         app:layout_constraintRight_toRightOf="@id/image_logo"
@@ -54,6 +55,7 @@
         android:drawablePadding="10dp"
         android:hint="@string/enter_your_password"
         android:inputType="textPassword"
+        android:textColor="@color/mint_cream"
         app:layout_constraintBottom_toBottomOf="@id/button_sign_in"
         app:layout_constraintLeft_toLeftOf="@id/email_sign_in"
         app:layout_constraintRight_toRightOf="@id/email_sign_in"
@@ -64,7 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:backgroundTint="@color/pacific_blue"
+        android:backgroundTint="@color/yale_blue"
         android:text="@string/sign_in"
         app:layout_constraintBottom_toBottomOf="@id/text_dont_have_an_account_sign_up"
         app:layout_constraintLeft_toLeftOf="@id/password_sign_in"
