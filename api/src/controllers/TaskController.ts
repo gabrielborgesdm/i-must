@@ -106,6 +106,9 @@ export class TaskController {
       doc = await Task.findOneAndRemove({ $and: [{ id }, { userId: request.body.userId }] })
       if (doc && doc._doc) {
         doc = this.filterTaskDoc(doc._doc)
+        if (doc && doc.imagePaths) {
+          this.imageService.removeImages(doc.imagePaths)
+        }
       }
     } catch (err) {
       console.log(err)
