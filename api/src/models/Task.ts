@@ -16,6 +16,12 @@ const TaskSchema = new mongoose.Schema({
     type: Boolean,
     require: true
   },
+  datetime: {
+    type: String
+  },
+  imagePaths: {
+    type: Array
+  },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',

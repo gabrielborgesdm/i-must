@@ -1,8 +1,16 @@
 import { Request, Response } from 'express'
 
 import Task from '@models/Task'
+import { ImageService } from '@services/ImageService'
+import { Document } from 'mongoose'
 
 export class TaskController {
+  imageService: ImageService
+
+  constructor () {
+    this.imageService = new ImageService()
+  }
+
   async get (request: Request, response: Response): Promise<Response> {
     const id = request.params.id
     let doc: any = null
@@ -34,7 +42,6 @@ export class TaskController {
     delete newDoc.__v
     delete newDoc._id
     delete newDoc.$setOnInsert
-    console.log(newDoc)
     return newDoc
   }
 
@@ -60,13 +67,24 @@ export class TaskController {
   async upsertMany (request: Request, response: Response): Promise<Response> {
     const { tasks, userId } = request.body
     const upsertedTasks: Array<Object> = []
+
     let error = false
 
     for (const task of tasks) {
       try {
         task.userId = userId
+        if (task.images) {
+          task.imagePaths = this.imageService.writeImages(task.userId, task.images)
+          delete task.images
+        }
+        const oldTask: any = await Task.findOne({ $and: [{ id: task.id }, { userId }] })
         const res = await Task.updateOne({ $and: [{ id: task.id }, { userId }] }, task, { new: true, upsert: true })
-        if (res.ok) upsertedTasks.push(this.filterTaskDoc(task))
+        if (res.ok) {
+          if (oldTask && oldTask.imagePaths) {
+            this.imageService.removeImages(oldTask.imagePaths)
+          }
+          upsertedTasks.push(this.filterTaskDoc(task))
+        }
       } catch (err) {
         error = true
         console.log(err)
