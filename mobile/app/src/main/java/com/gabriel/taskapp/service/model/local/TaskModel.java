@@ -17,7 +17,7 @@ public class TaskModel extends RealmObject {
     private String description;
     private boolean completed;
     private String datetime;
-    private String imagesPaths;
+    private String imagePaths;
     private boolean removed;
     private long lastSync;
     private long lastUpdated;
@@ -66,19 +66,19 @@ public class TaskModel extends RealmObject {
         this.datetime = datetime;
     }
 
-    public JSONArray getImagesPaths() throws JSONException {
+    public JSONArray getImagePaths() throws JSONException {
         JSONArray imagesPathJsonArray = null;
-        if(this.imagesPaths != null){
-            imagesPathJsonArray = new JSONArray(this.imagesPaths);
+        if(this.imagePaths != null){
+            imagesPathJsonArray = new JSONArray(this.imagePaths);
         }
         return imagesPathJsonArray;
     }
 
-    public void setImagesPaths(JSONArray imagesPaths) {
-        if(imagesPaths != null && imagesPaths.length() > 0){
-            this.imagesPaths = imagesPaths.toString();
+    public void setImagePaths(JSONArray imagePaths) {
+        if(imagePaths != null && imagePaths.length() > 0){
+            this.imagePaths = imagePaths.toString();
         } else {
-            this.imagesPaths = null;
+            this.imagePaths = null;
         }
 
     }

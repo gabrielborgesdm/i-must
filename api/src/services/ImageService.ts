@@ -74,4 +74,27 @@ export class ImageService {
 
       return removedPaths
     }
+
+    private convertImageToBase64 (imageRelativePath: string) {
+      let base64Image = null
+      const fullImagePath = `${this.IMAGE_PATH}/${imageRelativePath}`
+      if (fs.existsSync(fullImagePath)) {
+        try {
+          const file = fs.readFileSync(fullImagePath)
+          base64Image = file.toString('base64')
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      return base64Image
+    }
+
+    public getImages (imagePaths: Array<string>) {
+      const images = []
+      for (const imagePath of imagePaths) {
+        const base64Image = this.convertImageToBase64(imagePath)
+        if (base64Image) images.push(base64Image)
+      }
+      return images
+    }
 }

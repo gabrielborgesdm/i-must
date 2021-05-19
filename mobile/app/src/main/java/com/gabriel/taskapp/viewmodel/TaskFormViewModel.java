@@ -30,8 +30,8 @@ public class TaskFormViewModel extends AndroidViewModel {
     public LiveData<Boolean> saveTodo = mSaveTodo;
 
     public JSONArray localImagesPath = new JSONArray();
-    private MutableLiveData<JSONArray> mImagesPaths = new MutableLiveData(localImagesPath);
-    public LiveData<JSONArray> imagesPaths = mImagesPaths;
+    private MutableLiveData<JSONArray> mImagePaths = new MutableLiveData(localImagesPath);
+    public LiveData<JSONArray> imagePaths = mImagePaths;
 
     private MutableLiveData<Boolean> mIsCollapsed = new MutableLiveData(true);
     public LiveData<Boolean> isCollapsed = mIsCollapsed;
@@ -51,7 +51,7 @@ public class TaskFormViewModel extends AndroidViewModel {
             final String description,
             final boolean completed,
             final String datetime,
-            final JSONArray imagesPaths,
+            final JSONArray imagePaths,
             final long lastSync,
             final boolean removed) {
         TaskModel todo = new TaskModel();
@@ -61,7 +61,7 @@ public class TaskFormViewModel extends AndroidViewModel {
         todo.setDescription(description);
         todo.setCompleted(completed);
         todo.setLastSync(lastSync);
-        todo.setImagesPaths(imagesPaths);
+        todo.setImagePaths(imagePaths);
         todo.setDatetime(datetime);
         todo.setRemoved(removed);
         mSaveTodo.setValue(mRepository.saveOrUpdate(todo));
@@ -75,12 +75,12 @@ public class TaskFormViewModel extends AndroidViewModel {
         }
 
         localImagesPath.put(imageName);
-        mImagesPaths.setValue(localImagesPath);
+        mImagePaths.setValue(localImagesPath);
     }
 
     public void removeImage(int position) {
         localImagesPath.remove(position);
-        mImagesPaths.setValue(localImagesPath);
+        mImagePaths.setValue(localImagesPath);
     }
 
 
@@ -97,8 +97,8 @@ public class TaskFormViewModel extends AndroidViewModel {
     }
 
 
-    public void loadImages(JSONArray imagesPaths) {
-        localImagesPath = imagesPaths;
-        mImagesPaths.setValue(localImagesPath);
+    public void loadImages(JSONArray imagePaths) {
+        localImagesPath = imagePaths;
+        mImagePaths.setValue(localImagesPath);
     }
 }

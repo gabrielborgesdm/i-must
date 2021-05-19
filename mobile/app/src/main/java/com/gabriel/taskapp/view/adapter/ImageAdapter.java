@@ -19,18 +19,18 @@ import java.util.List;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private final JSONArray imagesPaths;
+    private final JSONArray imagePaths;
     private ImageRepository mImageRepository;
 
-    public ImageAdapter(Context context, JSONArray imagesPaths) {
+    public ImageAdapter(Context context, JSONArray imagePaths) {
         mContext = context;
-        this.imagesPaths = imagesPaths;
+        this.imagePaths = imagePaths;
         mImageRepository = ImageRepository.getRepository(mContext);
     }
 
     @Override
     public int getCount() {
-        return imagesPaths.length();
+        return imagePaths.length();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ImageAdapter extends BaseAdapter {
             ImageView imageView = gridView.findViewById(R.id.grid_item_image);
             Bitmap image = null;
             try {
-                image = mImageRepository.getImage(imagesPaths.getString(position));
+                image = mImageRepository.getImage(imagePaths.getString(position));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

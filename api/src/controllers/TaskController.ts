@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import Task from '@models/Task'
 import { ImageService } from '@services/ImageService'
-import { Document } from 'mongoose'
 
 export class TaskController {
   imageService: ImageService
@@ -38,6 +37,11 @@ export class TaskController {
     newDoc.lastUpdated = new Date(task.lastUpdated).getTime()
     if (newDoc.createdAt) {
       newDoc.createdAt = new Date(task.createdAt).getTime()
+    }
+    if (task.imagePaths && task.imagePaths.length) {
+      const images = this.imageService.getImages(task.imagePaths)
+      newDoc.images = images
+      delete newDoc.imagePaths
     }
     delete newDoc.__v
     delete newDoc._id

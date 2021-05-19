@@ -207,13 +207,13 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        mViewModel.imagesPaths.observe(this, imagesPaths -> {
-            if (imagesPaths.length() > 0) {
+        mViewModel.imagePaths.observe(this, imagePaths -> {
+            if (imagePaths.length() > 0) {
                 findViewById(R.id.text_view_no_image).setVisibility(View.GONE);
             } else {
                 findViewById(R.id.text_view_no_image).setVisibility(View.VISIBLE);
             }
-            ImageAdapter adapter = new ImageAdapter(this, imagesPaths);
+            ImageAdapter adapter = new ImageAdapter(this, imagePaths);
             GridView grid = findViewById(R.id.grid_view_form_images);
             grid.setAdapter(adapter);
 
@@ -232,7 +232,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             grid.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent(this, FullscreenActivity.class);
                 try {
-                    intent.putExtra(TASK_IMAGE, imagesPaths.getString(position));
+                    intent.putExtra(TASK_IMAGE, imagePaths.getString(position));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -279,8 +279,8 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             }
 
             if (imagesPathsString != null) {
-                JSONArray imagesPaths = new JSONArray(imagesPathsString);
-                mViewModel.loadImages(imagesPaths);
+                JSONArray imagePaths = new JSONArray(imagesPathsString);
+                mViewModel.loadImages(imagePaths);
                 isCollapsed = false;
             }
 

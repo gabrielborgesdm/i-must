@@ -51,8 +51,8 @@ public class TaskListFragment extends Fragment {
             bundle.putString(DatabaseConstants.TASK.DESCRIPTION, task.getDescription());
             bundle.putBoolean(DatabaseConstants.TASK.COMPLETED, task.getCompleted());
             bundle.putString(DatabaseConstants.TASK.DATETIME, task.getDatetime());
-            if(task.getImagesPaths() != null){
-                bundle.putString(DatabaseConstants.TASK.IMAGES_PATHS, task.getImagesPaths().toString());
+            if(task.getImagePaths() != null){
+                bundle.putString(DatabaseConstants.TASK.IMAGES_PATHS, task.getImagePaths().toString());
             }
             intent.putExtras(bundle);
             startActivity(intent);

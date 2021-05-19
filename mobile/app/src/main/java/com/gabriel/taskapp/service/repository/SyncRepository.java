@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class SyncRepository extends BaseRepository {
 
     private final com.gabriel.taskapp.service.repository.remote.TaskRepository mRemoteTaskRepository;
     private final TaskRepository mLocalRepository = TaskRepository.getRealmRepository();
+    private ImageRepository mImageRepository;
     private Boolean isPostFinished = false;
     private Boolean isGetFinished = false;
     private Boolean isDeleteFinished = false;
@@ -30,6 +32,7 @@ public class SyncRepository extends BaseRepository {
     public SyncRepository(Context context) {
         super(context);
         mRemoteTaskRepository = new com.gabriel.taskapp.service.repository.remote.TaskRepository(context);
+        mImageRepository = ImageRepository.getRepository(context);
     }
 
 
@@ -44,7 +47,7 @@ public class SyncRepository extends BaseRepository {
 
         try {
             JSONObject tasksObject = buildTasksObject(filteredTasks);
-            Log.d(TASK_TAG, "postNewOrUpdatedTasks: " + tasksObject.toString());
+            Log.d(TASK_TAG, "postNewOrUpdatedTasks: " + tasksObject);
             mRemoteTaskRepository.createTasks(tasksObject, new APIListener<TasksModel>() {
                 @Override
                 public void onSuccess(TasksModel model) {
@@ -53,7 +56,6 @@ public class SyncRepository extends BaseRepository {
                     if (model.tasks == null || model.tasks.size() == 0) isOkay = false;
                     if(isOkay){
                         model.tasks.forEach(taskModel -> {
-                            Log.d(TASK_TAG, "postNewOrUpdatedTasks: " + taskModel.getDescription());
                             taskModel.setLastSync(System.currentTimeMillis());
                             taskModel.setRemoved(false);
                             mLocalRepository.saveOrUpdate(taskModel);
@@ -88,6 +90,17 @@ public class SyncRepository extends BaseRepository {
         return filteredTasks;
     }
 
+    private JSONArray getImagesInBase64(JSONArray imagePaths) throws JSONException, IOException {
+        JSONArray images = new JSONArray();
+        for(int i = 0; i < imagePaths.length(); i++){
+            String imagePath = imagePaths.getString(i);
+            String base64 = mImageRepository.convertFileToBase64(imagePath);
+            Log.d(TASK_TAG, "getImagesInBase64: " + base64);
+            if(base64 != null) images.put(base64);
+        }
+        return images;
+    }
+
     private JSONObject buildTasksObject(List<TaskModel> tasks) throws JSONException {
         JSONObject tasksObject = new JSONObject();
         JSONArray tasksArray = new JSONArray();
@@ -98,10 +111,20 @@ public class SyncRepository extends BaseRepository {
                 taskObject.put(TaskConstants.TASK_DESCRIPTION, task.getDescription());
                 taskObject.put(TaskConstants.TASK_COMPLETED, task.getCompleted());
                 taskObject.put(TaskConstants.TASK_LAST_UPDATED, task.getLastUpdated());
+                taskObject.put(TaskConstants.TASK_DATETIME, task.getDatetime());
                 taskObject.put(TaskConstants.TASK_ID, task.getId());
+                JSONArray imagePaths = task.getImagePaths();
+                if(imagePaths.length() > 0) {
+                    JSONArray images = getImagesInBase64(imagePaths);
+                    if(images.length() > 0){
+                        taskObject.put(TaskConstants.TASK_IMAGES, images);
+                    }
+                }
+
                 tasksArray.put(taskObject);
-            } catch (JSONException e) {
+            } catch (JSONException | IOException e) {
                 e.printStackTrace();
+
             }
         });
         tasksObject.put(TaskConstants.TASK_TASKS, tasksArray);
@@ -120,10 +143,6 @@ public class SyncRepository extends BaseRepository {
                     model.tasks.forEach(taskModel -> {
                         if (!checkTaskIsSynced(taskModel, localTasks)) {
                             taskModel.setLastSync(System.currentTimeMillis());
-                            Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getDescription());
-                            Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getLastUpdated());
-                            Log.d(TASK_TAG, "getNonSyncedTasks: " + taskModel.getCompleted());
-                            Log.d(TASK_TAG, "getNonSyncedTasks: ----------------------------");
                             mLocalRepository.saveOrUpdate(taskModel);
                         }
                     });

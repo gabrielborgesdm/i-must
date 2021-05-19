@@ -7,7 +7,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.FileUtils;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 
 import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
@@ -15,6 +17,9 @@ import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_EMAIL;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
@@ -38,6 +43,16 @@ public class ImageRepository {
             mRepository = new ImageRepository(context);
         }
         return  mRepository;
+    }
+
+    private File getImageFile(String imageFilePath) {
+        ContextWrapper cw = new ContextWrapper(mContext);
+        File directory = cw.getDir(IMAGE_DIRECTORIES, Context.MODE_PRIVATE);
+        File file = new File(directory, imageFilePath);
+        if (!file.exists()) {
+            return null;
+        }
+        return file;
     }
 
     public String writeImage(Uri imageUri){
@@ -80,12 +95,8 @@ public class ImageRepository {
     }
 
     public Bitmap getImage(String imageFilePath) {
-        ContextWrapper cw = new ContextWrapper(mContext);
-        File directory = cw.getDir(IMAGE_DIRECTORIES, Context.MODE_PRIVATE);
-        File file = new File(directory, imageFilePath);
-        if (!file.exists()) {
-            return null;
-        }
+        File file = getImageFile(imageFilePath);
+        if(file == null) return  null;
         return BitmapFactory.decodeFile(file.getAbsolutePath());
     }
 
@@ -131,7 +142,6 @@ public class ImageRepository {
             orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                     ExifInterface.ORIENTATION_UNDEFINED);
 
-            Log.d(TASK_TAG, "orientation 11: " + orientation);
         } catch (Exception e) {
             Log.d(TASK_TAG, "getFileOrientation: " + e.getLocalizedMessage());
             e.printStackTrace();
@@ -188,5 +198,20 @@ public class ImageRepository {
 
     public Bitmap convertByteArrayToBitmap(byte[] byteArray){
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+    }
+
+    public String convertFileToBase64(String imageFilePath) throws IOException {
+        String base64Image = null;
+        File file = getImageFile(imageFilePath);
+        if(file != null) {
+            try {
+                byte[] fileContent = Files.readAllBytes(file.toPath());
+                base64Image = Base64.encodeToString(fileContent, Base64.DEFAULT);
+            } catch (IOException e) {
+                throw new IllegalStateException("Could not read file " + file, e);
+            }
+        }
+
+        return base64Image;
     }
 }

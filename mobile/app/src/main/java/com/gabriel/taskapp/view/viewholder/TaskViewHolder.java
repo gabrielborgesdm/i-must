@@ -53,15 +53,15 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         mButtonComplete.setOnClickListener(this);
         mButtonRemove.setOnClickListener(this);
 
-        if(task.getImagesPaths() != null){
-            JSONArray imagesPaths = task.getImagesPaths();
-            ImageAdapter adapter = new ImageAdapter(itemView.getContext(), imagesPaths);
+        if(task.getImagePaths() != null){
+            JSONArray imagePaths = task.getImagePaths();
+            ImageAdapter adapter = new ImageAdapter(itemView.getContext(), imagePaths);
             GridView grid = itemView.findViewById(R.id.grid_view_row_task_images);
             grid.setAdapter(adapter);
             grid.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent(itemView.getContext(), FullscreenActivity.class);
                 try {
-                    intent.putExtra(TASK_IMAGE, imagesPaths.getString(position));
+                    intent.putExtra(TASK_IMAGE, imagePaths.getString(position));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
