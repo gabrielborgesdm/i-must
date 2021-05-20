@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
@@ -24,7 +26,7 @@ public class LocalTaskModel extends RealmObject {
     private String description;
     private boolean completed;
     private String datetime;
-    private String imagePaths;
+    private RealmList<String> imagePaths;
     private boolean removed;
     private long lastSync;
     private long lastUpdated;
@@ -89,24 +91,17 @@ public class LocalTaskModel extends RealmObject {
         this.datetime = datetime;
     }
 
-    public JSONArray getImagePaths() throws JSONException {
-        JSONArray imagesPathJsonArray = null;
-        if (this.imagePaths != null) {
-            imagesPathJsonArray = new JSONArray(this.imagePaths);
-        }
-        return imagesPathJsonArray;
+    public ArrayList<String> getImagePaths() {
+        return new ArrayList<>(this.imagePaths);
     }
 
-    public void setImagePaths(JSONArray imagePaths) {
-        if (imagePaths != null && imagePaths.length() > 0) {
-            this.imagePaths = imagePaths.toString();
-        } else {
-            this.imagePaths = null;
-        }
-
+    public void setImagePaths(ArrayList<String> imagePathsArrayList) {
+        RealmList<String> imagePaths = new RealmList<>();
+        imagePaths.addAll(imagePathsArrayList);
+        this.imagePaths = imagePaths;
     }
 
-    public void setValuesFromRemoteTask(Context context, RemoteTaskModel remoteTask) throws JSONException {
+    public void setValuesFromRemoteTask(Context context, RemoteTaskModel remoteTask) {
         this.setId(remoteTask.getId());
         this.setCompleted(remoteTask.getCompleted());
         this.setDescription(remoteTask.getDescription());

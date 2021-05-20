@@ -56,17 +56,14 @@ public class SyncRepository extends BaseRepository {
                     boolean isOkay = true;
                     if (!model.status.equals(API_OPERATION_EXECUTED)) isOkay = false;
                     if (model.tasks == null || model.tasks.size() == 0) isOkay = false;
-                    if(isOkay){
+                    if (isOkay) {
                         model.tasks.forEach(taskModel -> {
                             LocalTaskModel localTask = new LocalTaskModel();
-                            try {
-                                localTask.setValuesFromRemoteTask(mContext, taskModel);
-                                localTask.setLastSync(System.currentTimeMillis());
-                                localTask.setRemoved(false);
-                                mLocalRepository.saveOrUpdate(localTask);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            localTask.setValuesFromRemoteTask(mContext, taskModel);
+                            localTask.setLastSync(System.currentTimeMillis());
+                            localTask.setRemoved(false);
+                            mLocalRepository.saveOrUpdate(localTask);
+
                         });
                     }
                     isPostFinished = true;
@@ -98,12 +95,12 @@ public class SyncRepository extends BaseRepository {
         return filteredTasks;
     }
 
-    private JSONArray getImagesInBase64(JSONArray imagePaths) throws JSONException, IOException {
+    private JSONArray getImagesInBase64(ArrayList<String> imagePaths) throws IOException {
         JSONArray images = new JSONArray();
-        for(int i = 0; i < imagePaths.length(); i++){
-            String imagePath = imagePaths.getString(i);
+        for (int i = 0; i < imagePaths.size(); i++) {
+            String imagePath = imagePaths.get(i);
             String base64 = mImageRepository.convertFileToBase64(imagePath);
-            if(base64 != null) images.put(base64);
+            if (base64 != null) images.put(base64);
         }
         return images;
     }
@@ -120,10 +117,10 @@ public class SyncRepository extends BaseRepository {
                 taskObject.put(TaskConstants.TASK_LAST_UPDATED, task.getLastUpdated());
                 taskObject.put(TaskConstants.TASK_DATETIME, task.getDatetime());
                 taskObject.put(TaskConstants.TASK_ID, task.getId());
-                JSONArray imagePaths = task.getImagePaths();
-                if(imagePaths.length() > 0) {
+                ArrayList<String> imagePaths = task.getImagePaths();
+                if (imagePaths.size() > 0) {
                     JSONArray images = getImagesInBase64(imagePaths);
-                    if(images.length() > 0){
+                    if (images.length() > 0) {
                         taskObject.put(TaskConstants.TASK_IMAGES, images);
                     }
                 }
@@ -146,17 +143,13 @@ public class SyncRepository extends BaseRepository {
                 boolean isOkay = true;
                 if (!model.status.equals(API_OPERATION_EXECUTED)) isOkay = false;
                 if (model.tasks == null || model.tasks.size() == 0) isOkay = false;
-                if(isOkay) {
+                if (isOkay) {
                     model.tasks.forEach(taskModel -> {
                         if (!checkTaskIsSynced(taskModel, localTasks)) {
                             LocalTaskModel localTask = new LocalTaskModel();
-                            try {
-                                localTask.setValuesFromRemoteTask(mContext, taskModel);
-                                localTask.setLastSync(System.currentTimeMillis());
-                                mLocalRepository.saveOrUpdate(localTask);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            localTask.setValuesFromRemoteTask(mContext, taskModel);
+                            localTask.setLastSync(System.currentTimeMillis());
+                            mLocalRepository.saveOrUpdate(localTask);
                         }
                     });
                 }

@@ -139,7 +139,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         if (id == R.id.button_form_more_options) {
             if (!mViewModel.isCollapsed.getValue()
                     && ((mViewModel.dueDate.getValue() != null && mViewModel.dueDate.getValue() != "")
-                    || mViewModel.localImagesPath.length() > 0)) {
+                    || mViewModel.localImagesPath.size() > 0)) {
                 Log.d(TASK_TAG, "onClick: " + mViewModel.dueDate.getValue());
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.modal_collapse_title)
@@ -154,7 +154,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             }
         }
         if (id == R.id.button_form_upload_image) {
-            if (mViewModel.localImagesPath != null && mViewModel.localImagesPath.length() >= MAX_IMAGES_ALLOWED) {
+            if (mViewModel.localImagesPath != null && mViewModel.localImagesPath.size() >= MAX_IMAGES_ALLOWED) {
                 Toast.makeText(this, getString(R.string.cannot_add_more_images_to_task), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -208,7 +208,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         });
 
         mViewModel.imagePaths.observe(this, imagePaths -> {
-            if (imagePaths.length() > 0) {
+            if (imagePaths.size() > 0) {
                 findViewById(R.id.text_view_no_image).setVisibility(View.GONE);
             } else {
                 findViewById(R.id.text_view_no_image).setVisibility(View.VISIBLE);
@@ -231,11 +231,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             });
             grid.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent(this, FullscreenActivity.class);
-                try {
-                    intent.putExtra(TASK_IMAGE, imagePaths.getString(position));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                intent.putExtra(TASK_IMAGE, imagePaths.get(position));
                 startActivity(intent);
             });
         });
@@ -268,7 +264,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             editDescription.setText(bundle.getString(DatabaseConstants.TASK.DESCRIPTION));
 
             String datetime = bundle.getString(DatabaseConstants.TASK.DATETIME);
-            String imagesPathsString = bundle.getString(DatabaseConstants.TASK.IMAGES_PATHS);
+            ArrayList<String> imagePaths = bundle.getStringArrayList(DatabaseConstants.TASK.IMAGES_PATHS);
             Boolean isCollapsed = true;
 
             if (datetime != null) {
@@ -278,8 +274,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
                 isCollapsed = false;
             }
 
-            if (imagesPathsString != null) {
-                JSONArray imagePaths = new JSONArray(imagesPathsString);
+            if (imagePaths.size() > 0) {
                 mViewModel.loadImages(imagePaths);
                 isCollapsed = false;
             }

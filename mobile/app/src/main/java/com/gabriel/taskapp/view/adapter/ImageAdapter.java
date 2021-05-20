@@ -15,14 +15,15 @@ import com.gabriel.taskapp.service.repository.ImageRepository;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private final JSONArray imagePaths;
+    private final ArrayList<String> imagePaths;
     private ImageRepository mImageRepository;
 
-    public ImageAdapter(Context context, JSONArray imagePaths) {
+    public ImageAdapter(Context context, ArrayList<String> imagePaths) {
         mContext = context;
         this.imagePaths = imagePaths;
         mImageRepository = ImageRepository.getRepository(mContext);
@@ -30,7 +31,7 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return imagePaths.length();
+        return imagePaths.size();
     }
 
     @Override
@@ -52,11 +53,7 @@ public class ImageAdapter extends BaseAdapter {
             gridView = inflater.inflate(R.layout.grid_image_layout, null);
             ImageView imageView = gridView.findViewById(R.id.grid_item_image);
             Bitmap image = null;
-            try {
-                image = mImageRepository.getImage(imagePaths.getString(position));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            image = mImageRepository.getImage(imagePaths.get(position));
             imageView.setImageBitmap(image);
         } else {
             gridView = convertView;

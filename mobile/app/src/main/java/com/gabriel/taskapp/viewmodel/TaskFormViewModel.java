@@ -18,6 +18,8 @@ import com.gabriel.taskapp.service.repository.local.TaskRepository;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+
 public class TaskFormViewModel extends AndroidViewModel {
     private Context mContext;
     private ImageRepository mImageRepository;
@@ -26,9 +28,9 @@ public class TaskFormViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> mSaveTodo = new MutableLiveData();
     public LiveData<Boolean> saveTodo = mSaveTodo;
 
-    public JSONArray localImagesPath = new JSONArray();
-    private MutableLiveData<JSONArray> mImagePaths = new MutableLiveData(localImagesPath);
-    public LiveData<JSONArray> imagePaths = mImagePaths;
+    public ArrayList<String> localImagesPath = new ArrayList<>();
+    private MutableLiveData<ArrayList<String>> mImagePaths = new MutableLiveData(localImagesPath);
+    public LiveData<ArrayList<String>> imagePaths = mImagePaths;
 
     private MutableLiveData<Boolean> mIsCollapsed = new MutableLiveData(true);
     public LiveData<Boolean> isCollapsed = mIsCollapsed;
@@ -48,7 +50,7 @@ public class TaskFormViewModel extends AndroidViewModel {
             final String description,
             final boolean completed,
             final String datetime,
-            final JSONArray imagePaths,
+            final ArrayList<String> imagePaths,
             final long lastSync,
             final boolean removed) {
         LocalTaskModel todo = new LocalTaskModel();
@@ -71,7 +73,7 @@ public class TaskFormViewModel extends AndroidViewModel {
             return;
         }
 
-        localImagesPath.put(imageName);
+        localImagesPath.add(imageName);
         mImagePaths.setValue(localImagesPath);
     }
 
@@ -83,7 +85,7 @@ public class TaskFormViewModel extends AndroidViewModel {
 
     public void toggleCollapsed() {
         if (!mIsCollapsed.getValue()) {
-            loadImages(new JSONArray());
+            loadImages(new ArrayList<>());
             mDueDate.setValue("");
         }
         mIsCollapsed.setValue(!mIsCollapsed.getValue());
@@ -94,7 +96,7 @@ public class TaskFormViewModel extends AndroidViewModel {
     }
 
 
-    public void loadImages(JSONArray imagePaths) {
+    public void loadImages(ArrayList<String> imagePaths) {
         localImagesPath = imagePaths;
         mImagePaths.setValue(localImagesPath);
     }

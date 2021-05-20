@@ -253,14 +253,14 @@ public class ImageRepository {
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
-    public JSONArray decodeImagesAndGetPaths(ArrayList<String> images) throws JSONException {
-        JSONArray imagePaths = new JSONArray();
+    public ArrayList<String> decodeImagesAndGetPaths(ArrayList<String> images){
+        ArrayList<String> imagePaths = new ArrayList<>();
         for(int i = 0; i < images.size(); i++){
             String imageBase64 = images.get(i);
             Bitmap bitmapImage = convertBase64ToBitmap(imageBase64);
             String imagePath = writeBitmapImage(bitmapImage);
             if(imagePath != null){
-                imagePaths.put(imagePath);
+                imagePaths.add(imagePath);
             }
         }
         return imagePaths;

@@ -21,6 +21,8 @@ import com.gabriel.taskapp.view.adapter.ImageAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_IMAGE;
 
 public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -51,17 +53,13 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         mButtonRemove.setOnClickListener(this);
 
         if(task.getImagePaths() != null){
-            JSONArray imagePaths = task.getImagePaths();
+            ArrayList<String> imagePaths = task.getImagePaths();
             ImageAdapter adapter = new ImageAdapter(itemView.getContext(), imagePaths);
             GridView grid = itemView.findViewById(R.id.grid_view_row_task_images);
             grid.setAdapter(adapter);
             grid.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent(itemView.getContext(), FullscreenActivity.class);
-                try {
-                    intent.putExtra(TASK_IMAGE, imagePaths.getString(position));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                intent.putExtra(TASK_IMAGE, imagePaths.get(position));
                 itemView.getContext().startActivity(intent);
             });
         }
