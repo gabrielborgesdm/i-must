@@ -1,6 +1,5 @@
 package com.gabriel.taskapp.service.model.remote;
 
-import com.gabriel.taskapp.service.model.local.TaskModel;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import static com.gabriel.taskapp.service.constants.APIConstants.API_STATUS;
 import static com.gabriel.taskapp.service.constants.APIConstants.API_SUCCESS;
 import static com.gabriel.taskapp.service.constants.APIConstants.API_TASKS;
 
-public class TasksModel {
+public class ResponseTasksModel {
     @SerializedName(API_MESSAGE)
     public String message = "";
 
@@ -22,5 +21,5 @@ public class TasksModel {
     public String status = "";
 
     @SerializedName(API_TASKS)
-    public List<TaskModel> tasks = new ArrayList<>();
+    public List<RemoteTaskModel> tasks = new ArrayList<>();
 }

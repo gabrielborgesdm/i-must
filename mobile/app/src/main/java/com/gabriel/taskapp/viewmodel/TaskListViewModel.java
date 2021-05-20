@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.service.model.local.LocalTaskModel;
 import com.gabriel.taskapp.service.repository.local.TaskRepository;
 
 import java.util.List;
@@ -17,11 +17,11 @@ import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
 public class TaskListViewModel extends AndroidViewModel {
     private TaskRepository mRepository = TaskRepository.getRealmRepository();
 
-    private MutableLiveData<List<TaskModel>> mTodoList = new MutableLiveData();
-    public LiveData<List<TaskModel>> todoList = mTodoList;
+    private MutableLiveData<List<LocalTaskModel>> mTodoList = new MutableLiveData();
+    public LiveData<List<LocalTaskModel>> todoList = mTodoList;
 
-    private MutableLiveData<List<TaskModel>> mCompletedList = new MutableLiveData();
-    public LiveData<List<TaskModel>> completedList = mCompletedList;
+    private MutableLiveData<List<LocalTaskModel>> mCompletedList = new MutableLiveData();
+    public LiveData<List<LocalTaskModel>> completedList = mCompletedList;
 
     public TaskListViewModel(@NonNull Application application) {
         super(application);
@@ -33,11 +33,11 @@ public class TaskListViewModel extends AndroidViewModel {
         sendRefreshBroadcast(getApplication().getApplicationContext());
     }
 
-    public void delete(TaskModel todo) {
+    public void delete(LocalTaskModel todo) {
         mRepository.delete(todo.getId(), false);
     }
 
-    public void complete(TaskModel todo) {
+    public void complete(LocalTaskModel todo) {
         mRepository.complete(todo);
     }
 

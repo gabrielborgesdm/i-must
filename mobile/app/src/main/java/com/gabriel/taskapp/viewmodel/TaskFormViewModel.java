@@ -11,15 +11,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.service.model.local.LocalTaskModel;
 import com.gabriel.taskapp.service.repository.DateRepository;
 import com.gabriel.taskapp.service.repository.ImageRepository;
 import com.gabriel.taskapp.service.repository.local.TaskRepository;
 
 import org.json.JSONArray;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TaskFormViewModel extends AndroidViewModel {
     private Context mContext;
@@ -54,7 +51,7 @@ public class TaskFormViewModel extends AndroidViewModel {
             final JSONArray imagePaths,
             final long lastSync,
             final boolean removed) {
-        TaskModel todo = new TaskModel();
+        LocalTaskModel todo = new LocalTaskModel();
         if (id != null) {
             todo.setId(id);
         }

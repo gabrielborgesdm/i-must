@@ -14,12 +14,16 @@ import android.util.Log;
 
 import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_EMAIL;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
@@ -55,13 +59,19 @@ public class ImageRepository {
         return file;
     }
 
+    private File createNewFile(String imageName){
+        ContextWrapper cw = new ContextWrapper(mContext);
+        File directory = cw.getDir(IMAGE_DIRECTORIES, Context.MODE_PRIVATE);
+
+        return new File(directory, imageName + IMAGE_FORMAT);
+    }
+
     public String writeImage(Uri imageUri){
         if(isBusy) return null;
         setBusy(true);
-        ContextWrapper cw = new ContextWrapper(mContext);
-        File directory = cw.getDir(IMAGE_DIRECTORIES, Context.MODE_PRIVATE);
+        Boolean error = false;
         String imageName = getImageName();
-        File file = new File(directory, imageName + IMAGE_FORMAT);
+        File file = createNewFile(imageName);
         if (!file.exists()) {
             FileOutputStream fos = null;
             try {
@@ -74,10 +84,32 @@ public class ImageRepository {
                 image.recycle();
             } catch (java.io.IOException e) {
                 e.printStackTrace();
+                error = true;
             }
         }
         setBusy(false);
-        return imageName + IMAGE_FORMAT;
+        return  error ? null : imageName + IMAGE_FORMAT;
+    }
+
+    public String writeBitmapImage(Bitmap bitmapImage){
+        if(isBusy) return null;
+        setBusy(true);
+        Boolean error = false;
+        String imageName = getImageName();
+        File file = createNewFile(imageName);
+        if (!file.exists()) {
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                error = true;
+            }
+        }
+        setBusy(false);
+        return error ? null : imageName + IMAGE_FORMAT;
     }
 
     private String getImageName(){
@@ -213,5 +245,24 @@ public class ImageRepository {
         }
 
         return base64Image;
+    }
+
+    public Bitmap convertBase64ToBitmap(String base64String) {
+        final String pureBase64Encoded = base64String.substring(base64String.indexOf(",")  + 1);
+        final byte[] decodedBytes = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
+    public JSONArray decodeImagesAndGetPaths(ArrayList<String> images) throws JSONException {
+        JSONArray imagePaths = new JSONArray();
+        for(int i = 0; i < images.size(); i++){
+            String imageBase64 = images.get(i);
+            Bitmap bitmapImage = convertBase64ToBitmap(imageBase64);
+            String imagePath = writeBitmapImage(bitmapImage);
+            if(imagePath != null){
+                imagePaths.put(imagePath);
+            }
+        }
+        return imagePaths;
     }
 }

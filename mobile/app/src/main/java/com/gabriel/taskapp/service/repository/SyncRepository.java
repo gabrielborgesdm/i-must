@@ -5,8 +5,10 @@ import android.util.Log;
 
 import com.gabriel.taskapp.service.constants.TaskConstants;
 import com.gabriel.taskapp.service.listener.APIListener;
-import com.gabriel.taskapp.service.model.local.TaskModel;
-import com.gabriel.taskapp.service.model.remote.TasksModel;
+import com.gabriel.taskapp.service.model.local.LocalTaskModel;
+import com.gabriel.taskapp.service.model.remote.RemoteTaskModel;
+import com.gabriel.taskapp.service.model.remote.ResponseTaskModel;
+import com.gabriel.taskapp.service.model.remote.ResponseTasksModel;
 import com.gabriel.taskapp.service.repository.local.TaskRepository;
 
 import org.json.JSONArray;
@@ -37,8 +39,8 @@ public class SyncRepository extends BaseRepository {
 
 
     public void postNewOrUpdatedTasks() {
-        List<TaskModel> tasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_ALL);
-        List<TaskModel> filteredTasks = filterNonSyncedTasks(tasks);
+        List<LocalTaskModel> tasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_ALL);
+        List<LocalTaskModel> filteredTasks = filterNonSyncedTasks(tasks);
 
         if (filteredTasks.size() == 0) {
             isPostFinished = true;
@@ -48,17 +50,23 @@ public class SyncRepository extends BaseRepository {
         try {
             JSONObject tasksObject = buildTasksObject(filteredTasks);
             Log.d(TASK_TAG, "postNewOrUpdatedTasks: " + tasksObject);
-            mRemoteTaskRepository.createTasks(tasksObject, new APIListener<TasksModel>() {
+            mRemoteTaskRepository.createTasks(tasksObject, new APIListener<ResponseTasksModel>() {
                 @Override
-                public void onSuccess(TasksModel model) {
+                public void onSuccess(ResponseTasksModel model) {
                     boolean isOkay = true;
                     if (!model.status.equals(API_OPERATION_EXECUTED)) isOkay = false;
                     if (model.tasks == null || model.tasks.size() == 0) isOkay = false;
                     if(isOkay){
                         model.tasks.forEach(taskModel -> {
-                            taskModel.setLastSync(System.currentTimeMillis());
-                            taskModel.setRemoved(false);
-                            mLocalRepository.saveOrUpdate(taskModel);
+                            LocalTaskModel localTask = new LocalTaskModel();
+                            try {
+                                localTask.setValuesFromRemoteTask(mContext, taskModel);
+                                localTask.setLastSync(System.currentTimeMillis());
+                                localTask.setRemoved(false);
+                                mLocalRepository.saveOrUpdate(localTask);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         });
                     }
                     isPostFinished = true;
@@ -77,8 +85,8 @@ public class SyncRepository extends BaseRepository {
 
     }
 
-    private List<TaskModel> filterNonSyncedTasks(List<TaskModel> tasks) {
-        List<TaskModel> filteredTasks = new ArrayList<>();
+    private List<LocalTaskModel> filterNonSyncedTasks(List<LocalTaskModel> tasks) {
+        List<LocalTaskModel> filteredTasks = new ArrayList<>();
         if (tasks != null && tasks.size() > 0) {
             tasks.forEach(task -> {
                 if (task.getLastSync() == 0) {
@@ -95,13 +103,12 @@ public class SyncRepository extends BaseRepository {
         for(int i = 0; i < imagePaths.length(); i++){
             String imagePath = imagePaths.getString(i);
             String base64 = mImageRepository.convertFileToBase64(imagePath);
-            Log.d(TASK_TAG, "getImagesInBase64: " + base64);
             if(base64 != null) images.put(base64);
         }
         return images;
     }
 
-    private JSONObject buildTasksObject(List<TaskModel> tasks) throws JSONException {
+    private JSONObject buildTasksObject(List<LocalTaskModel> tasks) throws JSONException {
         JSONObject tasksObject = new JSONObject();
         JSONArray tasksArray = new JSONArray();
 
@@ -132,18 +139,24 @@ public class SyncRepository extends BaseRepository {
     }
 
     public void getNonSyncedTasks() {
-        List<TaskModel> localTasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_ALL);
-        mRemoteTaskRepository.getTasks(new APIListener<TasksModel>() {
+        List<LocalTaskModel> localTasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_ALL);
+        mRemoteTaskRepository.getTasks(new APIListener<ResponseTasksModel>() {
             @Override
-            public void onSuccess(TasksModel model) {
+            public void onSuccess(ResponseTasksModel model) {
                 boolean isOkay = true;
                 if (!model.status.equals(API_OPERATION_EXECUTED)) isOkay = false;
                 if (model.tasks == null || model.tasks.size() == 0) isOkay = false;
                 if(isOkay) {
                     model.tasks.forEach(taskModel -> {
                         if (!checkTaskIsSynced(taskModel, localTasks)) {
-                            taskModel.setLastSync(System.currentTimeMillis());
-                            mLocalRepository.saveOrUpdate(taskModel);
+                            LocalTaskModel localTask = new LocalTaskModel();
+                            try {
+                                localTask.setValuesFromRemoteTask(mContext, taskModel);
+                                localTask.setLastSync(System.currentTimeMillis());
+                                mLocalRepository.saveOrUpdate(localTask);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 }
@@ -158,11 +171,11 @@ public class SyncRepository extends BaseRepository {
         });
     }
 
-    private Boolean checkTaskIsSynced(TaskModel remoteTask, List<TaskModel> localTasks) {
+    private Boolean checkTaskIsSynced(RemoteTaskModel remoteTask, List<LocalTaskModel> localTasks) {
         boolean isSynced = false;
         if (localTasks == null || localTasks.size() == 0) return false;
 
-        for (TaskModel localTask : localTasks) {
+        for (LocalTaskModel localTask : localTasks) {
             if (localTask.getId().equals(remoteTask.getId())) {
                 isSynced = true;
                 break;
@@ -172,12 +185,12 @@ public class SyncRepository extends BaseRepository {
     }
 
     public void deleteRemovedTasks() {
-        List<TaskModel> localTasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_REMOVED);
+        List<LocalTaskModel> localTasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_REMOVED);
         if (localTasks != null && localTasks.size() > 0) {
             localTasks.forEach(localTask -> {
-                mRemoteTaskRepository.removeTask(localTask.getId(), new APIListener<com.gabriel.taskapp.service.model.remote.TaskModel>() {
+                mRemoteTaskRepository.removeTask(localTask.getId(), new APIListener<ResponseTaskModel>() {
                     @Override
-                    public void onSuccess(com.gabriel.taskapp.service.model.remote.TaskModel model) {
+                    public void onSuccess(ResponseTaskModel model) {
                         if (model.status.equals(API_OPERATION_EXECUTED) && model.task != null) {
                             mLocalRepository.delete(model.task.getId(), true);
                         }

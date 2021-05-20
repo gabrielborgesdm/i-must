@@ -1,16 +1,23 @@
 package com.gabriel.taskapp.service.model.local;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+
+import com.gabriel.taskapp.service.model.remote.RemoteTaskModel;
+import com.gabriel.taskapp.service.repository.ImageRepository;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
-public class TaskModel extends RealmObject {
+public class LocalTaskModel extends RealmObject {
     @PrimaryKey
     private String id;
     @Required
@@ -22,13 +29,14 @@ public class TaskModel extends RealmObject {
     private long lastSync;
     private long lastUpdated;
 
-    public TaskModel() {
+    public LocalTaskModel() {
         this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -36,6 +44,7 @@ public class TaskModel extends RealmObject {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -43,20 +52,34 @@ public class TaskModel extends RealmObject {
     public boolean getCompleted() {
         return completed;
     }
+
     public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 
-    public long getLastSync() { return lastSync; }
-    public void setLastSync(long lastSync) { this.lastSync = lastSync; }
+    public long getLastSync() {
+        return lastSync;
+    }
 
-    public long getLastUpdated() { return lastUpdated; }
-    public void setLastUpdated(long lastUpdated) { this.lastUpdated = lastUpdated; }
-    public void updateLastUpdated(){
+    public void setLastSync(long lastSync) {
+        this.lastSync = lastSync;
+    }
+
+    public long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(long lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public void updateLastUpdated() {
         setLastUpdated(System.currentTimeMillis());
     }
 
-    public void setRemoved(boolean removed) {  this.removed = removed; }
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
+    }
 
     public String getDatetime() {
         return datetime;
@@ -68,18 +91,31 @@ public class TaskModel extends RealmObject {
 
     public JSONArray getImagePaths() throws JSONException {
         JSONArray imagesPathJsonArray = null;
-        if(this.imagePaths != null){
+        if (this.imagePaths != null) {
             imagesPathJsonArray = new JSONArray(this.imagePaths);
         }
         return imagesPathJsonArray;
     }
 
     public void setImagePaths(JSONArray imagePaths) {
-        if(imagePaths != null && imagePaths.length() > 0){
+        if (imagePaths != null && imagePaths.length() > 0) {
             this.imagePaths = imagePaths.toString();
         } else {
             this.imagePaths = null;
         }
 
+    }
+
+    public void setValuesFromRemoteTask(Context context, RemoteTaskModel remoteTask) throws JSONException {
+        this.setId(remoteTask.getId());
+        this.setCompleted(remoteTask.getCompleted());
+        this.setDescription(remoteTask.getDescription());
+        if(remoteTask.getLastUpdated() != null) this.setLastUpdated(this.getLastUpdated());
+        if (remoteTask.getDatetime() != null) this.setDatetime(remoteTask.getDatetime());
+        if (remoteTask.getImages() != null) {
+            ImageRepository imageRepository = ImageRepository.getRepository(context);
+            ArrayList<String> images = remoteTask.getImages();
+            this.setImagePaths(imageRepository.decodeImagesAndGetPaths(images));
+        }
     }
 }

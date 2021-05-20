@@ -5,8 +5,8 @@ import android.util.Log;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.listener.APIListener;
-import com.gabriel.taskapp.service.model.remote.TaskModel;
-import com.gabriel.taskapp.service.model.remote.TasksModel;
+import com.gabriel.taskapp.service.model.remote.ResponseTaskModel;
+import com.gabriel.taskapp.service.model.remote.ResponseTasksModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -28,12 +28,12 @@ public class TaskRepository {
         mRemote = RetrofitClient.createService(mContext, TaskService.class);
     }
 
-    public void createTasks(JSONObject tasksBody, APIListener<TasksModel> listener) {
+    public void createTasks(JSONObject tasksBody, APIListener<ResponseTasksModel> listener) {
         RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), tasksBody.toString());
-        Call<TasksModel> call = mRemote.createTasks(requestBody);
-        call.enqueue(new Callback<TasksModel>() {
+        Call<ResponseTasksModel> call = mRemote.createTasks(requestBody);
+        call.enqueue(new Callback<ResponseTasksModel>() {
             @Override
-            public void onResponse(@NotNull Call<TasksModel> call, @NotNull Response<TasksModel> response) {
+            public void onResponse(@NotNull Call<ResponseTasksModel> call, @NotNull Response<ResponseTasksModel> response) {
                 if (response.isSuccessful()) {
                     listener.onSuccess(response.body());
                 } else {
@@ -43,18 +43,18 @@ public class TaskRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<TasksModel> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<ResponseTasksModel> call, @NotNull Throwable t) {
                 Log.d(TASK_TAG, "onFailure: " + t.getMessage());
                 listener.onFailure(mContext.getString(R.string.something_went_wrong));
             }
         });
     }
 
-    public void getTasks(APIListener<TasksModel> listener) {
-        Call<TasksModel> call = mRemote.getTasks();
-        call.enqueue(new Callback<TasksModel>() {
+    public void getTasks(APIListener<ResponseTasksModel> listener) {
+        Call<ResponseTasksModel> call = mRemote.getTasks();
+        call.enqueue(new Callback<ResponseTasksModel>() {
             @Override
-            public void onResponse(@NotNull Call<TasksModel> call, @NotNull Response<TasksModel> response) {
+            public void onResponse(@NotNull Call<ResponseTasksModel> call, @NotNull Response<ResponseTasksModel> response) {
                 if (response.isSuccessful()) {
                     listener.onSuccess(response.body());
                 } else {
@@ -63,18 +63,18 @@ public class TaskRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<TasksModel> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<ResponseTasksModel> call, @NotNull Throwable t) {
                 Log.d(TASK_TAG, "onFailure: " + t.getMessage());
                 listener.onFailure(mContext.getString(R.string.something_went_wrong));
             }
         });
     }
 
-    public void removeTask(String id, APIListener<TaskModel> listener) {
-        Call<TaskModel> call = mRemote.removeTask(id);
-        call.enqueue(new Callback<TaskModel>() {
+    public void removeTask(String id, APIListener<ResponseTaskModel> listener) {
+        Call<ResponseTaskModel> call = mRemote.removeTask(id);
+        call.enqueue(new Callback<ResponseTaskModel>() {
             @Override
-            public void onResponse(@NotNull Call<TaskModel> call, @NotNull Response<TaskModel> response) {
+            public void onResponse(@NotNull Call<ResponseTaskModel> call, @NotNull Response<ResponseTaskModel> response) {
                 if (response.isSuccessful()) {
                     listener.onSuccess(response.body());
                 } else {
@@ -83,7 +83,7 @@ public class TaskRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<TaskModel> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<ResponseTaskModel> call, @NotNull Throwable t) {
                 Log.d(TASK_TAG, "onFailure: " + t.getMessage());
                 listener.onFailure(mContext.getString(R.string.something_went_wrong));
             }

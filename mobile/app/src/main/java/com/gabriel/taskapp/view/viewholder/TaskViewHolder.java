@@ -3,9 +3,7 @@ package com.gabriel.taskapp.view.viewholder;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.listener.TaskListener;
-import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.service.model.local.LocalTaskModel;
 import com.gabriel.taskapp.view.FullscreenActivity;
 import com.gabriel.taskapp.view.adapter.ImageAdapter;
 
@@ -24,11 +22,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_IMAGE;
-import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     TaskListener mListener;
-    TaskModel mTask;
+    LocalTaskModel mTask;
     ImageView mButtonEdit;
     ImageView mButtonComplete;
     ImageView mButtonRemove;
@@ -38,7 +35,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         mListener = listener;
     }
 
-    public void bind(TaskModel task) throws JSONException {
+    public void bind(LocalTaskModel task) throws JSONException {
         mTask = task;
         mButtonEdit = itemView.findViewById(R.id.button_edit_task);
         mButtonComplete = itemView.findViewById(R.id.button_complete_task);

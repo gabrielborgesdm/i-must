@@ -3,7 +3,7 @@ package com.gabriel.taskapp.service.repository.local;
 import android.util.Log;
 
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
-import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.service.model.local.LocalTaskModel;
 
 import java.util.List;
 
@@ -29,14 +29,14 @@ public class TaskRepository {
         return repository;
     }
 
-    public TaskModel get(final String id) {
-        TaskModel task;
+    public LocalTaskModel get(final String id) {
+        LocalTaskModel task;
         Realm realm = null;
         try {
             realm = getRealm();
             realm.refresh();
             task = realm
-                    .where(TaskModel.class)
+                    .where(LocalTaskModel.class)
                     .equalTo(DatabaseConstants.TASK.ID, id)
                     .findFirst();
         } finally {
@@ -47,15 +47,15 @@ public class TaskRepository {
         return task;
     }
 
-    public List<TaskModel> getAllFiltered(int filter) {
-        List<TaskModel> task = null;
+    public List<LocalTaskModel> getAllFiltered(int filter) {
+        List<LocalTaskModel> task = null;
         Realm realm = null;
         try {
             realm = getRealm();
             realm.beginTransaction();
             switch (filter){
                 case TASK_FILTER_ALL:
-                    task = realm.where(TaskModel.class)
+                    task = realm.where(LocalTaskModel.class)
                             .equalTo(DatabaseConstants.TASK.REMOVED, false)
                             .sort("lastUpdated", Sort.ASCENDING)
                             .findAll();
@@ -63,14 +63,14 @@ public class TaskRepository {
                 case TASK_FILTER_COMPLETED:
                 case TASK_FILTER_OPEN:
                     Boolean completed = filter == TASK_FILTER_COMPLETED;
-                    task = realm.where(TaskModel.class)
+                    task = realm.where(LocalTaskModel.class)
                             .equalTo(DatabaseConstants.TASK.COMPLETED, completed)
                             .equalTo(DatabaseConstants.TASK.REMOVED, false)
                             .sort("lastUpdated", Sort.ASCENDING)
                             .findAll();
                     break;
                 default:
-                    task = realm.where(TaskModel.class)
+                    task = realm.where(LocalTaskModel.class)
                             .equalTo(DatabaseConstants.TASK.REMOVED, true)
                             .sort("lastUpdated", Sort.ASCENDING)
                             .findAll();
@@ -90,7 +90,7 @@ public class TaskRepository {
         return task;
     }
 
-    public boolean saveOrUpdate(final TaskModel task) {
+    public boolean saveOrUpdate(final LocalTaskModel task) {
         task.updateLastUpdated();
         boolean success = true;
         Realm realm = null;
@@ -112,7 +112,7 @@ public class TaskRepository {
         Realm realm = getRealm();
         try {
             realm.executeTransaction(inRealm -> {
-                TaskModel task = inRealm.where(TaskModel.class)
+                LocalTaskModel task = inRealm.where(LocalTaskModel.class)
                         .equalTo(DatabaseConstants.TASK.ID, id)
                         .findFirst();
                 if (task == null) return;
@@ -131,15 +131,15 @@ public class TaskRepository {
         }
     }
 
-    public List<TaskModel> getOpenTasks() {
+    public List<LocalTaskModel> getOpenTasks() {
         return getAllFiltered(TASK_FILTER_OPEN);
     }
 
-    public List<TaskModel> getCompleted() {
+    public List<LocalTaskModel> getCompleted() {
         return getAllFiltered(TASK_FILTER_COMPLETED);
     }
 
-    public boolean complete(TaskModel task) {
+    public boolean complete(LocalTaskModel task) {
         boolean success = true;
         Realm realm = null;
         try {

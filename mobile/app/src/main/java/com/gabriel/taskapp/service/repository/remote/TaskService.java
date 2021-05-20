@@ -1,7 +1,7 @@
 package com.gabriel.taskapp.service.repository.remote;
 
-import com.gabriel.taskapp.service.model.remote.TaskModel;
-import com.gabriel.taskapp.service.model.remote.TasksModel;
+import com.gabriel.taskapp.service.model.remote.ResponseTaskModel;
+import com.gabriel.taskapp.service.model.remote.ResponseTasksModel;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -13,11 +13,11 @@ import retrofit2.http.Path;
 
 public interface TaskService {
     @POST("tasks")
-    Call<TasksModel> createTasks(@Body RequestBody body);
+    Call<ResponseTasksModel> createTasks(@Body RequestBody body);
 
     @GET("tasks")
-    Call<TasksModel> getTasks();
+    Call<ResponseTasksModel> getTasks();
 
     @DELETE("task/{id}")
-    Call<TaskModel> removeTask(@Path("id") String id);
+    Call<ResponseTaskModel> removeTask(@Path("id") String id);
 }

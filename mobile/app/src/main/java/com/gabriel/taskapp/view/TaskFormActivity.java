@@ -26,7 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
-import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.service.model.local.LocalTaskModel;
 import com.gabriel.taskapp.service.repository.ImageRepository;
 import com.gabriel.taskapp.view.adapter.ImageAdapter;
 import com.gabriel.taskapp.viewmodel.TaskFormViewModel;
@@ -48,7 +48,7 @@ import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 public class TaskFormActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
     private static TaskFormViewModel mViewModel;
-    private TaskModel mTodo = null;
+    private LocalTaskModel mTodo = null;
     private ImageRepository mImageRepository;
 
     private static int mYear;
@@ -260,7 +260,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
     private void loadData() throws JSONException {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            mTodo = new TaskModel();
+            mTodo = new LocalTaskModel();
             mTodo.setId(bundle.getString(DatabaseConstants.TASK.ID));
             mTodo.setCompleted(bundle.getBoolean(DatabaseConstants.TASK.COMPLETED));
 

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.service.model.local.LocalTaskModel;
 import com.gabriel.taskapp.service.listener.TaskListener;
 import com.gabriel.taskapp.view.viewholder.TaskViewHolder;
 
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class  TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
-    private List<TaskModel> mTodoList = new ArrayList();
+    private List<LocalTaskModel> mTodoList = new ArrayList();
     private TaskListener mListener;
 
     @NonNull
@@ -43,7 +43,7 @@ public class  TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         return mTodoList == null ? 0 : mTodoList.size();
     }
 
-    public void updateTodo(List<TaskModel> list){
+    public void updateTodo(List<LocalTaskModel> list){
         if(list != null){
             mTodoList = list;
             notifyDataSetChanged();

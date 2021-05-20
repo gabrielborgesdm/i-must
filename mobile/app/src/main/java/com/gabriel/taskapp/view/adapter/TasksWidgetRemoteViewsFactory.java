@@ -2,16 +2,13 @@ package com.gabriel.taskapp.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import androidx.annotation.RequiresApi;
-
 import com.gabriel.taskapp.MainActivity;
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.model.local.TaskModel;
+import com.gabriel.taskapp.service.model.local.LocalTaskModel;
 import com.gabriel.taskapp.service.repository.local.TaskRepository;
 
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 public class TasksWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context mContext;
-    private List<TaskModel> mTodoList = new ArrayList();
+    private List<LocalTaskModel> mTodoList = new ArrayList();
     private TaskRepository  mRepository = TaskRepository.getRealmRepository();
 
     public TasksWidgetRemoteViewsFactory(Context mContext) {
