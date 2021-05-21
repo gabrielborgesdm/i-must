@@ -35,7 +35,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if(id == R.id.button_save_sign_up){
+        if(id == R.id.button_sign_up_save){
             handleSignUp();
         }
         if(id == R.id.text_have_an_account_sign_in){
@@ -44,13 +44,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void handleSignUp() {
-        EditText edit_name = findViewById(R.id.full_name_sign_up);
+        EditText edit_name = findViewById(R.id.text_field_sign_up_full_name);
         String name = edit_name.getText().toString();
 
-        EditText edit_email = findViewById(R.id.email_sign_up);
+        EditText edit_email = findViewById(R.id.text_field_sign_up_email);
         String email = edit_email.getText().toString();
 
-        EditText edit_password = findViewById(R.id.password_sign_up);
+        EditText edit_password = findViewById(R.id.text_field_sign_up_password);
         String password = edit_password.getText().toString();
 
         if(validateFields(name, email, password)){
@@ -91,7 +91,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setListeners() {
-        findViewById(R.id.button_save_sign_up).setOnClickListener(this);
+        findViewById(R.id.button_sign_up_save).setOnClickListener(this);
         findViewById(R.id.text_have_an_account_sign_in).setOnClickListener(this);
     }
 }

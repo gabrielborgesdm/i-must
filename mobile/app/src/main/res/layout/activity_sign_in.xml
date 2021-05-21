@@ -7,73 +7,90 @@
     android:background="@drawable/background_gradient"
     tools:context=".view.SignInActivity">
 
-    <TextView
-        android:id="@+id/text_sign_in"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_sign_in_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/sign_in"
         android:textAlignment="center"
         android:textSize="26sp"
-        app:layout_constraintBottom_toTopOf="@id/image_logo"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/image_view_sign_in_logo"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
+
     <ImageView
-        android:id="@+id/image_logo"
+        android:id="@+id/image_view_sign_in_logo"
         android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_marginVertical="20dp"
         android:src="@drawable/ic_baseline_library_add_check_24"
-        app:layout_constraintBottom_toTopOf="@id/email_sign_in"
-        app:layout_constraintLeft_toLeftOf="@id/text_sign_in"
-        app:layout_constraintRight_toRightOf="@id/text_sign_in"
-        app:layout_constraintTop_toBottomOf="@id/text_sign_in" />
+        app:layout_constraintBottom_toTopOf="@id/text_layout_sign_in_email"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@id/text_view_sign_in_title"
+        app:layout_constraintRight_toRightOf="@id/text_view_sign_in_title"
+        app:layout_constraintTop_toBottomOf="@id/text_view_sign_in_title" />
 
-
-    <EditText
-        android:id="@+id/email_sign_in"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_layout_sign_in_email"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_baseline_email_24"
-        android:drawablePadding="10dp"
+        android:layout_margin="16dp"
         android:hint="@string/enter_your_e_mail"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/mint_cream"
-        app:layout_constraintBottom_toTopOf="@id/password_sign_in"
-        app:layout_constraintLeft_toLeftOf="@id/image_logo"
-        app:layout_constraintRight_toRightOf="@id/image_logo"
-        app:layout_constraintTop_toBottomOf="@id/image_logo" />
+        app:endIconContentDescription="@string/text_to_speech"
+        app:layout_constraintBottom_toTopOf="@id/text_layout_sign_in_password"
+        app:layout_constraintLeft_toLeftOf="@id/image_view_sign_in_logo"
+        app:layout_constraintRight_toRightOf="@id/image_view_sign_in_logo"
+        app:layout_constraintTop_toBottomOf="@id/image_view_sign_in_logo"
+        app:startIconDrawable="@drawable/ic_baseline_email_24">
 
-    <EditText
-        android:id="@+id/password_sign_in"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_field_sign_in_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_layout_sign_in_password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_baseline_vpn_key_24"
-        android:drawablePadding="10dp"
         android:hint="@string/enter_your_password"
-        android:inputType="textPassword"
-        android:textColor="@color/mint_cream"
-        app:layout_constraintBottom_toBottomOf="@id/button_sign_in"
-        app:layout_constraintLeft_toLeftOf="@id/email_sign_in"
-        app:layout_constraintRight_toRightOf="@id/email_sign_in"
-        app:layout_constraintTop_toBottomOf="@id/email_sign_in" />
+        app:endIconMode="password_toggle"
+        app:layout_constraintBottom_toTopOf="@id/button_sign_in"
+        app:layout_constraintLeft_toLeftOf="@id/text_layout_sign_in_email"
+        app:layout_constraintRight_toRightOf="@id/text_layout_sign_in_email"
+        app:layout_constraintTop_toBottomOf="@id/text_layout_sign_in_email"
+        app:startIconDrawable="@drawable/ic_baseline_vpn_key_24">
 
-    <Button
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_field_sign_in_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_sign_in"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginVertical="16dp"
         android:backgroundTint="@color/yale_blue"
         android:text="@string/sign_in"
         app:layout_constraintBottom_toBottomOf="@id/text_dont_have_an_account_sign_up"
-        app:layout_constraintLeft_toLeftOf="@id/password_sign_in"
-        app:layout_constraintRight_toRightOf="@id/password_sign_in"
-        app:layout_constraintTop_toBottomOf="@id/password_sign_in" />
+        app:layout_constraintLeft_toLeftOf="@id/text_layout_sign_in_password"
+        app:layout_constraintRight_toRightOf="@id/text_layout_sign_in_password"
+        app:layout_constraintTop_toBottomOf="@id/text_layout_sign_in_password" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_dont_have_an_account_sign_up"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

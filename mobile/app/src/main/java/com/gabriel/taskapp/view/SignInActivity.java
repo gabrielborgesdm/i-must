@@ -45,10 +45,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void handleLogin() {
-        EditText edit_email = findViewById(R.id.email_sign_in);
+        EditText edit_email = findViewById(R.id.text_field_sign_in_email);
         String email = edit_email.getText().toString();
 
-        EditText edit_password = findViewById(R.id.password_sign_in);
+        EditText edit_password = findViewById(R.id.text_field_sign_in_password);
         String password = edit_password.getText().toString();
 
         if (validateFields(email, password)) {
