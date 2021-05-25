@@ -12,15 +12,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ResultReceiver;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.gabriel.taskapp.MainActivity;
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.repository.SyncRepository;
-import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
+import com.gabriel.taskapp.service.repositories.SyncRepository;
+import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,11 +33,11 @@ import static com.gabriel.taskapp.service.constants.SyncConstants.NOTIFICATION_C
 import static com.gabriel.taskapp.service.constants.SyncConstants.NOTIFICATION_ID;
 import static com.gabriel.taskapp.service.constants.SyncConstants.SYNC_SERVICE_MESSAGE;
 import static com.gabriel.taskapp.service.constants.SyncConstants.SYNC_SERVICE_SUCCESS;
-import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class SyncService extends Service {
     public static int timeout;
     private Context mContext;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mContext = this;
@@ -62,7 +61,7 @@ public class SyncService extends Service {
                         boolean isFinished = sync.isSyncFinished();
                         timeout -= 100;
 
-                        if(isFinished || timeout <= 0){
+                        if (isFinished || timeout <= 0) {
                             SecurityPreferences mSharedPreferences = new SecurityPreferences(mContext);
                             mSharedPreferences.storeLong(LAST_SYNC_SHARED_PREFERENCE, System.currentTimeMillis());
                             receiver.send(Activity.RESULT_OK, bundle);
@@ -71,8 +70,6 @@ public class SyncService extends Service {
                         }
                     }
                 }, 0, 100);
-
-
 
 
             }).start();

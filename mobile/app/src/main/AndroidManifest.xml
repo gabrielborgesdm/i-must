@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoApp"
         android:usesCleartextTraffic="true">
+        <service
+            android:name=".service.services.AlarmService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".view.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -29,6 +36,20 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/tasks_widget_info" />
+        </receiver>
+        <receiver android:name=".service.receivers.AlarmReceiver" />
+        <receiver
+            android:name=".service.receivers.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <!-- For HTC devices -->
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
         </receiver>
 
         <service

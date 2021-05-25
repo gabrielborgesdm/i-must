@@ -11,19 +11,21 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.model.local.LocalTaskModel;
-import com.gabriel.taskapp.service.repository.DateRepository;
-import com.gabriel.taskapp.service.repository.ImageRepository;
-import com.gabriel.taskapp.service.repository.local.TaskRepository;
-
-import org.json.JSONArray;
+import com.gabriel.taskapp.service.models.local.AlarmModel;
+import com.gabriel.taskapp.service.models.local.LocalTaskModel;
+import com.gabriel.taskapp.service.repositories.AlarmRepository;
+import com.gabriel.taskapp.service.repositories.DateRepository;
+import com.gabriel.taskapp.service.repositories.ImageRepository;
+import com.gabriel.taskapp.service.repositories.local.LocalAlarmsRepository;
+import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;
 
 import java.util.ArrayList;
 
 public class TaskFormViewModel extends AndroidViewModel {
     private Context mContext;
     private ImageRepository mImageRepository;
-    private TaskRepository mRepository = TaskRepository.getRealmRepository();
+    private LocalTasksRepository mRealmRepository = LocalTasksRepository.getRealmRepository();
+    private AlarmRepository mAlarmRepository;
 
     private MutableLiveData<Boolean> mSaveTodo = new MutableLiveData();
     public LiveData<Boolean> saveTodo = mSaveTodo;
@@ -43,6 +45,7 @@ public class TaskFormViewModel extends AndroidViewModel {
         super(application);
         mContext = application.getApplicationContext();
         mImageRepository = ImageRepository.getRepository(mContext);
+        mAlarmRepository = new AlarmRepository(mContext);
     }
 
     public void saveOrUpdate(
@@ -53,17 +56,38 @@ public class TaskFormViewModel extends AndroidViewModel {
             final ArrayList<String> imagePaths,
             final long lastSync,
             final boolean removed) {
-        LocalTaskModel todo = new LocalTaskModel();
+        LocalTaskModel task = new LocalTaskModel();
+        AlarmModel oldAlarm = null;
+        LocalAlarmsRepository localAlarmsRepository = LocalAlarmsRepository.getRealmRepository();
         if (id != null) {
-            todo.setId(id);
+            task.setId(id);
+            oldAlarm = localAlarmsRepository.get(id);
         }
-        todo.setDescription(description);
-        todo.setCompleted(completed);
-        todo.setLastSync(lastSync);
-        todo.setImagePaths(imagePaths);
-        todo.setDatetime(datetime);
-        todo.setRemoved(removed);
-        mSaveTodo.setValue(mRepository.saveOrUpdate(todo));
+        task.setDescription(description);
+        task.setCompleted(completed);
+        task.setLastSync(lastSync);
+        task.setImagePaths(imagePaths);
+        task.setDatetime(datetime);
+        task.setRemoved(removed);
+
+        boolean isOkay = mRealmRepository.saveOrUpdate(task);
+
+        if(isOkay && task.getDatetime() != null && task.getDatetime().length() > 0){
+            AlarmModel alarm = new AlarmModel();
+            alarm.setId(task.getId());
+            if(oldAlarm == null){
+                alarm.setAlarmId(localAlarmsRepository.getAlarmsLength() + 1);
+            } else {
+                alarm.setAlarmId(oldAlarm.getAlarmId());
+            }
+            alarm.setDescription(task.getDescription());
+            alarm.setTimeInMillis(task.getDatetime());
+            if(alarm.getTimeInMillis() != null){
+                localAlarmsRepository.saveOrUpdate(alarm);
+                mAlarmRepository.setAlarm(alarm);
+            }
+        }
+        mSaveTodo.setValue(isOkay);
     }
 
     public void uploadImage(Uri imageURI) {

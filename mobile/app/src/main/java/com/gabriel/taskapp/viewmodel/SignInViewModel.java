@@ -2,7 +2,6 @@ package com.gabriel.taskapp.viewmodel;
 
 import android.app.Application;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,18 +10,16 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.APIConstants;
-import com.gabriel.taskapp.service.listener.APIListener;
-import com.gabriel.taskapp.service.model.remote.HeaderModel;
-import com.gabriel.taskapp.service.repository.remote.PersonRepository;
-import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
-import com.gabriel.taskapp.service.repository.remote.RetrofitClient;
+import com.gabriel.taskapp.service.listeners.APIListener;
+import com.gabriel.taskapp.service.models.remote.HeaderModel;
+import com.gabriel.taskapp.service.repositories.remote.PersonRepository;
+import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
 
 import static com.gabriel.taskapp.service.constants.APIConstants.API_MESSAGE;
 import static com.gabriel.taskapp.service.constants.APIConstants.API_OPERATION_EXECUTED;
 import static com.gabriel.taskapp.service.constants.APIConstants.API_SUCCESS;
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_EMAIL;
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_TOKEN;
-import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class SignInViewModel extends AndroidViewModel {
     PersonRepository mPersonRepository = new PersonRepository(getApplication().getApplicationContext());

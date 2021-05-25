@@ -9,10 +9,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.listener.APIListener;
-import com.gabriel.taskapp.service.model.remote.SignUpModel;
-import com.gabriel.taskapp.service.repository.remote.PersonRepository;
-import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
+import com.gabriel.taskapp.service.listeners.APIListener;
+import com.gabriel.taskapp.service.models.remote.SignUpModel;
+import com.gabriel.taskapp.service.repositories.remote.PersonRepository;
+import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
 
 import static com.gabriel.taskapp.service.constants.APIConstants.API_MESSAGE;
 import static com.gabriel.taskapp.service.constants.APIConstants.API_OPERATION_EXECUTED;

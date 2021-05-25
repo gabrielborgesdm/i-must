@@ -1,18 +1,15 @@
 package com.gabriel.taskapp;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.gabriel.taskapp.service.repository.SyncRepository;
-import com.gabriel.taskapp.service.services.SyncService;
 import com.gabriel.taskapp.view.TaskFormActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import static com.gabriel.taskapp.service.repository.local.RealmHelpers.startRealmContext;
+import static com.gabriel.taskapp.service.repositories.local.RealmHelpers.startRealmContext;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,122 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    tools:context=".view.SignUpActivity">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_view_sign_up_title"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/sign_up"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:textSize="26sp"
-        app:layout_constraintBottom_toTopOf="@id/image_view_sign_up_logo"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        tools:context=".view.SignUpActivity">
 
-    <ImageView
-        android:id="@+id/image_view_sign_up_logo"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_baseline_library_add_check_24"
-        app:layout_constraintBottom_toTopOf="@id/text_layout_sign_up_full_name"
-        app:layout_constraintLeft_toLeftOf="@id/text_view_sign_up_title"
-        app:layout_constraintRight_toRightOf="@id/text_view_sign_up_title"
-        app:layout_constraintTop_toBottomOf="@id/text_view_sign_up_title" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_layout_sign_up_full_name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="0dp"
-        android:layout_marginVertical="16dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/enter_your_full_name"
-        app:startIconDrawable="@drawable/ic_baseline_person_24"
-        app:layout_constraintBottom_toTopOf="@id/text_layout_sign_up_email"
-        app:layout_constraintLeft_toLeftOf="@id/text_view_sign_up_title"
-        app:layout_constraintRight_toRightOf="@id/text_view_sign_up_title"
-        app:layout_constraintTop_toBottomOf="@id/image_view_sign_up_logo"  >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_field_sign_up_full_name"
-            android:layout_width="match_parent"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_view_create_account_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_margin="16dp"
+            android:text="@string/create_account"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/image_view_create_account_logo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_layout_sign_up_email"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/enter_your_e_mail"
-        app:startIconDrawable="@drawable/ic_baseline_email_24"
-        app:layout_constraintBottom_toTopOf="@id/text_layout_sign_up_password"
-        app:layout_constraintLeft_toLeftOf="@id/text_layout_sign_up_full_name"
-        app:layout_constraintRight_toRightOf="@id/text_layout_sign_up_full_name"
-        app:layout_constraintTop_toBottomOf="@id/text_layout_sign_up_full_name" >
+        <ImageView
+            android:id="@+id/image_view_create_account_logo"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_baseline_library_add_check_24"
+            app:layout_constraintBottom_toTopOf="@id/text_layout_create_account_full_name"
+            app:layout_constraintLeft_toLeftOf="@id/text_view_create_account_title"
+            app:layout_constraintRight_toRightOf="@id/text_view_create_account_title"
+            app:layout_constraintTop_toBottomOf="@id/text_view_create_account_title"
+            app:tint="@color/grey" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_field_sign_up_email"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_layout_create_account_full_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:layout_marginVertical="16dp"
+            android:backgroundTint="@color/grey"
+            android:hint="@string/enter_your_full_name"
+            android:textColorHint="@color/grey"
+            app:layout_constraintBottom_toTopOf="@id/text_layout_create_account_email"
+            app:layout_constraintLeft_toLeftOf="@id/text_view_create_account_title"
+            app:layout_constraintRight_toRightOf="@id/text_view_create_account_title"
+            app:layout_constraintTop_toBottomOf="@id/image_view_create_account_logo"
+            app:startIconDrawable="@drawable/ic_baseline_person_24"
+            app:startIconTint="@color/grey">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_field_create_account_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/grey"
+                app:boxStrokeWidth="2dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_layout_sign_up_password"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="0dp"
-        android:layout_marginVertical="16dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/enter_your_password"
-        app:startIconDrawable="@drawable/ic_baseline_vpn_key_24"
-        app:endIconMode="password_toggle"
-        app:layout_constraintBottom_toBottomOf="@id/button_sign_up_save"
-        app:layout_constraintLeft_toLeftOf="@id/text_layout_sign_up_email"
-        app:layout_constraintRight_toRightOf="@id/text_layout_sign_up_email"
-        app:layout_constraintTop_toBottomOf="@id/text_layout_sign_up_email" >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_field_sign_up_password"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_layout_create_account_email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:hint="@string/enter_your_e_mail"
+            android:textColorHint="@color/grey"
+            app:layout_constraintBottom_toTopOf="@id/text_layout_create_account_password"
+            app:layout_constraintLeft_toLeftOf="@id/text_layout_create_account_full_name"
+            app:layout_constraintRight_toRightOf="@id/text_layout_create_account_full_name"
+            app:layout_constraintTop_toBottomOf="@id/text_layout_create_account_full_name"
+            app:startIconDrawable="@drawable/ic_baseline_email_24"
+            app:startIconTint="@color/grey">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_field_create_account_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/grey" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_sign_up_save"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/yale_blue"
-        android:text="@string/create_account"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/text_have_an_account_sign_in"
-        app:layout_constraintLeft_toLeftOf="@id/text_layout_sign_up_password"
-        app:layout_constraintRight_toRightOf="@id/text_layout_sign_up_password"
-        app:layout_constraintTop_toBottomOf="@id/text_layout_sign_up_password" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_have_an_account_sign_in"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
-        android:text="@string/already_have_an_account_sign_in"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/button_sign_up_save"
-        app:layout_constraintRight_toRightOf="@id/button_sign_up_save"
-        app:layout_constraintTop_toBottomOf="@id/button_sign_up_save" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_layout_create_account_password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:hint="@string/enter_your_password"
+            android:textColorHint="@color/grey"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/grey"
+            app:layout_constraintBottom_toBottomOf="@id/button_create_account_save"
+            app:layout_constraintLeft_toLeftOf="@id/text_layout_create_account_email"
+            app:layout_constraintRight_toRightOf="@id/text_layout_create_account_email"
+            app:layout_constraintTop_toBottomOf="@id/text_layout_create_account_email"
+            app:startIconDrawable="@drawable/ic_baseline_vpn_key_24"
+            app:startIconTint="@color/grey">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_field_create_account_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="@color/grey" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_create_account_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yale_blue"
+            android:text="@string/create_account"
+            android:textColor="@color/grey"
+            android:theme="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            app:layout_constraintBottom_toBottomOf="@id/text_have_an_account_sign_in"
+            app:layout_constraintLeft_toLeftOf="@id/text_layout_create_account_password"
+            app:layout_constraintRight_toRightOf="@id/text_layout_create_account_password"
+            app:layout_constraintTop_toBottomOf="@id/text_layout_create_account_password" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_have_an_account_sign_in"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:text="@string/already_have_an_account_sign_in"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/button_create_account_save"
+            app:layout_constraintRight_toRightOf="@id/button_create_account_save"
+            app:layout_constraintTop_toBottomOf="@id/button_create_account_save" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

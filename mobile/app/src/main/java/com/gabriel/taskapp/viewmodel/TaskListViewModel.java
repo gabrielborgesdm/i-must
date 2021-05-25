@@ -7,15 +7,15 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.gabriel.taskapp.service.model.local.LocalTaskModel;
-import com.gabriel.taskapp.service.repository.local.TaskRepository;
+import com.gabriel.taskapp.service.models.local.LocalTaskModel;
+import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;
 
 import java.util.List;
 
 import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
 
 public class TaskListViewModel extends AndroidViewModel {
-    private TaskRepository mRepository = TaskRepository.getRealmRepository();
+    private LocalTasksRepository mRepository = LocalTasksRepository.getRealmRepository();
 
     private MutableLiveData<List<LocalTaskModel>> mTodoList = new MutableLiveData();
     public LiveData<List<LocalTaskModel>> todoList = mTodoList;

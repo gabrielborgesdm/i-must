@@ -26,8 +26,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
-import com.gabriel.taskapp.service.model.local.LocalTaskModel;
-import com.gabriel.taskapp.service.repository.ImageRepository;
+import com.gabriel.taskapp.service.models.local.LocalTaskModel;
+import com.gabriel.taskapp.service.repositories.ImageRepository;
 import com.gabriel.taskapp.view.adapter.ImageAdapter;
 import com.gabriel.taskapp.viewmodel.TaskFormViewModel;
 import com.google.android.material.button.MaterialButton;
@@ -35,7 +35,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;

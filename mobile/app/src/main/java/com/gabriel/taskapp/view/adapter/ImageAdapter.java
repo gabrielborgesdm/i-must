@@ -2,7 +2,6 @@ package com.gabriel.taskapp.view.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.repository.ImageRepository;
-
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.gabriel.taskapp.service.repositories.ImageRepository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
@@ -52,6 +47,7 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             gridView = inflater.inflate(R.layout.grid_image_layout, null);
             ImageView imageView = gridView.findViewById(R.id.grid_item_image);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Bitmap image = null;
             image = mImageRepository.getImage(imagePaths.get(position));
             imageView.setImageBitmap(image);

@@ -6,22 +6,14 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.gabriel.taskapp.MainActivity;
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
+import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
 import com.gabriel.taskapp.service.services.TasksWidgetRemoteViewsService;
 
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_TOKEN;
-import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class TasksWidget extends AppWidgetProvider {
 

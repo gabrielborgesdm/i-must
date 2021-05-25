@@ -1,18 +1,13 @@
 package com.gabriel.taskapp.view;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.repository.ImageRepository;
+import com.gabriel.taskapp.service.repositories.ImageRepository;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_IMAGE;

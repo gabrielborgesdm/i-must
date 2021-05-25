@@ -19,14 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
-import com.gabriel.taskapp.service.listener.TaskListener;
-import com.gabriel.taskapp.service.model.local.LocalTaskModel;
-import com.gabriel.taskapp.service.repository.local.SecurityPreferences;
+import com.gabriel.taskapp.service.listeners.TaskListener;
+import com.gabriel.taskapp.service.models.local.LocalTaskModel;
+import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
 import com.gabriel.taskapp.service.services.SyncService;
 import com.gabriel.taskapp.view.adapter.TaskAdapter;
 import com.gabriel.taskapp.viewmodel.TaskListViewModel;
-
-import org.json.JSONException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -43,7 +41,7 @@ public class TaskListFragment extends Fragment {
 
     TaskListener mListener = new TaskListener() {
         @Override
-        public void onEdit(LocalTaskModel task) throws JSONException {
+        public void onEdit(LocalTaskModel task) {
             Intent intent = new Intent(getContext(), TaskFormActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString(DatabaseConstants.TASK.ID, task.getId());

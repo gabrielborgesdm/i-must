@@ -8,8 +8,8 @@ import android.widget.RemoteViewsService;
 
 import com.gabriel.taskapp.MainActivity;
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.model.local.LocalTaskModel;
-import com.gabriel.taskapp.service.repository.local.TaskRepository;
+import com.gabriel.taskapp.service.models.local.LocalTaskModel;
+import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class TasksWidgetRemoteViewsFactory implements RemoteViewsService.RemoteV
 
     private Context mContext;
     private List<LocalTaskModel> mTodoList = new ArrayList();
-    private TaskRepository  mRepository = TaskRepository.getRealmRepository();
+    private LocalTasksRepository mRepository = LocalTasksRepository.getRealmRepository();
 
     public TasksWidgetRemoteViewsFactory(Context mContext) {
         this.mContext = mContext;

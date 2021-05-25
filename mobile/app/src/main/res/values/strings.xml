@@ -25,16 +25,15 @@
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
     <string name="todo_list">Todo List</string>
-    <string name="sign_up">Sign Up</string>
+    <string name="create_account">Create Account</string>
     <string name="enter_your_full_name">Enter your full name</string>
     <string name="enter_your_e_mail">Enter your e-mail</string>
     <string name="enter_your_password">Enter your password</string>
-    <string name="create_account">Create account</string>
     <string name="already_have_an_account_sign_in">Already have an account? Sign in</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="sign_in">Sign in</string>
     <string name="log_off">Log off</string>
-    <string name="dont_have_an_account_create_one">Don\'t have an account? Sign Up</string>
+    <string name="dont_have_an_account_create_one">Don\'t have an account? Create Account</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="person_found_with_success">Person found with success</string>
     <string name="person_not_found">Person not found</string>
@@ -64,5 +63,8 @@
     <string name="modal_remove_media_title">Do you want to remove this image</string>
     <string name="modal_remove_media_message">Are you sure you want to remove this image?</string>
     <string name="modal_remove_media_button_remove">Remove</string>
-
+    <string name="date_not_set">Date not set</string>
+    <string name="time_to_complete_a_task">Time to complete a task!</string>
+    <string name="there_is_a_task_that_needs_your_attention">There is a task that needs your attention</string>
+    <string name="alarm_notification_setting_alarms">Setting Alarms</string>
 </resources>

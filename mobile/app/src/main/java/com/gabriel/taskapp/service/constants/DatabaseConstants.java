@@ -7,10 +7,15 @@ public class DatabaseConstants {
 
     public static class TASK {
         public static final String ID = "id";
+
         public static final String DESCRIPTION = "description";
         public static final String COMPLETED = "completed";
         public static final String DATETIME = "datetime";
         public static final String IMAGES_PATHS = "imagePaths";
         public static final String REMOVED = "removed";
+    }
+
+    public static class ALARM {
+        public static final String ID = "id";
     }
 }
