@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 
 import Task from '@models/Task'
-import { ImageService } from '@services/ImageService'
+import { ImageHelpers } from '@helpers/ImageHelpers'
 
 export class TaskController {
-  imageService: ImageService
+  ImageHelpers: ImageHelpers
 
   constructor () {
-    this.imageService = new ImageService()
+    this.ImageHelpers = new ImageHelpers()
   }
 
   async get (request: Request, response: Response): Promise<Response> {
@@ -39,7 +39,7 @@ export class TaskController {
       newDoc.createdAt = new Date(task.createdAt).getTime()
     }
     if (task.imagePaths && task.imagePaths.length) {
-      const images = this.imageService.getImages(task.imagePaths)
+      const images = this.ImageHelpers.getImages(task.imagePaths)
       newDoc.images = images
       delete newDoc.imagePaths
     }
@@ -78,14 +78,14 @@ export class TaskController {
       try {
         task.userId = userId
         if (task.images) {
-          task.imagePaths = this.imageService.writeImages(task.userId, task.images)
+          task.imagePaths = this.ImageHelpers.writeImages(task.userId, task.images)
           delete task.images
         }
         const oldTask: any = await Task.findOne({ $and: [{ id: task.id }, { userId }] })
         const res = await Task.updateOne({ $and: [{ id: task.id }, { userId }] }, task, { new: true, upsert: true })
         if (res.ok) {
           if (oldTask && oldTask.imagePaths) {
-            this.imageService.removeImages(oldTask.imagePaths)
+            this.ImageHelpers.removeImages(oldTask.imagePaths)
           }
           upsertedTasks.push(this.filterTaskDoc(task))
         }
@@ -111,7 +111,7 @@ export class TaskController {
       if (doc && doc._doc) {
         doc = this.filterTaskDoc(doc._doc)
         if (doc && doc.imagePaths) {
-          this.imageService.removeImages(doc.imagePaths)
+          this.ImageHelpers.removeImages(doc.imagePaths)
         }
       }
     } catch (err) {

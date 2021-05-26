@@ -31,8 +31,8 @@
             "@config/*": [
                 "./src/config/*"
             ],
-            "@services/*": [
-                "./src/services/*"
+            "@helpers/*": [
+                "./src/helpers/*"
             ]
         }
     }

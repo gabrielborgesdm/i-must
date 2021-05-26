@@ -1,7 +1,7 @@
 import User from '@models/User'
-import { AuthService } from '@services/AuthService'
+import { AuthHelpers } from '@helpers/AuthHelpers'
 import { Request, Response } from 'express'
-const auth = new AuthService()
+const auth = new AuthHelpers()
 
 export interface IUser {
   _id: string;

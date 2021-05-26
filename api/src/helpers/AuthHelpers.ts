@@ -9,7 +9,7 @@ export type Payload = {
     _id: string
 };
 
-export class AuthService {
+export class AuthHelpers {
     hashPassword = async (password: string) => await bcrypt.hash(password, 10)
 
     compareHash = async (userHash: string, accountHash: string) => await bcrypt.compare(userHash, accountHash)

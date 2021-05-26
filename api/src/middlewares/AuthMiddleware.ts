@@ -1,7 +1,7 @@
-import { AuthService } from '@services/AuthService'
+import { AuthHelpers } from '@helpers/AuthHelpers'
 import { NextFunction, Request, Response } from 'express'
 
-const auth = new AuthService()
+const auth = new AuthHelpers()
 
 export default class AuthMiddleware {
   async authenticateToken (request: Request, response: Response, next: NextFunction) {

@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 
-export class ImageService {
+export class ImageHelpers {
     IMAGE_PATH: string;
     IMAGE_EXTENSION: string;
 
