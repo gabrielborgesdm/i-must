@@ -167,19 +167,27 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             newFragment.show(getSupportFragmentManager(), "datePicker");
         }
         if (id == R.id.button_save) {
-            EditText edit_description = findViewById(R.id.task_form_description);
-            EditText edit_date = findViewById(R.id.text_input_form_date);
-            String description = edit_description.getText().toString();
-            String date = edit_date.getText().toString();
-
-            String todoId = null;
-            Boolean todoCompleted = false;
-            if (mTodo != null) {
-                todoId = mTodo.getId();
-                todoCompleted = mTodo.getCompleted();
-            }
-            mViewModel.saveOrUpdate(todoId, description, todoCompleted, date, mViewModel.localImagesPath, 0, false);
+            handleSaveClick();
         }
+    }
+
+    private void handleSaveClick(){
+        EditText edit_description = findViewById(R.id.task_form_description);
+        EditText edit_date = findViewById(R.id.text_input_form_date);
+        String description = edit_description.getText().toString();
+        if(description.length() == 0){
+            Toast.makeText(this, getString(R.string.description_is_required), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String date = edit_date.getText().toString();
+        String todoId = null;
+        Boolean todoCompleted = false;
+        if (mTodo != null) {
+            todoId = mTodo.getId();
+            todoCompleted = mTodo.getCompleted();
+        }
+        mViewModel.saveOrUpdate(todoId, description, todoCompleted, date, mViewModel.localImagesPath, 0, false);
     }
 
     private void setListeners() {

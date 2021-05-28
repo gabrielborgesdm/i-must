@@ -66,6 +66,7 @@ public class AlarmModel extends RealmObject {
     }
 
     private Long setDateAndGetMillis(String formattedDate){
+        if(formattedDate.length() == 0) return  null;
         Long timeInMillis = null;
         DateModel dateModel = DateRepository.getDateModelFromString(formattedDate);
         Calendar calendar = Calendar.getInstance();

@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gabriel.taskapp.BuildConfig;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
 import com.gabriel.taskapp.service.listeners.TaskListener;
@@ -131,8 +132,10 @@ public class TaskListFragment extends Fragment {
     private void syncTasks() {
         long lastSync = mSharedPreferences.getLong(LAST_SYNC_SHARED_PREFERENCE);
         long differenceInMillis = System.currentTimeMillis() - lastSync;
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(differenceInMillis);
-        if (minutes > 1) {
+        long days = TimeUnit.MILLISECONDS.toDays(differenceInMillis);
+        int daysInterval = BuildConfig.SYNC_DAYS_INTERVAL;
+
+        if (days > daysInterval) {
             //startSyncService();
         }
         startSyncService();
