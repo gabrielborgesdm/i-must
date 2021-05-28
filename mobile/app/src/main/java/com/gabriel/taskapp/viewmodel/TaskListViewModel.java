@@ -7,7 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.gabriel.taskapp.service.models.local.AlarmModel;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
+import com.gabriel.taskapp.service.repositories.AlarmRepository;
+import com.gabriel.taskapp.service.repositories.local.LocalAlarmsRepository;
 import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;
 
 import java.util.List;
@@ -15,7 +18,8 @@ import java.util.List;
 import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
 
 public class TaskListViewModel extends AndroidViewModel {
-    private LocalTasksRepository mRepository = LocalTasksRepository.getRealmRepository();
+    private final LocalTasksRepository mTasksRepository = LocalTasksRepository.getRealmRepository();
+    private AlarmRepository mAlarmRepository;
 
     private MutableLiveData<List<LocalTaskModel>> mTodoList = new MutableLiveData();
     public LiveData<List<LocalTaskModel>> todoList = mTodoList;
@@ -25,20 +29,23 @@ public class TaskListViewModel extends AndroidViewModel {
 
     public TaskListViewModel(@NonNull Application application) {
         super(application);
+        mAlarmRepository = new AlarmRepository(this.getApplication().getApplicationContext());
     }
 
     public void load() {
-        mTodoList.setValue(mRepository.getOpenTasks());
-        mCompletedList.setValue(mRepository.getCompleted());
+        mTodoList.setValue(mTasksRepository.getOpenTasks());
+        mCompletedList.setValue(mTasksRepository.getCompleted());
         sendRefreshBroadcast(getApplication().getApplicationContext());
     }
 
-    public void delete(LocalTaskModel todo) {
-        mRepository.delete(todo.getId(), false);
+    public void delete(LocalTaskModel task) {
+        mTasksRepository.delete(task.getId(), false);
+        mAlarmRepository.removeAlarmFromTask(task);
     }
 
-    public void complete(LocalTaskModel todo) {
-        mRepository.complete(todo);
+    public void complete(LocalTaskModel task) {
+        mTasksRepository.complete(task);
+        mAlarmRepository.removeAlarmFromTask(task);
     }
 
 }

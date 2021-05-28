@@ -5,10 +5,12 @@ import android.util.Log;
 
 import com.gabriel.taskapp.service.constants.TaskConstants;
 import com.gabriel.taskapp.service.listeners.APIListener;
+import com.gabriel.taskapp.service.models.local.AlarmModel;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
 import com.gabriel.taskapp.service.models.remote.RemoteTaskModel;
 import com.gabriel.taskapp.service.models.remote.ResponseTaskModel;
 import com.gabriel.taskapp.service.models.remote.ResponseTasksModel;
+import com.gabriel.taskapp.service.repositories.local.LocalAlarmsRepository;
 import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;
 
 import org.json.JSONArray;
@@ -26,7 +28,8 @@ public class SyncRepository extends BaseRepository {
 
     private final com.gabriel.taskapp.service.repositories.remote.TaskRepository mRemoteTaskRepository;
     private final LocalTasksRepository mLocalRepository = LocalTasksRepository.getRealmRepository();
-    private ImageRepository mImageRepository;
+    private final AlarmRepository mAlarmRepository;
+    private final ImageRepository mImageRepository;
     private Boolean isPostFinished = false;
     private Boolean isGetFinished = false;
     private Boolean isDeleteFinished = false;
@@ -35,13 +38,14 @@ public class SyncRepository extends BaseRepository {
         super(context);
         mRemoteTaskRepository = new com.gabriel.taskapp.service.repositories.remote.TaskRepository(context);
         mImageRepository = ImageRepository.getRepository(context);
+        mAlarmRepository = new AlarmRepository(context);
+
     }
 
 
     public void postNewOrUpdatedTasks() {
         List<LocalTaskModel> tasks = mLocalRepository.getAllFiltered(TaskConstants.TASK_FILTER_ALL);
         List<LocalTaskModel> filteredTasks = filterNonSyncedTasks(tasks);
-
         if (filteredTasks.size() == 0) {
             isPostFinished = true;
             return;
@@ -49,7 +53,6 @@ public class SyncRepository extends BaseRepository {
 
         try {
             JSONObject tasksObject = buildTasksObject(filteredTasks);
-            Log.d(TASK_TAG, "postNewOrUpdatedTasks: " + tasksObject);
             mRemoteTaskRepository.createTasks(tasksObject, new APIListener<ResponseTasksModel>() {
                 @Override
                 public void onSuccess(ResponseTasksModel model) {
@@ -63,7 +66,7 @@ public class SyncRepository extends BaseRepository {
                             localTask.setLastSync(System.currentTimeMillis());
                             localTask.setRemoved(false);
                             mLocalRepository.saveOrUpdate(localTask);
-
+                            mAlarmRepository.setOrUpdateAlarmFromTask(localTask);
                         });
                     }
                     isPostFinished = true;
@@ -150,6 +153,7 @@ public class SyncRepository extends BaseRepository {
                             localTask.setValuesFromRemoteTask(mContext, taskModel);
                             localTask.setLastSync(System.currentTimeMillis());
                             mLocalRepository.saveOrUpdate(localTask);
+                            mAlarmRepository.setOrUpdateAlarmFromTask(localTask);
                         }
                     });
                 }

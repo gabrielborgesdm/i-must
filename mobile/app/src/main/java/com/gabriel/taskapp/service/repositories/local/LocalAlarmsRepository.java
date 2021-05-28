@@ -77,6 +77,7 @@ public class LocalAlarmsRepository {
                 realm.close();
             }
         }
+        Log.d(TASK_TAG, "getAlarmsLength: " + alarms.size());
         return alarms.size();
     }
 

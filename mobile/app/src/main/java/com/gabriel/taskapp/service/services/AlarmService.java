@@ -65,17 +65,7 @@ public class AlarmService extends Service {
         if(tasks != null && tasks.size() > 0) {
             for(int i = 0; i < tasks.size(); i++){
                 LocalTaskModel task = tasks.get(i);
-                if (task.getDatetime() != null && task.getDatetime().length() > 0) {
-                    AlarmModel alarm = new AlarmModel();
-                    alarm.setId(task.getId());
-                    alarm.setAlarmId(i);
-                    alarm.setDescription(task.getDescription());
-                    alarm.setTimeInMillis(task.getDatetime());
-                    if(alarm.getTimeInMillis() != null){
-                        localAlarmsRepository.saveOrUpdate(alarm);
-                        alarmRepository.setAlarm(alarm);
-                    }
-                }
+                alarmRepository.setOrUpdateAlarmFromTask(task);
             }
 
         }

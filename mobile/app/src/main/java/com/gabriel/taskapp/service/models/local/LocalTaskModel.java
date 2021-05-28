@@ -71,6 +71,7 @@ public class LocalTaskModel extends RealmObject {
 
     public void updateLastUpdated() {
         setLastUpdated(System.currentTimeMillis());
+        setLastSync(0);
     }
 
     public void setRemoved(boolean removed) {

@@ -57,11 +57,8 @@ public class TaskFormViewModel extends AndroidViewModel {
             final long lastSync,
             final boolean removed) {
         LocalTaskModel task = new LocalTaskModel();
-        AlarmModel oldAlarm = null;
-        LocalAlarmsRepository localAlarmsRepository = LocalAlarmsRepository.getRealmRepository();
         if (id != null) {
             task.setId(id);
-            oldAlarm = localAlarmsRepository.get(id);
         }
         task.setDescription(description);
         task.setCompleted(completed);
@@ -72,20 +69,8 @@ public class TaskFormViewModel extends AndroidViewModel {
 
         boolean isOkay = mRealmRepository.saveOrUpdate(task);
 
-        if(isOkay && task.getDatetime() != null && task.getDatetime().length() > 0){
-            AlarmModel alarm = new AlarmModel();
-            alarm.setId(task.getId());
-            if(oldAlarm == null){
-                alarm.setAlarmId(localAlarmsRepository.getAlarmsLength() + 1);
-            } else {
-                alarm.setAlarmId(oldAlarm.getAlarmId());
-            }
-            alarm.setDescription(task.getDescription());
-            alarm.setTimeInMillis(task.getDatetime());
-            if(alarm.getTimeInMillis() != null){
-                localAlarmsRepository.saveOrUpdate(alarm);
-                mAlarmRepository.setAlarm(alarm);
-            }
+        if(isOkay){
+            mAlarmRepository.setOrUpdateAlarmFromTask(task);
         }
         mSaveTodo.setValue(isOkay);
     }
