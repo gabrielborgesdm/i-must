@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.gabriel.taskapp.service.models.local.AlarmModel;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
 import com.gabriel.taskapp.service.repositories.AlarmRepository;
+import com.gabriel.taskapp.service.repositories.ImageRepository;
 import com.gabriel.taskapp.service.repositories.local.LocalAlarmsRepository;
 import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;
 
@@ -19,7 +20,8 @@ import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
 
 public class TaskListViewModel extends AndroidViewModel {
     private final LocalTasksRepository mTasksRepository = LocalTasksRepository.getRealmRepository();
-    private AlarmRepository mAlarmRepository;
+    private final AlarmRepository mAlarmRepository;
+    private ImageRepository mImageRepository;
 
     private MutableLiveData<List<LocalTaskModel>> mTodoList = new MutableLiveData();
     public LiveData<List<LocalTaskModel>> todoList = mTodoList;
@@ -30,6 +32,7 @@ public class TaskListViewModel extends AndroidViewModel {
     public TaskListViewModel(@NonNull Application application) {
         super(application);
         mAlarmRepository = new AlarmRepository(this.getApplication().getApplicationContext());
+        mImageRepository = ImageRepository.getRepository(this.getApplication().getApplicationContext());
     }
 
     public void load() {
@@ -40,6 +43,7 @@ public class TaskListViewModel extends AndroidViewModel {
 
     public void delete(LocalTaskModel task) {
         mTasksRepository.delete(task.getId(), false);
+        mImageRepository.deleteImages(task.getImagePaths());
         mAlarmRepository.removeAlarmFromTask(task);
     }
 

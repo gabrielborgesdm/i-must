@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_EMAIL;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
@@ -259,5 +260,16 @@ public class ImageRepository {
             }
         }
         return imagePaths;
+    }
+
+    public void deleteImages(ArrayList<String> imagePaths) {
+        if(imagePaths == null || imagePaths.size() == 0) return;
+        Log.d(TASK_TAG, "deleteImages: " + Arrays.toString(imagePaths.toArray()));
+        imagePaths.forEach(path -> {
+            File imageFile = getImageFile(path);
+            if(imageFile != null){
+                imageFile.delete();
+            }
+        });
     }
 }
