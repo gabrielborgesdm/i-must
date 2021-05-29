@@ -1,13 +1,15 @@
-package com.gabriel.taskapp;
+package com.gabriel.taskapp.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
-import com.gabriel.taskapp.view.TaskFormActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.gabriel.taskapp.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import static com.gabriel.taskapp.service.repositories.local.RealmHelpers.startRealmContext;
 
@@ -19,13 +21,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         startRealmContext(getApplicationContext());
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view ->
-                startActivity(new Intent(getApplicationContext(), TaskFormActivity.class)));
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
     }
 }

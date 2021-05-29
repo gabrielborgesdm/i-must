@@ -26,14 +26,16 @@ import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
 import com.gabriel.taskapp.service.services.SyncService;
 import com.gabriel.taskapp.view.adapter.TaskAdapter;
 import com.gabriel.taskapp.viewmodel.TaskListViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.concurrent.TimeUnit;
 
 import static com.gabriel.taskapp.service.constants.SyncConstants.BUNDLED_LISTENER;
 import static com.gabriel.taskapp.service.constants.SyncConstants.LAST_SYNC_SHARED_PREFERENCE;
 import static com.gabriel.taskapp.service.constants.SyncConstants.SYNC_SERVICE_MESSAGE;
+import static io.realm.Realm.getApplicationContext;
 
-public class TaskListFragment extends Fragment {
+public class OpenTaskListFragment extends Fragment {
 
     TaskListViewModel taskListViewModel;
     TaskAdapter mTaskAdapter = new TaskAdapter();
@@ -72,7 +74,7 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         taskListViewModel = new ViewModelProvider(this).get(TaskListViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_task_list, container, false);
+        View root = inflater.inflate(R.layout.fragment_open_task_list, container, false);
 
         mSharedPreferences = new SecurityPreferences(getContext());
 
@@ -81,13 +83,12 @@ public class TaskListFragment extends Fragment {
         todoRecycler.setAdapter(mTaskAdapter);
         mTaskAdapter.attachListener(mListener);
 
-        RecyclerView completedRecycler = root.findViewById(R.id.todo_completed_view);
-        completedRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        completedRecycler.setAdapter(mCompletedAdapter);
-        mCompletedAdapter.attachListener(mListener);
-
         observer();
         syncTasks();
+
+        FloatingActionButton fab = root.findViewById(R.id.fab);
+        fab.setOnClickListener(view ->
+                startActivity(new Intent(getApplicationContext(), TaskFormActivity.class)));
 
         return root;
     }
@@ -115,18 +116,6 @@ public class TaskListFragment extends Fragment {
 
             mTaskAdapter.updateTodo(list);
         });
-
-        taskListViewModel.completedList.observe(getViewLifecycleOwner(), list -> {
-
-            if (list == null || list.size() == 0) {
-                TextView textNoCompleted = getActivity().findViewById(R.id.text_no_completed);
-                textNoCompleted.setVisibility(View.VISIBLE);
-            } else {
-                TextView textNoCompleted = getActivity().findViewById(R.id.text_no_completed);
-                textNoCompleted.setVisibility(View.GONE);
-            }
-            mCompletedAdapter.updateTodo(list);
-        });
     }
 
     private void syncTasks() {
@@ -136,9 +125,8 @@ public class TaskListFragment extends Fragment {
         int daysInterval = BuildConfig.SYNC_DAYS_INTERVAL;
 
         if (days > daysInterval) {
-            //startSyncService();
+            startSyncService();
         }
-        startSyncService();
     }
 
     private void startSyncService() {

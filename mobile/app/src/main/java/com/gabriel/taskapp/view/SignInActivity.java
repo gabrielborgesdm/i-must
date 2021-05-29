@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.gabriel.taskapp.MainActivity;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.APIConstants;
 import com.gabriel.taskapp.viewmodel.SignInViewModel;

@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.gabriel.taskapp.MainActivity;
+import com.gabriel.taskapp.view.MainActivity;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
 import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;

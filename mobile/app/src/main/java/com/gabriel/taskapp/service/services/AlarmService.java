@@ -12,9 +12,8 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.gabriel.taskapp.MainActivity;
+import com.gabriel.taskapp.view.MainActivity;
 import com.gabriel.taskapp.R;
-import com.gabriel.taskapp.service.models.local.AlarmModel;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
 import com.gabriel.taskapp.service.repositories.AlarmRepository;
 import com.gabriel.taskapp.service.repositories.local.LocalAlarmsRepository;

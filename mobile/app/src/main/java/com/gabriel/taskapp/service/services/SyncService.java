@@ -16,7 +16,7 @@ import android.os.ResultReceiver;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.gabriel.taskapp.MainActivity;
+import com.gabriel.taskapp.view.MainActivity;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.repositories.SyncRepository;
 import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;

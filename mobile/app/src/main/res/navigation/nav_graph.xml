@@ -3,13 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragment_list">
+    app:startDestination="@id/fragment_open_tasks">
+
 
     <fragment
-        android:id="@+id/fragment_list"
-        android:name="com.gabriel.taskapp.view.TaskListFragment"
+        android:id="@+id/fragment_open_tasks"
+        android:name="com.gabriel.taskapp.view.OpenTaskListFragment"
         android:label="@string/todo_list"
-        tools:layout="@layout/fragment_task_list">
+        tools:layout="@layout/fragment_open_task_list">
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_completed_tasks"
+        android:name="com.gabriel.taskapp.view.CompletedTaskListFragment"
+        android:label="@string/completed_todo"
+        tools:layout="@layout/fragment_completed_task_list">
     </fragment>
 
 </navigation>

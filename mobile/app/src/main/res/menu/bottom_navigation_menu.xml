@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fragment_open_tasks"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_crop_square_24"
+        android:title="@string/open_todo"/>
+    <item
+        android:id="@+id/fragment_completed_tasks"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_check_box_24"
+        android:title="@string/completed_todo"/>
+</menu>
