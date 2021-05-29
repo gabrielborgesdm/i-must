@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.gabriel.taskapp.service.models.local.AlarmModel;
 import com.gabriel.taskapp.service.models.local.DateModel;
@@ -14,6 +15,7 @@ import com.gabriel.taskapp.service.repositories.local.LocalAlarmsRepository;
 import java.util.Calendar;
 
 import static com.gabriel.taskapp.service.constants.AlarmConstants.ALARM_TASK_DESCRIPTION;
+import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class AlarmRepository {
     private AlarmManager mAlarmManager;
@@ -37,7 +39,7 @@ public class AlarmRepository {
         alarm.setId(task.getId());
         AlarmModel oldAlarm = mLocalAlarmsRepository.get(task.getId());
         if(oldAlarm == null){
-            alarm.setAlarmId(mLocalAlarmsRepository.getAlarmsLength() + 1);
+            alarm.setAlarmId(mLocalAlarmsRepository.getAlarmsLength());
         } else {
             alarm.setAlarmId(oldAlarm.getAlarmId());
         }
