@@ -10,9 +10,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingVertical="10dp"
+        android:paddingHorizontal="16dp"
         android:background="@color/mint_cream"
         app:layout_constraintVertical_bias="0"
-        android:paddingHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -62,6 +62,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintHorizontal_weight="1"
+            android:scaleType="fitEnd"
             android:contentDescription="@string/complete_button"
             android:src="@drawable/ic_baseline_more_vert_24"
             app:layout_constraintBottom_toBottomOf="@id/image_view_row_task_edit"
@@ -69,64 +70,90 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/image_view_row_task_edit" />
 
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/button_complete_task"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_row_task_details"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/complete_button"
-        android:src="@drawable/ic_baseline_check_box_24"
         android:layout_marginVertical="16dp"
-        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
         app:layout_constraintLeft_toLeftOf="@+id/constraint_row_task"
-        app:layout_constraintRight_toLeftOf="@+id/text_view_row_task_description"
-        app:layout_constraintTop_toBottomOf="@+id/constraint_row_task"
-        app:layout_constraintBottom_toTopOf="@+id/grid_view_row_task_images"
-        app:tint="@color/success" />
-
-    <TextView
-        android:id="@+id/text_view_row_task_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/open_todo"
-        android:textSize="16sp"
-        android:layout_marginVertical="16dp"
-        app:layout_constraintHorizontal_weight="4"
-        app:layout_constraintLeft_toRightOf="@+id/button_complete_task"
-        app:layout_constraintRight_toRightOf="@id/image_view_row_task_collapse"
-        app:layout_constraintTop_toTopOf="@id/button_complete_task"
-        app:layout_constraintBottom_toBottomOf="@id/button_complete_task" />
-
-    <ImageView
-        android:id="@+id/image_view_row_task_collapse"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_weight="1"
-        android:contentDescription="@string/complete_button"
-        android:src="@drawable/ic_baseline_arrow_right_24"
-        app:layout_constraintBottom_toBottomOf="@id/text_view_row_task_description"
-        app:layout_constraintLeft_toRightOf="@+id/text_view_row_task_description"
         app:layout_constraintRight_toRightOf="@+id/constraint_row_task"
-        app:layout_constraintTop_toTopOf="@id/text_view_row_task_description" />
-    <GridView
-        android:id="@+id/grid_view_row_task_images"
-        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraint_row_task"
+        app:layout_constraintBottom_toTopOf="@+id/constraint_row_task_image">
+
+        <ImageView
+            android:id="@+id/button_complete_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitStart"
+            android:contentDescription="@string/complete_button"
+            android:src="@drawable/ic_baseline_check_box_24"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/text_view_row_task_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="@color/success" />
+
+        <TextView
+            android:id="@+id/text_view_row_task_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:text="@string/open_todo"
+            android:textSize="16sp"
+            app:layout_constraintHorizontal_weight="8"
+            app:layout_constraintLeft_toRightOf="@+id/button_complete_task"
+            app:layout_constraintTop_toTopOf="@id/button_complete_task"
+            app:layout_constraintRight_toLeftOf="@id/image_view_row_task_collapse"
+            app:layout_constraintBottom_toBottomOf="@id/button_complete_task" />
+
+        <ImageView
+            android:id="@+id/image_view_row_task_collapse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitEnd"
+            app:layout_constraintHorizontal_weight="1"
+            android:contentDescription="@string/complete_button"
+            android:src="@drawable/ic_baseline_arrow_right_24"
+            app:layout_constraintBottom_toBottomOf="@id/text_view_row_task_description"
+            app:layout_constraintLeft_toRightOf="@+id/text_view_row_task_description"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/text_view_row_task_description" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_row_task_image"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/button_complete_task"
-        app:layout_constraintRight_toRightOf="@+id/image_view_row_task_collapse"
-        app:layout_constraintTop_toBottomOf="@+id/button_complete_task"
-        android:numColumns="3"
-        android:paddingTop="16dp"
-        android:visibility="gone"
-        android:gravity="center"
-        android:horizontalSpacing="5dp"
-        android:verticalSpacing="5dp"
-        android:columnWidth="90dp"
-        android:stretchMode="columnWidth"
-        android:layout_marginBottom="200dp"/>
+        app:layout_constraintLeft_toLeftOf="@+id/constraint_row_task_details"
+        app:layout_constraintRight_toRightOf="@+id/constraint_row_task_details"
+        app:layout_constraintTop_toBottomOf="@+id/constraint_row_task_details"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <GridView
+            android:id="@+id/grid_view_row_task_images"
+            android:layout_width="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:paddingBottom="16dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:numColumns="3"
+            android:visibility="gone"
+            android:gravity="center"
+            android:horizontalSpacing="5dp"
+            android:verticalSpacing="5dp"
+            android:columnWidth="90dp"
+            android:stretchMode="columnWidth"
+            android:layout_marginBottom="200dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
