@@ -45,6 +45,8 @@
     <string name="sync_notification_getting_started">Getting started</string>
     <string name="sync_notification_syncing">Syncing tasks</string>
     <string name="sync_notification_finishing">Finishing sync</string>
+    <string name="tasks_synced_with_success">Tasks synced with success</string>
+    <string name="wasnt_possible_to_sync_tasks">It wasn\'t possible to sync tasks</string>
     <string name="sync_notification_retrieving_updated_tasks">Retrieving updated tasks</string>
     <string name="sync_internet_connection_required">Synchronization failed. Internet connection required</string>
     <string name="speak_task_description">Speak the task\'s description</string>

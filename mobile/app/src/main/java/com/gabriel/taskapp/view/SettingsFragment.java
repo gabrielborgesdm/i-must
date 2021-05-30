@@ -54,6 +54,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
 
     private void setListeners(View root) {
         root.findViewById(R.id.button_settings_log_out).setOnClickListener(this);
+        root.findViewById(R.id.button_settings_sync).setOnClickListener(this);
     }
 
     @Override
@@ -62,12 +63,20 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void observer() {
-        taskSettingsViewModel.loggedOut.observe(getViewLifecycleOwner(), isLoggedOut -> {
+        taskSettingsViewModel.isLoggedOut.observe(getViewLifecycleOwner(), isLoggedOut -> {
            if(isLoggedOut){
                Intent intent = new Intent(this.getContext(), SignInActivity.class);
                startActivity(intent);
                getActivity().finish();
            }
+        });
+
+        taskSettingsViewModel.isSynced.observe(getViewLifecycleOwner(), isSynced -> {
+            if(isSynced){
+                Intent intent = new Intent(this.getContext(), SignInActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
         });
     }
 
@@ -76,6 +85,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
         int id = v.getId();
         if (id == R.id.button_settings_log_out) {
             taskSettingsViewModel.logout();
+        } else if (id == R.id.button_settings_sync) {
+            taskSettingsViewModel.syncTasks();
         }
     }
+
+
 }
