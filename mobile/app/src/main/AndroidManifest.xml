@@ -28,15 +28,6 @@
             android:label="@string/title_activity_fullscreen"
             android:theme="@style/Theme.TodoApp.NoActionBar" />
 
-        <receiver android:name=".view.TasksWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/tasks_widget_info" />
-        </receiver>
         <receiver android:name=".service.receivers.AlarmReceiver" />
         <receiver
             android:name=".service.receivers.BootReceiver"
@@ -56,9 +47,6 @@
             android:name=".service.services.SyncService"
             android:enabled="true"
             android:exported="true" />
-        <service
-            android:name=".service.services.TasksWidgetRemoteViewsService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity
             android:name=".view.SignInActivity"

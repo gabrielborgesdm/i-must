@@ -16,8 +16,6 @@ import com.gabriel.taskapp.viewmodel.SignInViewModel;
 
 import java.util.regex.Pattern;
 
-import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
-
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
     SignInViewModel mViewModel;
     ButtonUIRepository mButtonRepository = new ButtonUIRepository();
@@ -31,7 +29,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setListeners();
         observe();
         mViewModel.verifyLoggedUser();
-        sendRefreshBroadcast(getApplication().getApplicationContext(), null);
     }
 
     @Override

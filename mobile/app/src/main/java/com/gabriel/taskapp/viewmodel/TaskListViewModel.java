@@ -7,16 +7,13 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.gabriel.taskapp.service.models.local.AlarmModel;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
 import com.gabriel.taskapp.service.repositories.AlarmRepository;
 import com.gabriel.taskapp.service.repositories.ImageRepository;
-import com.gabriel.taskapp.service.repositories.local.LocalAlarmsRepository;
 import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;
 
 import java.util.List;
 
-import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
 
 public class TaskListViewModel extends AndroidViewModel {
     private final LocalTasksRepository mTasksRepository = LocalTasksRepository.getRealmRepository();
@@ -38,7 +35,6 @@ public class TaskListViewModel extends AndroidViewModel {
     public void load() {
         mTodoList.setValue(mTasksRepository.getOpenTasks());
         mCompletedList.setValue(mTasksRepository.getCompleted());
-        sendRefreshBroadcast(getApplication().getApplicationContext(), mTodoList.getValue().size());
     }
 
     public void delete(LocalTaskModel task) {

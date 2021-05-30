@@ -71,10 +71,14 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     }
 
     private void setViewImages(LocalTaskModel task) {
+        GridView grid = itemView.findViewById(R.id.grid_view_row_task_images);
         if (task.getImagePaths() != null && task.getImagePaths().size() > 0) {
+            mCollapse.setVisibility(View.VISIBLE);
+            if(!mIsCollapsed){
+                toggleCollapse();
+            }
             ArrayList<String> imagePaths = task.getImagePaths();
             ImageAdapter adapter = new ImageAdapter(itemView.getContext(), imagePaths);
-            GridView grid = itemView.findViewById(R.id.grid_view_row_task_images);
             grid.setAdapter(adapter);
             grid.setOnItemClickListener((parent, view, position, id) -> {
                 Intent intent = new Intent(itemView.getContext(), FullscreenActivity.class);
@@ -83,6 +87,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
             });
         } else {
             mCollapse.setVisibility(View.INVISIBLE);
+            grid.setVisibility(View.GONE);
         }
     }
 
