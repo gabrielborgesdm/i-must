@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
+import com.gabriel.taskapp.service.repositories.ButtonUIRepository;
 import com.gabriel.taskapp.service.repositories.ImageRepository;
 import com.gabriel.taskapp.view.adapter.ImageAdapter;
 import com.gabriel.taskapp.viewmodel.TaskFormViewModel;
@@ -48,7 +49,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
     private static TaskFormViewModel mViewModel;
     private LocalTaskModel mTodo = null;
-    private ImageRepository mImageRepository;
+    ButtonUIRepository mButtonRepository = new ButtonUIRepository();
 
     private static int mYear;
     private static int mMonth;
@@ -60,15 +61,10 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_form);
-        mImageRepository = ImageRepository.getRepository(this);
         mViewModel = new ViewModelProvider(this).get(TaskFormViewModel.class);
         setListeners();
         observe();
-        try {
-            loadData();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        loadData();
     }
 
     @Override
@@ -81,10 +77,9 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
                 edit_description.setText(result.get(0));
             }
         }
-        if (requestCode == SELECT_IMAGE) {
-            assert data != null;
+        if (requestCode == SELECT_IMAGE && data != null) {
             Uri selectedImageUri = data.getData();
-            if (null != selectedImageUri) {
+            if (selectedImageUri != null) {
                 mViewModel.uploadImage(selectedImageUri);
             }
         }
@@ -171,11 +166,11 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void handleSaveClick(){
+    private void handleSaveClick() {
         EditText edit_description = findViewById(R.id.task_form_description);
         EditText edit_date = findViewById(R.id.text_input_form_date);
         String description = edit_description.getText().toString();
-        if(description.length() == 0){
+        if (description.length() == 0) {
             Toast.makeText(this, getString(R.string.description_is_required), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -187,6 +182,7 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             todoId = mTodo.getId();
             todoCompleted = mTodo.getCompleted();
         }
+        mButtonRepository.startButtonLoading(findViewById(R.id.button_save));
         mViewModel.saveOrUpdate(todoId, description, todoCompleted, date, mViewModel.localImagesPath, 0, false);
     }
 
@@ -254,13 +250,14 @@ public class TaskFormActivity extends AppCompatActivity implements View.OnClickL
             } else {
                 Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_LONG).show();
             }
+            mButtonRepository.stopButtonLoading(findViewById(R.id.button_save));
             finish();
         });
 
 
     }
 
-    private void loadData() throws JSONException {
+    private void loadData(){
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mTodo = new LocalTaskModel();

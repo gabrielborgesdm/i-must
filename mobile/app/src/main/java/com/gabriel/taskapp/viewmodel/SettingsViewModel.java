@@ -3,7 +3,6 @@ package com.gabriel.taskapp.viewmodel;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -14,7 +13,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.gabriel.taskapp.BuildConfig;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.repositories.AlarmRepository;
 import com.gabriel.taskapp.service.repositories.ImageRepository;
@@ -23,13 +21,9 @@ import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;
 import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
 import com.gabriel.taskapp.service.services.SyncService;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.gabriel.taskapp.service.constants.SyncConstants.BUNDLED_LISTENER;
-import static com.gabriel.taskapp.service.constants.SyncConstants.LAST_SYNC_SHARED_PREFERENCE;
-import static com.gabriel.taskapp.service.constants.SyncConstants.SYNC_SERVICE_MESSAGE;
 
-public class TaskSettingsViewModel extends AndroidViewModel {
+public class SettingsViewModel extends AndroidViewModel {
     private final LocalTasksRepository mTasksRepository = LocalTasksRepository.getRealmRepository();
     private LocalAlarmsRepository mLocalAlarmsRepository = LocalAlarmsRepository.getRealmRepository();
     private AlarmRepository mAlarmRepository;
@@ -42,7 +36,7 @@ public class TaskSettingsViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> mIsSynced = new MutableLiveData();
     public LiveData<Boolean> isSynced = mIsSynced;
 
-    public TaskSettingsViewModel(@NonNull Application application) {
+    public SettingsViewModel(@NonNull Application application) {
         super(application);
         mAlarmRepository = new AlarmRepository(getApplication().getApplicationContext());
         mSharedPreferences = new SecurityPreferences(getApplication().getApplicationContext());

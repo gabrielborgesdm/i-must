@@ -17,21 +17,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gabriel.taskapp.BuildConfig;
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
 import com.gabriel.taskapp.service.listeners.TaskListener;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
-import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
+import com.gabriel.taskapp.service.repositories.SyncRepository;
 import com.gabriel.taskapp.service.services.SyncService;
 import com.gabriel.taskapp.view.adapter.TaskAdapter;
 import com.gabriel.taskapp.viewmodel.TaskListViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.gabriel.taskapp.service.constants.SyncConstants.BUNDLED_LISTENER;
-import static com.gabriel.taskapp.service.constants.SyncConstants.LAST_SYNC_SHARED_PREFERENCE;
 import static com.gabriel.taskapp.service.constants.SyncConstants.SYNC_SERVICE_MESSAGE;
 import static io.realm.Realm.getApplicationContext;
 
@@ -39,44 +35,14 @@ public class OpenTaskListFragment extends Fragment {
 
     TaskListViewModel taskListViewModel;
     TaskAdapter mTaskAdapter = new TaskAdapter();
-    TaskAdapter mCompletedAdapter = new TaskAdapter();
-    private SecurityPreferences mSharedPreferences;
+    SyncRepository mSyncRepository;
 
-    TaskListener mListener = new TaskListener() {
-        @Override
-        public void onEdit(LocalTaskModel task) {
-            Intent intent = new Intent(getContext(), TaskFormActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(DatabaseConstants.TASK.ID, task.getId());
-            bundle.putString(DatabaseConstants.TASK.DESCRIPTION, task.getDescription());
-            bundle.putBoolean(DatabaseConstants.TASK.COMPLETED, task.getCompleted());
-            bundle.putString(DatabaseConstants.TASK.DATETIME, task.getDatetime());
-            if(task.getImagePaths() != null){
-                bundle.putStringArrayList(DatabaseConstants.TASK.IMAGES_PATHS, task.getImagePaths());
-            }
-            intent.putExtras(bundle);
-            startActivity(intent);
-        }
-
-        @Override
-        public void onDelete(LocalTaskModel task) {
-            taskListViewModel.delete(task);
-            taskListViewModel.load();
-        }
-
-        @Override
-        public void onComplete(LocalTaskModel task) {
-            taskListViewModel.complete(task);
-            taskListViewModel.load();
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         taskListViewModel = new ViewModelProvider(this).get(TaskListViewModel.class);
+        mSyncRepository = new SyncRepository(this.getContext());
         View root = inflater.inflate(R.layout.fragment_open_task_list, container, false);
-
-        mSharedPreferences = new SecurityPreferences(getContext());
 
         RecyclerView todoRecycler = root.findViewById(R.id.todo_open_view);
         todoRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -119,19 +85,13 @@ public class OpenTaskListFragment extends Fragment {
     }
 
     private void syncTasks() {
-        long lastSync = mSharedPreferences.getLong(LAST_SYNC_SHARED_PREFERENCE);
-        long differenceInMillis = System.currentTimeMillis() - lastSync;
-        long days = TimeUnit.MILLISECONDS.toDays(differenceInMillis);
-        int daysInterval = BuildConfig.SYNC_DAYS_INTERVAL;
-
-        if (days > daysInterval) {
+        if (mSyncRepository.checkShouldSync()) {
             startSyncService();
         }
     }
 
     private void startSyncService() {
         Intent serviceIntent = new Intent(getContext(), SyncService.class);
-        serviceIntent.putExtra("logName", "MAIN_ACTIVITY");
         serviceIntent.putExtra(BUNDLED_LISTENER, new ResultReceiver(new Handler()) {
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
@@ -146,4 +106,32 @@ public class OpenTaskListFragment extends Fragment {
         getActivity().startForegroundService(serviceIntent);
     }
 
+    TaskListener mListener = new TaskListener() {
+        @Override
+        public void onEdit(LocalTaskModel task) {
+            Intent intent = new Intent(getContext(), TaskFormActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(DatabaseConstants.TASK.ID, task.getId());
+            bundle.putString(DatabaseConstants.TASK.DESCRIPTION, task.getDescription());
+            bundle.putBoolean(DatabaseConstants.TASK.COMPLETED, task.getCompleted());
+            bundle.putString(DatabaseConstants.TASK.DATETIME, task.getDatetime());
+            if (task.getImagePaths() != null) {
+                bundle.putStringArrayList(DatabaseConstants.TASK.IMAGES_PATHS, task.getImagePaths());
+            }
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onDelete(LocalTaskModel task) {
+            taskListViewModel.delete(task);
+            taskListViewModel.load();
+        }
+
+        @Override
+        public void onComplete(LocalTaskModel task) {
+            taskListViewModel.complete(task);
+            taskListViewModel.load();
+        }
+    };
 }

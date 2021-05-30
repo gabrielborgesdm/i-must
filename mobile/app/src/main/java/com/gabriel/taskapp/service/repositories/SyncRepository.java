@@ -3,15 +3,15 @@ package com.gabriel.taskapp.service.repositories;
 import android.content.Context;
 import android.util.Log;
 
+import com.gabriel.taskapp.BuildConfig;
 import com.gabriel.taskapp.service.constants.TaskConstants;
 import com.gabriel.taskapp.service.listeners.APIListener;
-import com.gabriel.taskapp.service.models.local.AlarmModel;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
 import com.gabriel.taskapp.service.models.remote.RemoteTaskModel;
 import com.gabriel.taskapp.service.models.remote.ResponseTaskModel;
 import com.gabriel.taskapp.service.models.remote.ResponseTasksModel;
-import com.gabriel.taskapp.service.repositories.local.LocalAlarmsRepository;
 import com.gabriel.taskapp.service.repositories.local.LocalTasksRepository;
+import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,8 +20,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.gabriel.taskapp.service.constants.APIConstants.API_OPERATION_EXECUTED;
+import static com.gabriel.taskapp.service.constants.SyncConstants.LAST_SYNC_SHARED_PREFERENCE;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class SyncRepository extends BaseRepository {
@@ -30,6 +32,7 @@ public class SyncRepository extends BaseRepository {
     private final LocalTasksRepository mLocalRepository = LocalTasksRepository.getRealmRepository();
     private final AlarmRepository mAlarmRepository;
     private final ImageRepository mImageRepository;
+    private SecurityPreferences mSharedPreferences;
     private Boolean isPostFinished = false;
     private Boolean isGetFinished = false;
     private Boolean isDeleteFinished = false;
@@ -39,6 +42,7 @@ public class SyncRepository extends BaseRepository {
         mRemoteTaskRepository = new com.gabriel.taskapp.service.repositories.remote.TaskRepository(context);
         mImageRepository = ImageRepository.getRepository(context);
         mAlarmRepository = new AlarmRepository(context);
+        mSharedPreferences = new SecurityPreferences(context);
 
     }
 
@@ -204,6 +208,15 @@ public class SyncRepository extends BaseRepository {
         } else {
             isDeleteFinished = true;
         }
+    }
+
+    public boolean checkShouldSync() {
+        long lastSync = mSharedPreferences.getLong(LAST_SYNC_SHARED_PREFERENCE);
+        long differenceInMillis = System.currentTimeMillis() - lastSync;
+        long days = TimeUnit.MILLISECONDS.toDays(differenceInMillis);
+        int daysInterval = BuildConfig.SYNC_DAYS_INTERVAL;
+
+        return days > daysInterval;
     }
 
     public Boolean isSyncFinished() {

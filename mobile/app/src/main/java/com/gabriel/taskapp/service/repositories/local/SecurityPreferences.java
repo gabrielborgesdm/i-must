@@ -5,11 +5,12 @@ import android.content.SharedPreferences;
 
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_EMAIL;
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_TOKEN;
+import static com.gabriel.taskapp.service.constants.SyncConstants.LAST_SYNC_SHARED_PREFERENCE;
 
 public class SecurityPreferences {
     private final SharedPreferences mPreferences;
 
-    public SecurityPreferences(Context context){
+    public SecurityPreferences(Context context) {
         mPreferences = context.getSharedPreferences("taskShared", Context.MODE_PRIVATE);
     }
 
@@ -36,5 +37,6 @@ public class SecurityPreferences {
     public void logout() {
         remove(PERSON_TOKEN);
         remove(PERSON_EMAIL);
+        remove(LAST_SYNC_SHARED_PREFERENCE);
     }
 }

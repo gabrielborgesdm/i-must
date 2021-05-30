@@ -73,4 +73,5 @@
     <string name="alarm_notification_setting_alarms">Setting Alarms</string>
     <string name="description_is_required">Description is required</string>
     <string name="sync_tasks">Sync tasks</string>
+    <string name="loading">loading</string>
 </resources>

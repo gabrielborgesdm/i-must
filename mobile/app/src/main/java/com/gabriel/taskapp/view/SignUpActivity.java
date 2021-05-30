@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.PersonConstants;
+import com.gabriel.taskapp.service.repositories.ButtonUIRepository;
 import com.gabriel.taskapp.viewmodel.SignUpViewModel;
 
 import java.util.regex.Pattern;
@@ -21,6 +22,7 @@ import static com.gabriel.taskapp.service.constants.APIConstants.API_SUCCESS;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
     SignUpViewModel mViewModel;
+    ButtonUIRepository mButtonRepository = new ButtonUIRepository();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String password = edit_password.getText().toString();
 
         if(validateFields(name, email, password)){
+            mButtonRepository.startButtonLoading(findViewById(R.id.button_create_account_save));
             mViewModel.signUp(name, email, password);
         }
     }
@@ -75,6 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private void observe() {
 
         mViewModel.signUp.observe(this, data -> {
+            mButtonRepository.stopButtonLoading(findViewById(R.id.button_create_account_save));
             if(data.getBoolean(API_SUCCESS)){
                 Toast.makeText(this, data.getString(API_MESSAGE), Toast.LENGTH_LONG).show();
                 navigate();

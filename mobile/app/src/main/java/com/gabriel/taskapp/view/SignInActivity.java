@@ -2,6 +2,7 @@ package com.gabriel.taskapp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,15 +12,18 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.APIConstants;
+import com.gabriel.taskapp.service.repositories.ButtonUIRepository;
 import com.gabriel.taskapp.viewmodel.SignInViewModel;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.regex.Pattern;
 
+import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
     SignInViewModel mViewModel;
-
+    ButtonUIRepository mButtonRepository = new ButtonUIRepository();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +53,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         EditText edit_password = findViewById(R.id.text_field_sign_in_password);
         String password = edit_password.getText().toString();
-
         if (validateFields(email, password)) {
+            mButtonRepository.startButtonLoading(findViewById(R.id.button_sign_in));
             mViewModel.doLogin(email, password);
         }
     }
@@ -81,6 +85,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             } else {
                 Toast.makeText(this, login.getString(APIConstants.API_MESSAGE), Toast.LENGTH_SHORT).show();
             }
+            mButtonRepository.stopButtonLoading(findViewById(R.id.button_sign_in));
         });
 
     }
