@@ -48,7 +48,7 @@ public class ImageAdapter extends BaseAdapter {
             gridView = inflater.inflate(R.layout.grid_image_layout, null);
             ImageView imageView = gridView.findViewById(R.id.grid_item_image);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Bitmap image = null;
+            Bitmap image;
             image = mImageRepository.getImage(imagePaths.get(position));
             imageView.setImageBitmap(image);
         } else {

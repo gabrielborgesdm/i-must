@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public class ImageRepository {
         return  mRepository;
     }
 
-    private File getImageFile(String imageFilePath) {
+    public File getImageFile(String imageFilePath) {
         ContextWrapper cw = new ContextWrapper(mContext);
         File directory = cw.getDir(IMAGE_DIRECTORIES, Context.MODE_PRIVATE);
         File file = new File(directory, imageFilePath);
@@ -74,6 +75,10 @@ public class ImageRepository {
             try {
                 fos = new FileOutputStream(file);
                 Bitmap image = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), imageUri);
+                Integer orientation = getFileOrientation(imageUri);
+                if(orientation != null) {
+                    image = rotateBitmap(image, orientation);
+                }
                 image = this.resizeBitmap(image, IMAGE_MAX_LENGTH);
                 image.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 fos.flush();
@@ -115,10 +120,6 @@ public class ImageRepository {
         return email.hashCode() + "" + System.currentTimeMillis();
     }
 
-    public boolean isBusy() {
-        return isBusy;
-    }
-
     public void setBusy(boolean busy) {
         isBusy = busy;
     }
@@ -126,14 +127,15 @@ public class ImageRepository {
     public Bitmap getImage(String imageFilePath) {
         File file = getImageFile(imageFilePath);
         if(file == null) return  null;
-        return BitmapFactory.decodeFile(file.getAbsolutePath());
+        Bitmap image = BitmapFactory.decodeFile(file.getAbsolutePath());
+        return image;
     }
 
     public Bitmap resizeBitmap(Bitmap source, int maxLength) {
         try {
             if (source.getHeight() >= source.getWidth()) {
                 int targetHeight = maxLength;
-                if (source.getHeight() <= targetHeight) { // if image already smaller than the required height
+                if (source.getHeight() <= targetHeight) {
                     return source;
                 }
 
@@ -145,7 +147,7 @@ public class ImageRepository {
             } else {
                 int targetWidth = maxLength;
 
-                if (source.getWidth() <= targetWidth) { // if image already smaller than the required height
+                if (source.getWidth() <= targetWidth) {
                     return source;
                 }
 
@@ -163,14 +165,15 @@ public class ImageRepository {
         }
     }
 
-    public int getFileOrientation(String path){
-        ExifInterface exif = null;
+    public Integer getFileOrientation(Uri uri){
         int orientation = 0;
         try {
-            exif = new ExifInterface(path);
-            orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_UNDEFINED);
-
+            InputStream input = mContext.getContentResolver().openInputStream(uri);
+            if (input != null){
+                ExifInterface exif = new ExifInterface(input);
+                orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                input.close();
+            }
         } catch (Exception e) {
             Log.d(TASK_TAG, "getFileOrientation: " + e.getLocalizedMessage());
             e.printStackTrace();
@@ -179,6 +182,7 @@ public class ImageRepository {
     }
 
     public Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
+        Log.d(TASK_TAG, "rotateBitmap: " + orientation);
         Matrix matrix = new Matrix();
         switch (orientation) {
             case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
@@ -217,16 +221,6 @@ public class ImageRepository {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public byte[] convertBitmapToByteArray(Bitmap bitmap){
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-    }
-
-    public Bitmap convertByteArrayToBitmap(byte[] byteArray){
-        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
     }
 
     public String convertFileToBase64(String imageFilePath) throws IOException {
