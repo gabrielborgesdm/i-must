@@ -38,7 +38,7 @@ public class TaskListViewModel extends AndroidViewModel {
     public void load() {
         mTodoList.setValue(mTasksRepository.getOpenTasks());
         mCompletedList.setValue(mTasksRepository.getCompleted());
-        sendRefreshBroadcast(getApplication().getApplicationContext());
+        sendRefreshBroadcast(getApplication().getApplicationContext(), mTodoList.getValue().size());
     }
 
     public void delete(LocalTaskModel task) {

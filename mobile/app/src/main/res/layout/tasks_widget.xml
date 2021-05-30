@@ -45,7 +45,16 @@
             android:paddingVertical="16dp"
             android:visibility="gone"
             android:text="@string/authentication_needed"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/text_view_widget_no_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingVertical="16dp"
+            android:visibility="visible"
+            android:text="@string/open_the_app_to_add_tasks"
+            android:textSize="18sp" />
         <ListView
             android:id="@+id/widgetListView"
             android:layout_width="match_parent"

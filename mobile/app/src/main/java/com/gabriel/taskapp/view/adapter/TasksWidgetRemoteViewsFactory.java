@@ -35,7 +35,6 @@ public class TasksWidgetRemoteViewsFactory implements RemoteViewsService.RemoteV
     @Override
     public void onDataSetChanged() {
         mTodoList = mRepository.getAllFiltered(TASK_FILTER_OPEN);
-        Log.d(TASK_TAG, "onDataSetChanged: ");
     }
 
     @Override
@@ -49,12 +48,8 @@ public class TasksWidgetRemoteViewsFactory implements RemoteViewsService.RemoteV
 
     @Override
     public RemoteViews getViewAt(int position) {
-        if(!checkPositionIsValid(position)) {
-            return  null;
-        }
         RemoteViews remoteView = new RemoteViews(mContext.getPackageName(), R.layout.row_widget_task);
         remoteView.setTextViewText(R.id.text_widget_description, mTodoList.get(position).getDescription());
-
         Intent intent = new Intent(mContext, MainActivity.class);
         remoteView.setOnClickFillInIntent(R.id.row_widget_task, intent);
         return remoteView;

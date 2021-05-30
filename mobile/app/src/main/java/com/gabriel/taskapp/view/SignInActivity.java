@@ -2,7 +2,6 @@ package com.gabriel.taskapp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,16 +13,15 @@ import com.gabriel.taskapp.R;
 import com.gabriel.taskapp.service.constants.APIConstants;
 import com.gabriel.taskapp.service.repositories.ButtonUIRepository;
 import com.gabriel.taskapp.viewmodel.SignInViewModel;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.regex.Pattern;
 
-import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 import static com.gabriel.taskapp.view.TasksWidget.sendRefreshBroadcast;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
     SignInViewModel mViewModel;
     ButtonUIRepository mButtonRepository = new ButtonUIRepository();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +31,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setListeners();
         observe();
         mViewModel.verifyLoggedUser();
-        sendRefreshBroadcast(getApplication().getApplicationContext());
+        sendRefreshBroadcast(getApplication().getApplicationContext(), null);
     }
 
     @Override

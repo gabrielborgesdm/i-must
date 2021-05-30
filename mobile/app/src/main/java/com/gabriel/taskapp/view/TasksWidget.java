@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -14,8 +15,10 @@ import com.gabriel.taskapp.service.repositories.local.SecurityPreferences;
 import com.gabriel.taskapp.service.services.TasksWidgetRemoteViewsService;
 
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_TOKEN;
+import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
 
 public class TasksWidget extends AppWidgetProvider {
+    private static Integer tasksSize = null;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -26,7 +29,12 @@ public class TasksWidget extends AppWidgetProvider {
                     R.layout.tasks_widget
             );
 
-            if(!sharedPreferences.get(PERSON_TOKEN).equals("")){
+            if (!sharedPreferences.get(PERSON_TOKEN).equals("")) {
+                if(tasksSize == 0){
+                    views.setViewVisibility(R.id.text_view_widget_no_tasks, View.VISIBLE);
+                } else {
+                    views.setViewVisibility(R.id.text_view_widget_no_tasks, View.GONE);
+                }
                 Intent intent = new Intent(context, TasksWidgetRemoteViewsService.class);
                 views.setRemoteAdapter(R.id.widgetListView, intent);
                 views.setViewVisibility(R.id.not_authenticated, View.GONE);
@@ -42,19 +50,8 @@ public class TasksWidget extends AppWidgetProvider {
         }
     }
 
-
-
-    @Override
-    public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
-
-    public static void sendRefreshBroadcast(Context context) {
+    public static void sendRefreshBroadcast(Context context, Integer newTasksSize) {
+        tasksSize = newTasksSize;
         Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intent.setComponent(new ComponentName(context, TasksWidget.class));
         context.sendBroadcast(intent);
@@ -65,6 +62,7 @@ public class TasksWidget extends AppWidgetProvider {
 
         final String action = intent.getAction();
         if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
+            Log.d(TASK_TAG, "onReceive: " + "updateActiononReceive");
             updateWidgets(context);
         }
 

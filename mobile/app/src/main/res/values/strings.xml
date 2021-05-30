@@ -74,4 +74,5 @@
     <string name="description_is_required">Description is required</string>
     <string name="sync_tasks">Sync tasks</string>
     <string name="loading">loading</string>
+    <string name="open_the_app_to_add_tasks">Open the app to add tasks</string>
 </resources>
