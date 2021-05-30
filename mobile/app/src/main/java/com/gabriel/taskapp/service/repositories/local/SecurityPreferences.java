@@ -3,6 +3,9 @@ package com.gabriel.taskapp.service.repositories.local;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_EMAIL;
+import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_TOKEN;
+
 public class SecurityPreferences {
     private final SharedPreferences mPreferences;
 
@@ -30,4 +33,8 @@ public class SecurityPreferences {
         mPreferences.edit().putLong(key, value).apply();
     }
 
+    public void logout() {
+        remove(PERSON_TOKEN);
+        remove(PERSON_EMAIL);
+    }
 }

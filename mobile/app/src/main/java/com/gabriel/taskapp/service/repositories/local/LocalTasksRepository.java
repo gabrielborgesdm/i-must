@@ -5,9 +5,11 @@ import android.util.Log;
 import com.gabriel.taskapp.service.constants.DatabaseConstants;
 import com.gabriel.taskapp.service.models.local.LocalTaskModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_FILTER_ALL;
@@ -158,5 +160,16 @@ public class LocalTasksRepository {
             }
         }
         return success;
+    }
+
+    public void removeAllTasks() {
+        try (Realm realm = getRealm()) {
+            realm.executeTransaction(inRealm -> {
+                RealmResults<LocalTaskModel> tasks = inRealm.where(LocalTaskModel.class)
+                        .findAll();
+                if (tasks == null || tasks.size() == 0) return;
+                tasks.deleteAllFromRealm();
+            });
+        }
     }
 }

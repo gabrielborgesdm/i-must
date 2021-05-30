@@ -120,17 +120,12 @@ public class LocalAlarmsRepository {
 
 
     public void deleteAll() {
-        Realm realm = getRealm();
-        try {
+        try (Realm realm = getRealm()) {
             realm.executeTransaction(inRealm -> {
                 inRealm.where(AlarmModel.class)
                         .findAll()
                         .deleteAllFromRealm();
             });
-        } finally {
-            if (realm != null) {
-                realm.close();
-            }
         }
     }
 }

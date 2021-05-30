@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static com.gabriel.taskapp.service.constants.PersonConstants.PERSON_EMAIL;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
@@ -271,5 +272,16 @@ public class ImageRepository {
                 imageFile.delete();
             }
         });
+    }
+
+    public void deleteAllImages() {
+        ContextWrapper cw = new ContextWrapper(mContext);
+        File directory = cw.getDir(IMAGE_DIRECTORIES, Context.MODE_PRIVATE);
+        if (directory.isDirectory())
+            for (File child : Objects.requireNonNull(directory.listFiles())) {
+                Log.d(TASK_TAG, "deleteAllImages: " + child.getAbsolutePath());
+                child.delete();
+            }
+
     }
 }

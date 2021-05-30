@@ -12,7 +12,9 @@ import com.gabriel.taskapp.service.models.local.LocalTaskModel;
 import com.gabriel.taskapp.service.receivers.AlarmReceiver;
 import com.gabriel.taskapp.service.repositories.local.LocalAlarmsRepository;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import static com.gabriel.taskapp.service.constants.AlarmConstants.ALARM_TASK_DESCRIPTION;
 import static com.gabriel.taskapp.service.constants.TaskConstants.TASK_TAG;
@@ -64,7 +66,14 @@ public class AlarmRepository {
 
     public void removeAlarm(AlarmModel alarm) {
         PendingIntent alarmIntent = getAlarmIntent(alarm.getDescription(), alarm.getAlarmId());
+        Log.d(TASK_TAG, "removeAlarm: " + alarm.getDescription());
         mAlarmManager.cancel(alarmIntent);
+    }
+
+    public void removeAllAlarms() {
+        List<AlarmModel> alarms = mLocalAlarmsRepository.getAlarms();
+        if(alarms == null || alarms.size() == 0) return;
+        alarms.forEach(this::removeAlarm);
     }
 
     private PendingIntent getAlarmIntent(String alarmDescription, int alarmId) {

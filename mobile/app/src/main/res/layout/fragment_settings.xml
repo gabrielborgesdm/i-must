@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".view.OpenTaskListFragment">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/view_todo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/yale_blue">
+
+                <TextView
+                    android:id="@+id/text_todo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings"
+                    android:textAllCaps="true"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_settings_sync"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:backgroundTint="@color/white"
+                android:paddingVertical="16dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textAllCaps="false"
+                android:text="@string/sync_tasks"
+                app:icon="@drawable/ic_baseline_sync_24"
+                app:iconTint="@color/black"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_settings_log_out"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:paddingVertical="16dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textAllCaps="false"
+                android:text="@string/log_out"
+                app:icon="@drawable/ic_baseline_logout_24"
+                app:iconTint="@color/black"
+                />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

@@ -8,6 +8,8 @@
     <string name="save_task">Save Task</string>
 
     <string name="open_todo">To do</string>
+    <string name="settings">Settings</string>
+    <string name="log_out">Log out</string>
     <string name="text_no_todo">There are no tasks to do</string>
     <string name="text_no_completed">There are no tasks to complete</string>
     <string name="completed_todo">Completed</string>
@@ -68,4 +70,5 @@
     <string name="there_is_a_task_that_needs_your_attention">There is a task that needs your attention</string>
     <string name="alarm_notification_setting_alarms">Setting Alarms</string>
     <string name="description_is_required">Description is required</string>
+    <string name="sync_tasks">Sync tasks</string>
 </resources>
