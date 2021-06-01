@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Task App</string>
+    <string name="app_name">I must</string>
     <string name="action_settings">Settings</string>
     <string name="next">Next</string>
     <string name="save_task">Save Task</string>

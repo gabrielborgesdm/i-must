@@ -8,21 +8,21 @@
 
     <fragment
         android:id="@+id/fragment_open_tasks"
-        android:name="com.gabriel.taskapp.view.OpenTaskListFragment"
+        android:name="com.gabriel.i_must.view.OpenTaskListFragment"
         android:label="@string/todo_list"
         tools:layout="@layout/fragment_open_task_list">
     </fragment>
 
     <fragment
         android:id="@+id/fragment_completed_tasks"
-        android:name="com.gabriel.taskapp.view.CompletedTaskListFragment"
+        android:name="com.gabriel.i_must.view.CompletedTaskListFragment"
         android:label="@string/completed_todo"
         tools:layout="@layout/fragment_completed_task_list">
     </fragment>
 
     <fragment
         android:id="@+id/fragment_settings"
-        android:name="com.gabriel.taskapp.view.SettingsFragment"
+        android:name="com.gabriel.i_must.view.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings">
     </fragment>

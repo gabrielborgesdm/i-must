@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App de Tarefas</string>
+    <string name="app_name">Eu preciso</string>
     <string name="action_settings">Configurações</string>
     <string name="next">Próximo</string>
     <string name="save_task">Salvar Tarefa</string>
