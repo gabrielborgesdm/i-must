@@ -2,6 +2,7 @@ package com.gabriel.i_must.service.repositories.remote;
 
 import android.content.Context;
 
+import com.gabriel.i_must.BuildConfig;
 import com.gabriel.i_must.service.repositories.remote.interceptors.AuthInterceptor;
 
 import okhttp3.OkHttpClient;
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static Retrofit retrofit;
     public static String token = null;
-    static final String BASE_URL = "http://192.168.25.2:3333/";
+    static final String BASE_URL = BuildConfig.API_URL;
 
     private RetrofitClient() {
     }

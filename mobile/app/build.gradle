@@ -14,6 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField "int", "SYNC_DAYS_INTERVAL", "15"
+        buildConfigField "String", "API_URL", "\"http://192.168.25.2:8080/\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

@@ -1,0 +1,21 @@
+version: "3.9"
+networks:
+  local_network:
+    external: true
+
+services:
+  api:
+    networks:
+      - local_network
+    ports:
+      - '3333:3333'
+    build: ./api
+    volumes:
+      - ./api:/api
+      - ./storage:/storage
+    working_dir: /api
+    entrypoint: ./entrypoint.sh
+    image: node:14
+
+    
+    

@@ -1,0 +1,32 @@
+version: "3.9"
+networks:
+  local_network:
+    external: true
+
+services:
+  api:
+    networks:
+      - local_network
+    volumes:
+      - ./api:/api
+      - ./storage:/storage
+    build: ./api
+    working_dir: /api
+    entrypoint: ./entrypoint.sh
+    ports:
+      - "3333:3333"
+    links:
+      - nginx
+    
+  nginx:
+    networks:
+      - local_network
+    image: nginx:1.21-alpine
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./certificates/:/etc/nginx/certs
+    
+    
