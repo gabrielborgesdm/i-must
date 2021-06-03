@@ -42,6 +42,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         if(id == R.id.text_have_an_account_sign_in){
             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
         }
+        if(id == R.id.text_terms_of_service){
+            startActivity(new Intent(getApplicationContext(), TermsOfService.class));
+        }
     }
 
     private void handleSignUp() {
@@ -96,5 +99,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private void setListeners() {
         findViewById(R.id.button_create_account_save).setOnClickListener(this);
         findViewById(R.id.text_have_an_account_sign_in).setOnClickListener(this);
+        findViewById(R.id.text_terms_of_service).setOnClickListener(this);
     }
 }

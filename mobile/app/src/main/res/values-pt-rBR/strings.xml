@@ -71,4 +71,5 @@
     <string name="sync_tasks">Sincronizar tarefas</string>
     <string name="loading">Carregando</string>
     <string name="open_the_app_to_add_tasks">Abra o aplicativo para adicionar tarefas</string>
+    <string name="by_continuing_you_agree_to_terms">Ao continuar você concordará com os nossos <b>Termos de Serviço</b></string>
 </resources>
