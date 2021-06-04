@@ -5,7 +5,7 @@ I must is a todo application that has some interesting features. First, you can 
 
 ## Publishing details
 - API docs available [here](https://documenter.getpostman.com/view/6190871/TzY4eaE9 "here")
-- I must android application [here](testhttp:// "here")
+- I must android application [here](https://play.google.com/store/apps/details?id=com.gabrielborgesdm.i_must "here")
 
 ## Application details
 **API Server**
