@@ -8,5 +8,4 @@ mongoose.connect(uri, {
   useFindAndModify: false
 })
 mongoose.Promise = global.Promise
-
 export default mongoose

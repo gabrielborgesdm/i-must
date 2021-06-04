@@ -2,4 +2,8 @@
 require('dotenv').config()
 import { app } from './app'
 
-app.listen(3333)
+if (typeof process.env.DATABASE_CONNECTION_STRING === 'undefined') {
+  console.log('Database connection string not found. Make sure you have your .env file set up')
+} else {
+  app.listen(3333)
+}
