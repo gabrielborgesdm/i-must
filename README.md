@@ -1,5 +1,5 @@
 # I must
-I must is a todo application that has some interesting features. First, you can create an user account that allows you to synchronize your tasks. A task has a description which can be spoken through Speech to text function. It also has *more options* in case you want to add more information to it, such as an alarm notification and the capacity to store images to help remembering what you must to do.
+*I must* is a todo application that has some interesting features. First, you can create an user account that allows you to synchronize your tasks. A task has a description which can be spoken through Speech to text function. It also has *more options* in case you want to add more information to it, such as an alarm notification and the capacity to store images to help remembering what you must do.
 
 ![I must](https://github.com/gabrielborgesdm/todo-app/blob/main/screenshots/screenshots.png)
 
@@ -13,10 +13,10 @@ I must is a todo application that has some interesting features. First, you can 
 - It was developed following an adapted version of the *MVC architecture*. Here, the *Model* is only for *schemas* and *models*, while the *Controller* holds all of the server logic.
 - It also has helpers with useful functions to be used by the *Controller*
 - The route system was developed using express, it has two middlewares.
-	- *Auth Middleware*: Check if the *JWT token* is valid, if that's not the case it won't allow the request to proceed.
+	- *Auth Middleware*: Check if the *JWT token* is valid.
 	- Validation Middleware: Check if the request's body is valid through the *JOI* validation library. Routes have specific schemas responsible for checking if the user is sending the right data.
 - It use Mongo database to store the server data. *Mongoose* was chosen as the ODM package.
-- For deployment there's a *docker-compose* and *Dockerfile* files and  that helps building and starting the server.
+- For deployment there's a *docker-compose* and *Dockerfile* files that helps building and starting the server.
 
 **Mobile application**
 - *Java* application using *Model–view–viewmodel* architecture.
