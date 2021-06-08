@@ -5,7 +5,7 @@
 
 ## Publishing details
 - API docs available [here](https://documenter.getpostman.com/view/6190871/TzY4eaE9 "here")
-- I must android application [here](https://play.google.com/store/apps/details?id=com.gabrielborgesdm.i_must "here")
+- I must android application [here](https://play.google.com/store/apps/details?id=com.gabrielborgesdm.i_must "here") (Waiting for play store's approval)
 
 ## Application details
 **API Server**
