@@ -1,5 +1,7 @@
 # I must
-*I must* is a to do application that has some interesting features. First, you can create an user account that allows you to synchronize your tasks. A task has a description which can be spoken through Speech to text function. It also has *more options* in case you want to add more information to it, such as an alarm notification and the capacity to store images to help remembering what you must do.
+"I must" allows you to take notes, set reminders and store Images while also offering online synchronization to avoid losing all of your appointments.
+
+You can create an user account that allows you to synchronize your tasks. A task has a description which can be spoken through Speech to text function. It also has *more options* in case you want to add more information to it, such as an alarm notification and the capacity to store images to help remembering what you must do.
 
 ![I must](https://github.com/gabrielborgesdm/todo-app/blob/main/screenshots/screenshots.png)
 
